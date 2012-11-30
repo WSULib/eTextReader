@@ -5,17 +5,17 @@
 //Get page number(s) and layout mode    
 function getPageInfo (){
     var cURL = window.location.href.split('/');
-    var rootpage = parseInt(cURL[4]);
+    var rootpage = parseInt(cURL[5]);
     var secondarypage = parseInt(rootpage) + 1;
 
     // sets mode
-    if (cURL[6] == "2up") {
+    if (cURL[7] == "2up") {
         var mode = "2up";    
     };
-    if (cURL[6] == "1up") {
+    if (cURL[7] == "1up") {
         var mode = "1up";    
     };
-    if (cURL[6] == "thumb") {
+    if (cURL[7] == "thumb") {
         var mode = "thumb";    
     };
 
@@ -443,18 +443,20 @@ function showOCR(adjust) {
         
         //2up mode --> ajax call for OCR html
         if (mode == "2up"){
+
+
             
             // left page
             var leafStr = '00000';            
             var htmlStr = rootpage.toString();
             var re = new RegExp("0{"+htmlStr.length+"}$");
-            var leftOCR_URL = 'data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';
+            var leftOCR_URL = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';            
 
             //right page
             var leafStr = '00000';            
             var htmlStr = secondarypage.toString(); //plus two for other page?
             var re = new RegExp("0{"+htmlStr.length+"}$");
-            var rightOCR_URL = 'data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';                
+            var rightOCR_URL = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';                
 
             if (rootpage == 1){ //conditional for cover
                 $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");                            
@@ -544,6 +546,7 @@ function hideOCR (){
 
 function toggleOCR() {    
     if (br.OCRstatus == false){
+
         showOCR();
         // show OCR controls
         $('.OCR_tools').fadeIn();

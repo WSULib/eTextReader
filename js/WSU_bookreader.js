@@ -719,7 +719,7 @@ BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
                 var thumbReduce = Math.floor(this.getPageWidth(leaf) / this.thumbWidth);    
                 
 
-                $(img).attr('src', "../images/gray_dark.png")
+                $(img).attr('src', "./images/gray_dark.png")
                     .css({'width': leafWidth+'px', 'height': leafHeight+'px' })
                     .addClass('BRlazyload')
                     // Store the URL of the image that will replace this one
@@ -4641,7 +4641,7 @@ BookReader.prototype._getPageHeight= function(index) {
 BookReader.prototype._getPageURI = function(index, reduce, rotate) {
     if (index < 0 || index >= this.numLeafs) { // Synthesize page
         // return this.imagesBaseURL + "transparent.png";
-        return "../images/gray_dark.png";
+        return "./images/gray_dark.png";
     }
     
     if ('undefined' == typeof(reduce)) {
