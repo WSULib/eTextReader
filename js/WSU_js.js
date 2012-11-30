@@ -517,7 +517,7 @@ function singlepageOCR() {
     var leafStr = '00000';            
     var htmlStr = rootpage.toString(); //plus two for other page?
     var re = new RegExp("0{"+htmlStr.length+"}$");
-    var singleOCR_html = 'data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';
+    var singleOCR_html = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';
     $('.OCR_box_single .OCR_box_text').load(singleOCR_html);
 
 
