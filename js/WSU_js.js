@@ -1,4 +1,55 @@
 //////////////////////////////////////////////////////////////////////////////////////
+//Postlaunch operations
+function postLaunch() {
+//////////////////////////////////////////////////////////////////////////////////////
+
+    //Create hidden Full-Text Search dialog    
+    $(document).ready(function() {
+        $fts_dialog = $('<div id="fts_box_text"></div>')            
+            .dialog({
+                autoOpen: false,
+                title: 'Full-Text Search Results',
+                autoResize: 'true'
+            });                   
+    });      
+
+    //create minimize arrow
+    $('#BookReader').append('<div id="WSUtoolbar_minimize" class="WSUdn" title="Show/hide nav bar">v</div>');
+    $('#WSUtoolbar_minimize').click(function() {
+        if ($('#WSUtoolbar_minimize').hasClass('WSUdn')) {            
+            $('#WSUtoolbar, #WSUfooter').slideUp(750);
+            $('#WSUtoolbar_minimize').animate({bottom:'0px'},{duration:750});
+            $('#WSUtoolbar_minimize').addClass('WSUup').removeClass('WSUdn');
+            $('#WSUtoolbar_minimize').html("^");
+            // extend BRcontainer to fill
+        }
+        else {            
+            $('#WSUtoolbar, #WSUfooter').slideDown(750);
+            $('#WSUtoolbar_minimize').animate({bottom:'35px'},{duration:750});
+            $('#WSUtoolbar_minimize').addClass('WSUdn').removeClass('WSUup');
+            $('#WSUtoolbar_minimize').html("v");
+        }
+
+    });
+
+    //set OCR status
+    br.OCRstatus = false;
+
+    // //set magnifying loupes
+    // $(document).ready(function() {
+    //     $('.BRpageimage').loupe({
+    //         width: 200, // width of magnifier
+    //         height: 150, // height of magnifier
+    //         loupe: 'loupe' // css class for magnifier
+    //     });
+    //     $('.BRpageimage').data('loupe', false);
+    // });
+
+} //closes postLaunch()
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
 //Other Functions
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -48,8 +99,8 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     var squery = 'http://141.217.54.38:8080/solr/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback';    
 
     //pagination counters
-    var prev = row_start - 11;
-    var next = row_start + 11;
+    var prev = row_start - 10;
+    var next = row_start + 10;
 
     //function for checking odd or even (leaf side)
     function isEven(value) {
@@ -80,12 +131,12 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
             $('#fts_terms').html('Search results for: "<span class="fts_highlight">' + search_term + '</span>"');
             $('#fts_terms').append('<div id="fts_counts"></div>');            
-            $('#fts_counts').append('Number of results: '+result.response.numFound+'</br>');
+            $('#fts_counts').append('Found on '+result.response.numFound+' pages.</br>');
             if (next < result.response.numFound){
-                $('#fts_counts').append('Displaying '+(row_start + 1)+' - '+(row_start + 10));
+                $('#fts_counts').append('Displaying results: '+(row_start + 1)+' - '+(row_start + 10));
             }
             else {
-                $('#fts_counts').append('Displaying '+(row_start + 1)+' - '+result.response.numFound);    
+                $('#fts_counts').append('Displaying pages '+(row_start + 1)+' - '+result.response.numFound);    
             }
 
             for (var i = 0; i < result.response.docs.length; i++) { 
@@ -170,7 +221,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             }
 
             else if (row_start == 0 && result.response.numFound > 10){            
-                $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic(11); return false;">Next 10</a>');
+                $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic('+next+'); return false;">Next 10</a>');
             }           
                     
             else {                
@@ -202,11 +253,13 @@ function displayFTSResultsStatic(row_start, search_term){
 
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
-    $('#fts_static_tools').append("<span style='font-size:1.5em; font-weight:bold;'>Full-Text Search Results</span>");
-    $('#fts_static_tools').prepend('<button id="fts_accordian" class="right fts_collapse tool_icon rollover" type="button" onclick="accordFTSResultsStatic(); return false;"></button>');
+    $('#fts_static_tools').append("<span style='font-size:1.5em; font-weight:bold;'>Full-Text Search Results</span>");    
     var func_call = "getFTSResultsDialog("+row_start+",'"+search_term+"')";
     $('#fts_static_tools').prepend('<button class="right fts_popout tool_icon rollover" type="button" onclick="'+func_call+'"; return false;"></button>');
     $('#fts_static_tools').prepend('<button class="right fts_close tool_icon rollover" type="button" onclick="hideFTSResultsStatic(); return false;"></button>');    
+
+    // slap accordian button on the right side of results box
+    $('#fts_static_tools').prepend('<button id="fts_accordian" class="right fts_collapse tool_icon rollover" type="button" onclick="accordFTSResultsStatic(); return false;"></button>');
 
     //display
     fts_handle_static.fadeIn();
@@ -265,8 +318,8 @@ function getFTSResultsDialog (row_start, search_term) {
     var squery = 'http://141.217.54.38:8080/solr/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback_dialog';    
 
     //pagination counters
-    var prev = row_start - 11;
-    var next = row_start + 11;
+    var prev = row_start - 10;
+    var next = row_start + 10;
 
     //function for checking odd or even (leaf side)
     function isEven(value) {
@@ -296,12 +349,12 @@ function getFTSResultsDialog (row_start, search_term) {
 
             $('#fts_terms_dialog').html('Search results for: "<span class="fts_highlight">' + search_term + '</span>"');
             $('#fts_terms_dialog').append('<div id="fts_counts_dialog"></div>');            
-            $('#fts_counts_dialog').append('Number of results: '+result.response.numFound+'</br>');
+            $('#fts_counts_dialog').append('Found on '+result.response.numFound+' pages.</br>');
             if (next < result.response.numFound){
-                $('#fts_counts_dialog').append('Displaying '+(row_start + 1)+' - '+(row_start + 10));
+                $('#fts_counts_dialog').append('Displaying results: '+(row_start + 1)+' - '+(row_start + 10));
             }
             else {
-                $('#fts_counts_dialog').append('Displaying '+(row_start + 1)+' - '+result.response.numFound);    
+                $('#fts_counts_dialog').append('Displaying results: '+(row_start + 1)+' - '+result.response.numFound);    
             }
 
             for (var i = 0; i < result.response.docs.length; i++) { 
@@ -368,7 +421,7 @@ function getFTSResultsDialog (row_start, search_term) {
                     //create snippet and append to page DOM             
                     OCR_snippet = page_text.slice(snippet_start,snippet_end).replace(search_term,'<span class="fts_highlight">'+search_term+'</span style="background-color:pink;">');
 
-                var thisResult = '<a href="' + ftsURL + '">Found on page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';                
+                var thisResult = '<a href="' + ftsURL + '">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';                
 
                 $('#fts_box_text').append('<div id="fts_result_dialog_'+counter+'"></div>');
                 $("#fts_result_dialog_"+counter).html(thisResult);
@@ -388,7 +441,7 @@ function getFTSResultsDialog (row_start, search_term) {
             }
 
             else if (row_start == 0 && result.response.numFound > 10){
-                var func_call = "getFTSResultsDialog(11,'"+search_term+"');"                            
+                var func_call = "getFTSResultsDialog("+next+",'"+search_term+"');"                            
                 $('.fts_nav_dialog').append('<a class="fts_page_nav fts_next" onclick="'+func_call+' return false;">Next 10</a>');
             }           
                     
@@ -695,6 +748,61 @@ function launchThumbs (){
     window.location = to_thumbs;
 }
 
+//fades out Toolbar and Footer
+function toolbarTransToggle(){
+    if (br.toolbar_trans == false){
+        // $('#WSUtoolbar').css({ 'opacity' : 0.2 });
+        $('#WSUtoolbar,#WSUfooter').fadeTo("slow",.4);
+        $('#WSUtoolbar,#WSUfooter').css({backgroundColor:"transparent"});
+        $('#WSUtoolbar').removeClass('shadow');
+        //maybe do more here?  remove "full-text-search"?  actually, remove most of everything?
+
+        br.toolbar_trans = true;
+    }
+    else{
+        // $('#WSUtoolbar').css({ 'opacity' : 0.9 });
+        $('#WSUtoolbar,#WSUfooter').fadeTo("slow",.9);
+        $('#WSUtoolbar,#WSUfooter').css({backgroundColor:"rgba(225, 221, 201, .9)"});
+        $('#WSUtoolbar').addClass('shadow');
+        br.toolbar_trans = false;
+    }
+}
+
+
+//magnifying loupe toggle on page
+//add click/destroy
+function magLoupe(){
+    //determine layout and select appropriate class
+    var $current_layout = getPageInfo();
+    if ($current_layout.mode == "2up"){
+        var mag_select = ".BRpageimage";
+    }
+    else if ($current_layout.mode == "1up"){        
+        var mag_select = '.BRnoselect';
+    }    
+
+    if (br.loupe_status == false){
+        br.loupe_status = true;
+        $(mag_select).loupe({
+            width: 225, // width of magnifier
+            height: 175, // height of magnifier
+            loupe: 'loupe' // css class for magnifier
+        });
+        $(mag_select).data('loupe', true);
+    }
+    else {
+        br.loupe_status = false;
+        $(mag_select).data('loupe', false);
+        //remove all but first couple 'loupe' class divs - convoluted but works
+        var loupers = $('.loupe');
+        if (loupers.length > 3){            
+            for (var i = loupers.length; i > 0; i--) {                
+                $(loupers[i-1]).remove();
+            }    
+        }        
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 //Listeners
@@ -709,6 +817,7 @@ $(window).resize(function() {
     }, 500);
 });
 
+//redraw OCR after resizing
 $(window).bind('resizeEnd', function() {
     if (br.OCRstatus == true) {
         showOCR(); //rename to redrawOCR (and create that function)                
@@ -719,3 +828,19 @@ $(window).bind('resizeEnd', function() {
     }
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

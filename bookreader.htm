@@ -28,6 +28,9 @@
     <script type="text/javascript" src="inc/jPlayer/jquery.jplayer.min.js"></script>
     <script type="text/javascript" src="js/jplayer.say.js"></script>
 
+    <!--magnifier / tjpzoom -->    
+    <script type="text/javascript" src="js/jquery.loupe.js"></script>
+
     <!--Touch Punch Hack / http://touchpunch.furf.com/ -->
     <!--<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script> -->
 
@@ -67,7 +70,7 @@
         <div class="tool_row">
 
             <div class="logo tools left">
-                <a href="/" style="text-decoration:none;"><img src="./images/icons/library_system_w_v2.png" height=32/></a>
+                <a href="/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
             </div>
 
             <div class="fts_form tools left">
@@ -101,6 +104,17 @@
                 <button class="tool_icon speak rollover" type="button" onclick='speakPagealoud();' title="Click to Speak Aloud"></button> 
                 <span id="audio_load_alert" class='label' style="background-color:pink; display:none;" onclick="sayItstop();">audio playing (click to stop)</span>
             </div>
+
+            <!-- Experimental Tools -->
+            <!--<div class="icon tools left">                
+                <button class="" type="button" onclick='toolbarTransToggle();' title="Toggle Transparency of the Toolbars">Trans</button> 
+            </div> -->
+
+            <div class="icon tools left">                
+                <button class="" type="button" onclick='magLoupe();' title="Click to use magnifying loupe">magLoupe</button>                 
+            </div>
+            <!-- Experimental Tools -->
+
 
             <div id="iframe_pivots">
                 <div class="icon tools right iframe_pivot_node">            
@@ -144,6 +158,7 @@
     <!-- Launch Reader -->
     <script type="text/javascript">
         // determine if within iframe
+        // MOVE TO WSU_js.js FILE
         if (top === self) {             
             var iframe = false;
         } 
@@ -162,7 +177,7 @@
             //launchBookReader() must be called first - launches and creates book scaffolding with item metadata            
             launchBookReader(ItemID, leafs, pheight, pwidth, item_title);
             //postLaunch() creates additions and overlays to the reader interface, encapsulated to follow metadata Ajax calls
-            //function can be found in WSUlaunch.js
+            //postLaunch function can be found in WSU_js.js
             postLaunch();        
         }    
     </script>

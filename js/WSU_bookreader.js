@@ -90,6 +90,12 @@ function BookReader() {
     this.fts_box_mode = "static";
     this.fts_accord = "expanded";
     this.fts_results_row = 0;
+
+    //toolbar variable
+    this.toolbar_trans = false;
+
+    //magnifying loupe varialbe
+    this.loupe_status = false;
     
     this.lastDisplayableIndex2up = null;
     
@@ -553,7 +559,7 @@ BookReader.prototype.drawLeafsOnePage = function() {
 // animated scrolling)
 BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
     //alert('drawing leafs!');
-    this.timer = null;
+    this.timer = null;    
     
     var viewWidth = $('#BRcontainer').attr('scrollWidth') - 20; // width minus buffer
 
@@ -917,8 +923,7 @@ BookReader.prototype.drawLeafsTwoPage = function() {
     this.twoPageSetCursor();
 
     this.updatePageNumBox2UP();
-    this.updateToolbarZoom(this.reduce);      
-    
+    this.updateToolbarZoom(this.reduce);    
     
     // this.twoPagePlaceFlipAreas();  // No longer used
 

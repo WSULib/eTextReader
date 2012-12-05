@@ -117,49 +117,7 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
     $('#btnSrch').hide();   
     $('.item_title span.title').html(br.bookTitle.toString());
     $('#leaf_count').html(leafs.toString());
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////
-//Postlaunch operations
-function postLaunch() {
-//////////////////////////////////////////////////////////////////////////////////////
-
-    //Create hidden Full-Text Search dialog    
-    $(document).ready(function() {
-        $fts_dialog = $('<div id="fts_box_text"></div>')            
-            .dialog({
-                autoOpen: false,
-                title: 'Full-Text Search Results',
-                autoResize: 'true'
-            });                   
-    });      
-
-    //create minimize arrow
-    $('#BookReader').append('<div id="WSUtoolbar_minimize" class="WSUdn" title="Show/hide nav bar">v</div>');
-    $('#WSUtoolbar_minimize').click(function() {
-        if ($('#WSUtoolbar_minimize').hasClass('WSUdn')) {            
-            $('#WSUtoolbar, #WSUfooter').slideUp(750);
-            $('#WSUtoolbar_minimize').animate({bottom:'0px'},{duration:750});
-            $('#WSUtoolbar_minimize').addClass('WSUup').removeClass('WSUdn');
-            $('#WSUtoolbar_minimize').html("^");
-            // extend BRcontainer to fill
-        }
-        else {            
-            $('#WSUtoolbar, #WSUfooter').slideDown(750);
-            $('#WSUtoolbar_minimize').animate({bottom:'35px'},{duration:750});
-            $('#WSUtoolbar_minimize').addClass('WSUdn').removeClass('WSUup');
-            $('#WSUtoolbar_minimize').html("v");
-        }
-
-    });
-
-    //set OCR status
-    br.OCRstatus = false;
-
-} //closes postLaunch()
-
-
+} //closes launch
 
 
 
