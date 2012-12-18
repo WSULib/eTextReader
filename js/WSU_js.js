@@ -96,7 +96,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
-    var squery = 'http://141.217.54.38:8080/solr/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback';    
+    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback';    
 
     //pagination counters
     var prev = row_start - 10;
@@ -315,7 +315,7 @@ function getFTSResultsDialog (row_start, search_term) {
     //clear previous results            
     $("#fts_box_text").html('<h2 id="fts_terms_dialog"></h2>');    
    
-    var squery = 'http://141.217.54.38:8080/solr/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback_dialog';    
+    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback_dialog';    
 
     //pagination counters
     var prev = row_start - 10;
@@ -619,7 +619,7 @@ function toggleOCR() {
 
 
 // read pages aloud
-// e.g. http://141.217.54.38:8080/solr/select/?q=page_num:15&fq=ItemID:letter_city&wt=json&json.wrf=callback
+// e.g. http://141.217.97.167:8080/solr/bookreader/select/?q=page_num:15&fq=ItemID:letter_city&wt=json&json.wrf=callback
 function speakPagealoud(source) {
      
     var $current_layout = getPageInfo();
@@ -627,7 +627,7 @@ function speakPagealoud(source) {
         $current_layout.rootpage = $current_layout.rootpage + 2;
         $current_layout.secondarypage = $current_layout.secondarypage + 2;
     }
-    var squery = 'http://141.217.54.38:8080/solr/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+ItemID+'&wt=json&json.wrf=callback';
+    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+ItemID+'&wt=json&json.wrf=callback';
 
     // loading information
     $('#audio_load_alert').fadeIn();
@@ -803,6 +803,26 @@ function magLoupe(){
     }
 }
 
+// fullscreen mode
+function fullScreen(){
+    
+    // the following works in Firefox...
+    // var elem = document.getElementById("bookreader_wrapper");
+    // if (elem.requestFullScreen) {
+    //   elem.requestFullScreen();
+    // } else if (elem.mozRequestFullScreen) {
+    //   elem.mozRequestFullScreen();
+    // } else if (elem.webkitRequestFullScreen) {
+    //   elem.webkitRequestFullScreen();
+    // }
+
+    //calls "fullscreen_API"
+    if (fullScreenApi.supportsFullScreen) {
+        var reader_handle = document.getElementById("bookreader_wrapper");
+        fullScreenApi.requestFullScreen(reader_handle);    
+    }
+
+}
 
 //////////////////////////////////////////////////////////////////////////////////////
 //Listeners

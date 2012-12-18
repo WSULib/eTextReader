@@ -19,6 +19,7 @@
 
     <!-- Load BR init and local functionality -->
     <script type="text/javascript" src="js/WSUlaunch.js"></script>
+    <script type="text/javascript" src="js/fullscreen_API.js"></script>
     <script type="text/javascript" src="js/WSU_js.js"></script>
 
     <!--URL hash detector -->
@@ -44,7 +45,7 @@
         var ItemID = getItemID('ItemID');
 
         $(document).ready(function() {
-            var metaquery = 'http://141.217.54.38:8080/solr/select/?q=ItemID:'+ItemID+'&fq=leafs:*&start=0&rows=10&indent=on&wt=json&json.wrf=callback';
+            var metaquery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=ItemID:'+ItemID+'&fq=leafs:*&start=0&rows=10&indent=on&wt=json&json.wrf=callback';
 
             $.ajax({          
                 url: metaquery,
@@ -64,13 +65,14 @@
 
 </head>
 <body>
+    <div id="bookreader_wrapper">
 
     <div id="WSUtoolbar" class="shadow">
         
         <div class="tool_row">
 
             <div class="logo tools left">
-                <a href="/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
+                <a href="/eTextReader" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
             </div>
 
             <div class="fts_form tools left">
@@ -105,17 +107,6 @@
                 <span id="audio_load_alert" class='label' style="background-color:pink; display:none;" onclick="sayItstop();">audio playing (click to stop)</span>
             </div>
 
-            <!-- Experimental Tools -->
-            <!--<div class="icon tools left">                
-                <button class="" type="button" onclick='toolbarTransToggle();' title="Toggle Transparency of the Toolbars">Trans</button> 
-            </div> -->
-
-            <div class="icon tools left">                
-                <button class="" type="button" onclick='magLoupe();' title="Click to use magnifying loupe">magLoupe</button>                 
-            </div>
-            <!-- Experimental Tools -->
-
-
             <div id="iframe_pivots">
                 <div class="icon tools right iframe_pivot_node">            
                     <button class="tool_icon one_page_mode rollover" type="button" onclick="launch1up(); return false;"></button>
@@ -149,10 +140,23 @@
     </div>
 
     <div id="WSUfooter">
+        <!-- Experimental Tools -->
+        <div class="tools left">
+            <span class="tools left">Experimental:</span>
+        </div>
+        <div class="icon tools left">            
+            <button class="" type="button" onclick='toolbarTransToggle();' title="Toggle Transparency of the Toolbars">Trans</button>         
+            <button class="" type="button" onclick='magLoupe();' title="Click to use magnifying loupe">magLoupe</button>
+            <button class="" type="button" onclick='fullScreen();' title="Click to use magnifying loupe">fullscreen (FF)</button>                 
+        </div>
+        <!-- Experimental Tools -->
+
         <div class="item_title tools right">                
             <span class="title label"></span>
         </div>    
     </div>
+
+    </div> <!--closes bookreader_wrapper-->
     
        
     <!-- Launch Reader -->

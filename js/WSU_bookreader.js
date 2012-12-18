@@ -120,12 +120,18 @@ function BookReader() {
                               {reduce: 16, autofit: null} ];
     */
     /* The autofit code ensures that fit to width and fit to height will be available */
-    this.reductionFactors = [ {reduce: 0.5, autofit: null},
+    this.reductionFactors = [ 
+                          {reduce: 0.5, autofit: null},
                           {reduce: 1, autofit: null},
+                          {reduce: 1.5, autofit: null},
                           {reduce: 2, autofit: null},
+                          {reduce: 2.5, autofit: null},
                           {reduce: 3, autofit: null},
+                          {reduce: 3.5, autofit: null},
                           {reduce: 4, autofit: null},
-                          {reduce: 6, autofit: null} ];
+                          {reduce: 5, autofit: null},
+                          {reduce: 6, autofit: null} 
+                          ];
 
 
     // Object to hold parameters related to 1up mode
