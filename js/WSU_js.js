@@ -14,36 +14,14 @@ function postLaunch() {
     });      
 
     //create minimize arrow
-    $('#BookReader').append('<div id="WSUtoolbar_minimize" class="WSUdn" title="Show/hide nav bar">v</div>');
-    $('#WSUtoolbar_minimize').click(function() {
-        if ($('#WSUtoolbar_minimize').hasClass('WSUdn')) {            
-            $('#WSUtoolbar, #WSUfooter').slideUp(750);
-            $('#WSUtoolbar_minimize').animate({bottom:'0px'},{duration:750});
-            $('#WSUtoolbar_minimize').addClass('WSUup').removeClass('WSUdn');
-            $('#WSUtoolbar_minimize').html("^");
-            // extend BRcontainer to fill
-        }
-        else {            
-            $('#WSUtoolbar, #WSUfooter').slideDown(750);
-            $('#WSUtoolbar_minimize').animate({bottom:'35px'},{duration:750});
-            $('#WSUtoolbar_minimize').addClass('WSUdn').removeClass('WSUup');
-            $('#WSUtoolbar_minimize').html("v");
-        }
-
-    });
+    $('#BookReader').append('<div id="WSUtoolbar_minimize" class="WSUdn" onclick="toolbarsMinimize(); return false;"" title="Show/hide nav bar">v</div>');
+    
 
     //set OCR status
-    br.OCRstatus = false;
+    br.OCRstatus = false;   
 
-    // //set magnifying loupes
-    // $(document).ready(function() {
-    //     $('.BRpageimage').loupe({
-    //         width: 200, // width of magnifier
-    //         height: 150, // height of magnifier
-    //         loupe: 'loupe' // css class for magnifier
-    //     });
-    //     $('.BRpageimage').data('loupe', false);
-    // });
+    //create large navigation arrows
+    bigArrows();
 
 } //closes postLaunch()
 
@@ -142,7 +120,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             for (var i = 0; i < result.response.docs.length; i++) { 
                 
                 //same for all instances in one page
-                var ftsURL = cURL.replace(/(.*?page\/).*?(\/.*?)/, "$1" + result.response.docs[i].page_num + "$2");
+                var ftsURL = cURL.replace(/(.*?page\/).*?(\/.+?\/).*/, "$1" + result.response.docs[i].page_num + "$2");                
                 var page_text = result.response.docs[i].OCR_text.toString();                 
 
                 // grab OCR snippet                
@@ -485,7 +463,7 @@ function displayFTSResultsDialog(){
 //Show OCR
 function showOCR(adjust) {
 
-        //global variable for detecting if OCR is down or up        
+        //global variable for detecting if OCR is on or off
         br.OCRstatus = true;
 
         //get page numbers and page mode
@@ -496,8 +474,6 @@ function showOCR(adjust) {
         
         //2up mode --> ajax call for OCR html
         if (mode == "2up"){
-
-
             
             // left page
             var leafStr = '00000';            
@@ -824,6 +800,176 @@ function fullScreen(){
 
 }
 
+function drawArrowsVert(page_mode) {
+    //get book dimensions
+    var bookwidth = $('#BRpageview').width();
+    var windowheight = $(window).height();    
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // navigation arrows for thumbnail mode currently does not work
+    // tied to line 1334 from WSU_bookreader.js
+    // need to determine 1st image on screen, but getCurrentIndex and hashing the URL don't provide reliable numbers.
+    // get it from the DOM?
+    if (page_mode == "thumbs"){        
+        var dArrow = "<div id='dBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.jumpToIndex("+'"thumb_button"'+"); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_down.png' width=35/></div>";
+        var uArrow = "<div id='uBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.jumpToIndex("+'"thumb_button"'+"); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_up.png' width=35/></div>";           
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////            
+
+    else{
+        // creates arrow background boxes
+        var dArrow = "<div id='dBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.right(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_down.png' width=35/></div>";
+        var uArrow = "<div id='uBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.left(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_up.png' width=35/></div>";
+    }
+
+    $('#overlays').append(dArrow);
+    $('#overlays').append(uArrow);    
+
+    // conditional for width of page; if wider, make buttons 90% of window
+    if (bookwidth < $(window).width()) {
+        $('.bigArrowBoxVert').width(bookwidth * .95);
+        $('#dBigArrow').offset({ top: windowheight - 85, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
+        $('#uBigArrow').offset({ top: 45, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
+    }
+
+    else { //if boxes will not fit next to pages        
+        $('.bigArrowBoxVert').width( $(window).width() * .95);
+        $('#dBigArrow').offset({ top: windowheight - 85, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
+        $('#uBigArrow').offset({ top: 45, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
+    }
+}
+
+function drawArrowsHoriz() {    
+    //get book dimensions
+    var bookwidth = $('#BRtwopageview').width();
+    var bookheight = $('#BRtwopageview').height();                        
+
+    // creates arrow background boxes
+    var rArrow = "<div id='rBigArrow' class='bigArrowBoxHoriz bigArrowHandle' onclick='br.right(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_right.png' width=35/></div>";
+    var lArrow = "<div id='lBigArrow' class='bigArrowBoxHoriz bigArrowHandle' onclick='br.left(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_left.png' width=35/></div>";       
+    $('#overlays').append(rArrow);
+    $('#overlays').append(lArrow);    
+
+    //sets size at 90% of height and offsets from page edges
+    if (bookwidth + 120 < $(window).width()) {
+        $('.bigArrowBoxHoriz').height($('.BRleafEdgeR').height() * .9);
+        $('#rBigArrow').position({my: "left center", at: "right center", offset: "10 0", of: '.BRleafEdgeR'});
+        $('#lBigArrow').position({my: "right center", at: "left center", offset: "-10 0", of: '.BRleafEdgeL'});
+    }
+
+    else { //if boxes will not fit next to pages        
+        //determine button height (specifically for portrait monitors)        
+        if (bookheight > $(window).height() - 100){
+            var button_height = $(window).height() - 100;    
+        }
+        else {
+            var button_height = bookheight * .95;
+        }               
+
+        $('.bigArrowBoxHoriz').height(button_height);        
+        $('#rBigArrow').offset({ top: $(window).height() / 2 - button_height / 2, left: $(window).width() - 50});
+        $('#lBigArrow').offset({ top: $(window).height() / 2 - button_height / 2, left: 10});
+    }
+}
+
+// easy page flip arrows
+function bigArrows(state){
+
+    var $current_layout = getPageInfo();    
+
+    if (br.bigArrowStatus == false || state == "resize" || state == "state_change"){
+
+        //sets status
+        br.bigArrowStatus = true;
+
+        // in the case of resizing, removes previous
+        if (state == "resize" || state == "state_change"){
+            $('.bigArrowHandle').remove();            
+        }
+
+        // run draw1upArrows, draw2upArrows, or drawThumbsArrows here...
+        if ($current_layout.mode == "1up"){
+            drawArrowsVert();
+        }
+        if ($current_layout.mode == "2up"){
+            drawArrowsHoriz();
+        }
+        if ($current_layout.mode == "thumb"){ //removes arrows for now from thumbnail mode
+            // drawArrowsVert('thumbs');
+            br.bigArrowStatus = false;
+            $('.bigArrowHandle').remove();
+            return
+        }               
+
+        //hover functions for big arrow buttons
+        $(".bigArrowHandle").hover(
+            function(){
+                clearTimeout(minimalArrowTimeout);                            
+                $(this).stop(true, false).animate({opacity: 0.35}, 300);
+            }, 
+            function() {                
+                $(this).stop(true, false).animate({opacity: .1}, 300);
+                minimalArrowTimeout = setTimeout(function (){
+                    $(".bigArrowHandle").stop(true, false).animate({opacity: .02}, 300);
+                },2000)                
+            }
+            );       
+
+        return
+    }
+
+    // removes arrows in toggling (likely remove)
+    if (br.bigArrowStatus == true){
+        br.bigArrowStatus = false;
+        $('.bigArrowHandle').remove();
+        return
+    }
+}
+
+function toolbarsMinimize(){
+
+    var $current_layout = getPageInfo(); 
+
+    if ($('#WSUtoolbar_minimize').hasClass('WSUdn')) {            
+        $('#WSUtoolbar, #WSUfooter').slideUp(750);
+        $('#WSUtoolbar_minimize').animate({bottom:'0px'},{duration:750});
+        $('#WSUtoolbar_minimize').addClass('WSUup').removeClass('WSUdn');
+        $('#WSUtoolbar_minimize').html("^");
+        
+        // if (when) nav arrows are on screen
+        if (br.bigArrowStatus == true){
+            if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
+                $('#dBigArrow').offset({ top: $(window).height() - 50});                
+                $('#uBigArrow').offset({ top: 10}); 
+            }            
+        }
+    }
+    else {            
+        $('#WSUtoolbar, #WSUfooter').slideDown(750);
+        $('#WSUtoolbar_minimize').animate({bottom:'35px'},{duration:750});
+        $('#WSUtoolbar_minimize').addClass('WSUdn').removeClass('WSUup');
+        $('#WSUtoolbar_minimize').html("v");
+
+        // if (when) nav arrows are on screen
+        if (br.bigArrowStatus == true){
+            if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
+                bigArrows('resize');               
+            }            
+        }
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//Resizing
+//////////////////////////////////////////////////////////////////////////////////////
+
+//hooked into: switchMode(), zoom1up(), zoom2up(),
+function stateChange(){    
+    bigArrows('state_change');    
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////
 //Listeners
 //////////////////////////////////////////////////////////////////////////////////////
@@ -837,17 +983,21 @@ $(window).resize(function() {
     }, 500);
 });
 
-//redraw OCR after resizing
+//redraws after resizing
 $(window).bind('resizeEnd', function() {
     if (br.OCRstatus == true) {
-        showOCR(); //rename to redrawOCR (and create that function)                
+        showOCR(); //rename to redrawOCR (and create that function)                        
     }
     if (br.fts_displayed == true) {
         var row_start = br.fts_results_row;
         getFTSResultsStatic(row_start);        
     }
-
+    if (br.bigArrowStatus == true) {
+        bigArrows('resize'); 
+    }
 });
+
+
 
 
 

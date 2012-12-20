@@ -54,7 +54,7 @@ function BookReader() {
     this.thumbColumns = 6; // default
     this.thumbMaxLoading = 4; // number of thumbnails to load at once
     this.thumbPadding = 10; // spacing between thumbnails
-    this.displayedRows=[];
+    this.diszoomplayedRows=[];
     
     this.displayedIndices = [];
     //this.indicesToDisplay = [];
@@ -78,7 +78,9 @@ function BookReader() {
     this.firstIndex = null;
 
     //global variables needed
-    this.ItemID = null;
+    this.ItemID = null;    
+
+    //////////////////////////////////////////////////////////////////////////////////////////
 
     //OCR variable
     this.OCRstatus = null;
@@ -96,6 +98,13 @@ function BookReader() {
 
     //magnifying loupe varialbe
     this.loupe_status = false;
+
+    //big nav arrow status
+    this.bigArrowStatus = false;
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+
     
     this.lastDisplayableIndex2up = null;
     
@@ -929,10 +938,7 @@ BookReader.prototype.drawLeafsTwoPage = function() {
     this.twoPageSetCursor();
 
     this.updatePageNumBox2UP();
-    this.updateToolbarZoom(this.reduce);    
-    
-    // this.twoPagePlaceFlipAreas();  // No longer used
-
+    this.updateToolbarZoom(this.reduce);
 }
 
 // updatePageNumBox2UP
@@ -950,14 +956,14 @@ BookReader.prototype.updatePageNumBox2UP = function() {
 //______________________________________________________________________________
 BookReader.prototype.loadLeafs = function() {
 
-
     var self = this;
     if (null == this.timer) {
         this.timer=setTimeout(function(){self.drawLeafs()},250);
     } else {
         clearTimeout(this.timer);
         this.timer=setTimeout(function(){self.drawLeafs()},250);    
-    }
+    }    
+
 }
 
 // zoom(direction)
@@ -966,7 +972,7 @@ BookReader.prototype.loadLeafs = function() {
 //______________________________________________________________________________
 BookReader.prototype.zoom = function(direction) {
     switch (this.mode) {
-        case this.constMode1up:
+        case this.constMode1up:        
             if (direction == 1) {
                 // XXX other cases
                 return this.zoom1up('in');
@@ -987,6 +993,7 @@ BookReader.prototype.zoom = function(direction) {
             return this.zoomThumb(direction);
             
     }
+
 }
 
 // zoom1up(dir)
@@ -1020,6 +1027,9 @@ BookReader.prototype.zoom1up = function(direction) {
     // Recalculate search hilites
     this.removeSearchHilites(); 
     this.updateSearchHilites();
+
+    //callback to local js file
+    stateChange();
 
 }
 
@@ -1190,6 +1200,9 @@ BookReader.prototype.zoom2up = function(direction) {
     
     // Prepare view with new center to minimize visual glitches
     this.prepareTwoPageView(oldCenter.percentageX, oldCenter.percentageY);
+
+    //callback to local js file
+    stateChange();
 }
 
 BookReader.prototype.zoomThumb = function(direction) {
@@ -1444,6 +1457,9 @@ BookReader.prototype.switchMode = function(mode) {
         this.twoPageCenterView(0.5, 0.5); // $$$ TODO preserve center
         arrowsFlip('2up');
     }
+
+    //callback to local js file
+    stateChange();
 
 }
 

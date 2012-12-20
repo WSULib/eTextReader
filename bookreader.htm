@@ -67,6 +67,8 @@
 <body>
     <div id="bookreader_wrapper">
 
+    <div id="overlays"></div>
+
     <div id="WSUtoolbar" class="shadow">
         
         <div class="tool_row">
@@ -116,9 +118,9 @@
 
                 <div class="icon tools right iframe_pivot_node">            
                     <button id="front_nav" class="tool_icon arrow_leftmost rollover" type="button" onclick='br.leftmost(); return false;'></button>
-                    <button id="previous_nav" class="tool_icon arrow_left rollover" type="button" onclick='br.left(); return false;'></button>
-                    <button id="next_nav" class="tool_icon arrow_right rollover" type="button" onclick='br.right(); return false;'></button>
-                    <button id="back_nav" class="tool_icon arrow_rightmost rollover" type="button" onclick='br.rightmost(); return false;'></button>            
+                    <!-- <button id="previous_nav" class="tool_icon arrow_left rollover" type="button" onclick='br.left(); return false;'></button>
+                    <button id="next_nav" class="tool_icon arrow_right rollover" type="button" onclick='br.right(); return false;'></button> -->
+                    <button id="back_nav" class="tool_icon arrow_rightmost rollover" type="button" onclick='br.rightmost(); return false;'></button>
                     <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
                         <span class='label'>Page<input id='BRpagenum' type='text' size='2' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
                     </form>            
@@ -147,7 +149,8 @@
         <div class="icon tools left">            
             <button class="" type="button" onclick='toolbarTransToggle();' title="Toggle Transparency of the Toolbars">Trans</button>         
             <button class="" type="button" onclick='magLoupe();' title="Click to use magnifying loupe">magLoupe</button>
-            <button class="" type="button" onclick='fullScreen();' title="Click to use magnifying loupe">fullscreen (FF)</button>                 
+            <button class="" type="button" onclick='fullScreen();' title="Click to use magnifying loupe">fullscreen (FF)</button>
+            <button class="" type="button" onclick='bigArrows();' title="temp: creates arrows">toggle Nav arrows</button>                             
         </div>
         <!-- Experimental Tools -->
 
@@ -183,7 +186,9 @@
             //postLaunch() creates additions and overlays to the reader interface, encapsulated to follow metadata Ajax calls
             //postLaunch function can be found in WSU_js.js
             postLaunch();        
-        }    
+        }       
+
+
     </script>
 
 </body>
