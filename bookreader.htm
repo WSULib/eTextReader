@@ -16,6 +16,7 @@
     <!-- Main BookReader JS and CSS // "WSU" prefix for modified versions-->
     <script type="text/javascript" src="js/WSU_bookreader.js"></script>
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_BookReader.css"/>    
+    <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive_icons/css/elusive-webfont.css"/>
 
     <!-- Load BR init and local functionality -->
     <script type="text/javascript" src="js/WSUlaunch.js"></script>
@@ -34,6 +35,9 @@
 
     <!--Touch Punch Hack / http://touchpunch.furf.com/ -->
     <!--<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script> -->
+
+    <!--jQuery Rotate -->
+    <script type="text/javascript" src="js/jQueryRotate.2.2.js"></script> 
 
     <!-- ////////////////////// Get Item ID & Metadata //////////////////////// -->
     <script type="text/javascript">
@@ -108,6 +112,12 @@
                 <button class="tool_icon speak rollover" type="button" onclick='speakPagealoud();' title="Click to Speak Aloud"></button> 
                 <span id="audio_load_alert" class='label' style="background-color:pink; display:none;" onclick="sayItstop();">audio playing (click to stop)</span>
             </div>
+
+            <!-- TEST ELUSIVE ICONS -->           
+           <!-- <i class="icon-zoom-in"/>
+           <i class="icon-zoom-out"/> -->
+           <!-- <img class="icon" src="css/elusive_icons/dev/svg/zoom-in.svg" height="22"/> -->
+
 
             <div id="iframe_pivots">
                 <div class="icon tools right iframe_pivot_node">            

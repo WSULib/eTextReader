@@ -20,8 +20,13 @@ function postLaunch() {
     //set OCR status
     br.OCRstatus = false;   
 
-    //create large navigation arrows
+    //create large navigation arrows - 2 second bold to show user they are there
     bigArrows();
+    bigArrowsPulse();
+                    
+                   
+
+
 
 } //closes postLaunch()
 
@@ -910,7 +915,7 @@ function bigArrows(state){
             function() {                
                 $(this).stop(true, false).animate({opacity: .1}, 300);
                 minimalArrowTimeout = setTimeout(function (){
-                    $(".bigArrowHandle").stop(true, false).animate({opacity: .02}, 300);
+                    $(".bigArrowHandle").stop(true, false).animate({opacity: .06}, 300);
                 },2000)                
             }
             );       
@@ -924,6 +929,13 @@ function bigArrows(state){
         $('.bigArrowHandle').remove();
         return
     }
+}
+
+function bigArrowsPulse(){
+    $(".bigArrowHandle").stop(true, false).animate({opacity: .35}, 500);
+    minimalArrowTimeout = setTimeout(function (){
+        $(".bigArrowHandle").stop(true, false).animate({opacity: .06}, 750);
+    },2500) 
 }
 
 function toolbarsMinimize(){
@@ -966,7 +978,8 @@ function toolbarsMinimize(){
 
 //hooked into: switchMode(), zoom1up(), zoom2up(),
 function stateChange(){    
-    bigArrows('state_change');    
+    bigArrows('state_change');
+    bigArrowsPulse();    
 }
 
 

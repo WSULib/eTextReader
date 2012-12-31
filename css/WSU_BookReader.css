@@ -112,7 +112,7 @@ a { cursor: hand; cursor: pointer; }
     margin-top:5%;    
     width:45%;
     height:90%;
-    z-index:2;
+    z-index:20001;
     background-color:rgba(252,244,214,.9);
     display:none;
     overflow-y:scroll;
