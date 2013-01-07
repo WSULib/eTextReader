@@ -1425,9 +1425,12 @@ BookReader.prototype.jumpToIndex = function(index, pageX, pageY) {
         $('#html_concat').scrollTo("#page_ID_" + (index + 1));
     }
 
-    if (br.imageHighlights == true){
-        removeImageHighlights();        
-        //renderImageHighlights(br.search_term); // Need to tether to when the image has loaded...
+    if (br.imageHighlights == true){        
+        removeImageHighlights();
+        // $(document).ready(function() {
+        //     renderImageHighlights(br.search_term); // Need to tether to when the image has loaded...
+        // });        
+        
     }
 }
 

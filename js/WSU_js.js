@@ -292,6 +292,12 @@ function hideFTSResultsStatic(){
         $('#html_concat').width($(window).width() - 40)
     }
     br.fts_displayed = false;
+
+    //image / plain text highlights highlights
+    removeImageHighlights();
+    removePlainTextHighlights();
+
+
 }
 
 //Collapse FTS results Static
@@ -866,6 +872,9 @@ function plainText(plainStatus){
 
         $('#html_concat').load(html_concat, function(){
             $('#html_concat').scrollTo("#page_ID_" + $current_layout.rootpage);
+            if(br.fts_displayed == true){
+                renderPlainTextHighlights();
+            }
         });
 
         //create page numbers / links
