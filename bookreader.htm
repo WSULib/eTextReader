@@ -4,7 +4,9 @@
 <head>
     <title>POPULATE WITH METADATA FROM ItemID</title>   
    
-    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+    <!--<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
+    
     <script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="js/dragscrollable.js"></script>    
     <!-- <script type="text/javascript" src="js/jquery.ui.ipad.js"></script>-->
@@ -31,13 +33,13 @@
     <script type="text/javascript" src="js/jplayer.say.js"></script>
 
     <!--magnifier / tjpzoom -->    
-    <script type="text/javascript" src="js/jquery.loupe.js"></script>
-
-    <!--Touch Punch Hack / http://touchpunch.furf.com/ -->
-    <!--<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script> -->
+    <script type="text/javascript" src="js/jquery.loupe.js"></script>    
 
     <!--jQuery Rotate -->
     <script type="text/javascript" src="js/jQueryRotate.2.2.js"></script> 
+
+    <!--jquery highlight-->
+    <script type="text/javascript" src="js/jquery.highlight.js"></script> 
 
     <!-- ////////////////////// Get Item ID & Metadata //////////////////////// -->
     <script type="text/javascript">
@@ -88,13 +90,6 @@
                     <button id="fts_search_button" type="button" onclick="getFTSResultsStatic(0); return false;">Go</button> 
                 </form>                
             </div>
-            <script type="text/javascript">
-                //punch through - NOT WORKING.
-                $('.input').bind('click', function(){
-                    $(this).focus();
-                });
-            </script>           
-
             
             <div class="icon tools left">                
                 <button class="tool_icon zoom_out rollover" type="button" onclick='br.zoom(-1); return false;'></button>                
@@ -160,7 +155,9 @@
             <button class="" type="button" onclick='toolbarTransToggle();' title="Toggle Transparency of the Toolbars">Trans</button>         
             <button class="" type="button" onclick='magLoupe();' title="Click to use magnifying loupe">magLoupe</button>
             <button class="" type="button" onclick='fullScreen();' title="Click to use magnifying loupe">fullscreen (FF)</button>
-            <button class="" type="button" onclick='bigArrows();' title="temp: creates arrows">toggle Nav arrows</button>                             
+            <button class="" type="button" onclick='bigArrows();' title="temp: creates arrows">toggle Nav arrows</button>
+            <button class="" type="button" onclick='plainText();' title="Switches to Plain Text / HTML">Plain Text</button>
+            <button class="" type="button" onclick='removeImageHighlights();' title="highlight search_term on images">Remove Highlights</button>
         </div>
         <!-- Experimental Tools -->
 
@@ -188,7 +185,7 @@
             $('.iframe_pivot_node').removeClass('right').addClass('left'); //switches right / left
 
             var iframe = true;
-        }        
+        }    
 
         function postMetaCall(leafs, pheight, pwidth, item_title){
             //launchBookReader() must be called first - launches and creates book scaffolding with item metadata            

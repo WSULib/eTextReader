@@ -102,6 +102,16 @@ function BookReader() {
     //big nav arrow status
     this.bigArrowStatus = false;
 
+    //plain text / full HTML status
+    this.plainTextStatus = false;
+    this.plainTextHighlights = false;
+
+    //global search_term variable
+    this.search_term = "null";
+
+    //highlight image strings status
+    this.imageHighlights = false;
+
     //////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -531,7 +541,7 @@ BookReader.prototype.drawLeafsOnePage = function() {
 
             var img = document.createElement("img");
             img.src = this._getPageURI(index, this.reduce, 0);
-            $(img).addClass('BRnoselect');
+            $(img).addClass('BRnoselect').attr('id',(index+1));
             $(img).css('width', width+'px');
             $(img).css('height', height+'px');
             $(div).append(img);
@@ -938,7 +948,6 @@ BookReader.prototype.drawLeafsTwoPage = function() {
     this.twoPageSetCursor();
 
     this.updatePageNumBox2UP();
-    this.updateToolbarZoom(this.reduce);
 }
 
 // updatePageNumBox2UP
@@ -1323,7 +1332,8 @@ BookReader.prototype.jumpToPage = function(pageNum) {
         var leafTop = 0;
         var h;
         this.jumpToIndex(pageIndex);
-        $('#BRcontainer').attr('scrollTop', leafTop);
+        $('#BRcontainer').attr('scrollTop', leafTop);       
+
         return true;
     }
     
@@ -1408,6 +1418,16 @@ BookReader.prototype.jumpToIndex = function(index, pageX, pageY) {
 
         //$('#BRcontainer').attr('scrollTop', leafTop);
         $('#BRcontainer').animate({scrollTop: leafTop, scrollLeft: leafLeft },'fast');
+    }    
+
+    // scrolls plain text if br.plainTextStatus is true
+    if (br.plainTextStatus == true){
+        $('#html_concat').scrollTo("#page_ID_" + (index + 1));
+    }
+
+    if (br.imageHighlights == true){
+        removeImageHighlights();        
+        //renderImageHighlights(br.search_term); // Need to tether to when the image has loaded...
     }
 }
 
@@ -2573,7 +2593,8 @@ BookReader.prototype.prefetchImg = function(index) {
     if (loadImage) {
         //console.log('prefetching ' + index);
         var img = document.createElement("img");
-        $(img).addClass('BRpageimage').addClass('BRnoselect');
+        $(img).addClass('BRpageimage').addClass('BRnoselect').attr('id',(index+1));
+        // alert(index);
         if (index < 0 || index > (this.numLeafs - 1) ) {
             // Facing page at beginning or end, or beyond
             $(img).css({
