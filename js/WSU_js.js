@@ -263,16 +263,15 @@ function displayFTSResultsStatic(row_start, search_term){
     fts_handle_static.fadeIn();
 
     //highlight matched strings on image
-    if (br.imageHighlights == true){
-        removeImageHighlights();
-    }
+    // if (br.imageHighlights == true){
+    //     removeImageHighlights();
+    // }
     renderImageHighlights(search_term);
 
-    //highlight matched strings on image
+    //highlight matched strings on plain text
     if (br.plainTextHighlights == true){
         removePlainTextHighlights();
     }
-
     if (br.plainTextStatus == true){
         renderPlainTextHighlights(search_term);
     }
@@ -296,6 +295,7 @@ function hideFTSResultsStatic(){
     //image / plain text highlights highlights
     removeImageHighlights();
     removePlainTextHighlights();
+    br.imageHighlights = false;
 
 
 }
@@ -972,6 +972,9 @@ function renderImageHighlights(search_term){
 
     $current_layout = getPageInfo();
 
+    //clear previous
+    $(".image_highlight").remove();   
+
     // 2up
     if ($current_layout.mode == "2up") {
         //left XML location
@@ -986,8 +989,8 @@ function renderImageHighlights(search_term){
         var re = new RegExp("0{"+htmlStr.length+"}$");
         var right_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
 
-        drawBoxes($current_layout.rootpage, left_xml_doc,search_term,'l');
-        drawBoxes($current_layout.secondarypage, right_xml_doc,search_term,'r');
+        drawBoxes($current_layout.rootpage, left_xml_doc,br.search_term,'l');
+        drawBoxes($current_layout.secondarypage, right_xml_doc,br.search_term,'r');
     }
 }
 
@@ -1056,13 +1059,14 @@ function drawBoxes(image_index, xml_doc, search_term, leaf_side, match_indices){
             // console.log("highlight box",h_info);
 
             //draw boxes where "i" is the current match number
-            $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' class='image_highlight'></div>"); //number with match indices...
-            $('#'+leaf_side+'_match_'+i).animate({
+            $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'></div>"); //number with match indices...
+            $('#'+leaf_side+'_match_'+i).css({
                 'height': h_info['height'],
                 'width': h_info['width'],
                 'top': h_info['vpos'],
                 'left': h_info['hpos']
-            },1000);            
+            },1000);
+            $('.image_highlight').fadeIn();            
         }
 
 
@@ -1077,7 +1081,7 @@ function drawBoxes(image_index, xml_doc, search_term, leaf_side, match_indices){
 //hooked into: switchMode(), zoom1up(), zoom2up(),
 function stateChange(){    
     bigArrows('state_change');
-    bigArrowsPulse();    
+    bigArrowsPulse();
 }
 
 
@@ -1107,3 +1111,6 @@ $(window).bind('resizeEnd', function() {
         bigArrows('resize'); 
     }
 });
+
+/* Notes
+line 2397 in WSU_bookreader.js is the key...*/

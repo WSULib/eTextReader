@@ -1423,15 +1423,7 @@ BookReader.prototype.jumpToIndex = function(index, pageX, pageY) {
     // scrolls plain text if br.plainTextStatus is true
     if (br.plainTextStatus == true){
         $('#html_concat').scrollTo("#page_ID_" + (index + 1));
-    }
-
-    if (br.imageHighlights == true){        
-        removeImageHighlights();
-        // $(document).ready(function() {
-        //     renderImageHighlights(br.search_term); // Need to tether to when the image has loaded...
-        // });        
-        
-    }
+    }    
 }
 
 // switchMode()
@@ -2375,6 +2367,14 @@ BookReader.prototype.flipLeftToRight = function(newIndexL, newIndexR) {
                 $('.OCR_box').remove();
                 showOCR();
             }
+
+            //redraw image highlights
+            if (br.imageHighlights == true){                
+                renderImageHighlights();                
+            }
+            else{
+                removeImageHighlights();
+            }
             
             if (self.animationFinishedCallback) {                
                 self.animationFinishedCallback();                
@@ -2436,6 +2436,10 @@ BookReader.prototype.willChangeToIndex = function(index)
 //______________________________________________________________________________
 // Flip from left to right and show the nextL and nextR indices on those sides
 BookReader.prototype.flipRightToLeft = function(newIndexL, newIndexR) {
+
+    //hide image highlights if present
+    $(".image_highlight").hide();
+
     var oldLeafEdgeWidthL = this.leafEdgeWidth(this.twoPage.currentIndexL);
     var oldLeafEdgeWidthR = this.twoPage.edgeWidth-oldLeafEdgeWidthL;
     var newLeafEdgeWidthL = this.leafEdgeWidth(newIndexL);  
@@ -2526,6 +2530,14 @@ BookReader.prototype.flipRightToLeft = function(newIndexL, newIndexR) {
                 // alert("OCR was here!");
                 $('.OCR_box').remove();
                 showOCR();
+            }
+
+            //redraw image highlights
+            if (br.imageHighlights == true){                
+                renderImageHighlights();                
+            }
+            else{
+                removeImageHighlights();
             }
             
             if (self.animationFinishedCallback) {
@@ -4609,7 +4621,7 @@ BookReader.prototype.startLocationPolling = function() {
                 if (self.animating) {
                     self.autoStop();
                     self.animationFinishedCallback = function() {
-                        self.updateFromParams(self.paramsFromFragment(newHash));
+                        self.updateFromParams(self.paramsFromFragment(newHash));                        
                     }                        
                 } else { // update immediately
                     self.updateFromParams(self.paramsFromFragment(newHash));
