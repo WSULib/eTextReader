@@ -29,6 +29,16 @@ a { cursor: hand; cursor: pointer; }
     font-size:1.2em;
     width:100%;
     text-align:center;
+    color: #00594d;
+}
+
+#fts_top_nav {
+    margin-top:3px;
+    margin-bottom:5px;    
+}
+
+#fts_bottom_nav a{
+    margin-top:8px;
 }
 
 #fts_search_button {
@@ -41,6 +51,7 @@ a { cursor: hand; cursor: pointer; }
 
 #fts_terms {
     margin-top:20px;
+    margin-bottom:0px;
     font-weight:bold;
     font-size:1.5em;    
 }
@@ -54,9 +65,16 @@ a { cursor: hand; cursor: pointer; }
     border: 1px solid rgba(71,86,73,.8);
     text-align:left;
     z-index: 20001;
-    padding:10px;
-    overflow-y:scroll;
+    padding:0px 10px;
+    /*padding-left:10px;*/
+    /*padding-right:10px;*/
+    overflow:hidden;
+    /*overflow-y:scroll;*/
+}
 
+#fts_results_wrapper {
+    overflow-y:scroll;
+    height:100%;
 }
 
 #fts_box_text_static .right{
@@ -80,8 +98,15 @@ a { cursor: hand; cursor: pointer; }
     clear:both;
 }
 
+#fts_static_tools{
+    /*position:fixed;*/
+    margin-bottom:3px;
+    margin-top:3px;
+}
+
 .fts_result {
     font-size:1.2em;
+    padding:3px;
 }
 
 .highlighted {
@@ -171,6 +196,12 @@ a { cursor: hand; cursor: pointer; }
     -moz-box-shadow: 0px 1px 15px #303030;
     -webkit-box-shadow: 0px 1px 15px #303030;
     box-shadow: 0px 1px 15px #303030;
+}
+
+.shadow_bottom {
+   -webkit-box-shadow: 0 2px 4px -3px #303030;
+   -moz-box-shadow: 0 2px 4px -3px #303030;
+        box-shadow: 0 2px 4px -3px #303030;
 }
 
 .pbox_border {
@@ -435,7 +466,7 @@ input[type='password'], textarea
 
 .bigArrowBoxHoriz {
     position:fixed;
-    width:40px;
+    width:30px;
     background-color:rgba(0,0,0,1);
     height:200px;
     z-index:20000;
@@ -444,7 +475,7 @@ input[type='password'], textarea
 
 .bigArrowBoxVert{
     /*position:absolute;    */
-    height:40px;
+    height:30px;
     width:200px; /*will change*/
     background-color:rgba(0,0,0,1);    
     z-index:20000;
@@ -460,11 +491,36 @@ input[type='password'], textarea
 
 .bigArrowHandle{
     opacity:0.06;
-    /*
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    border-radius:4px;
-    */
+    
+    /*-moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;*/
+    
+}
+
+/* Arrow rounding */
+#lBigArrow{
+    -moz-border-radius:10px 0px 0px 10px;
+    -webkit-border-radius:10px 0px 0px 10px;
+    border-radius:10px 0px 0px 10px;
+}
+
+#rBigArrow{
+    -moz-border-radius:0px 10px 10px 0px;
+    -webkit-border-radius:0px 10px 10px 0px;
+    border-radius:0px 10px 10px 0px;
+}
+
+#uBigArrow{
+    -moz-border-radius:10px 10px 0px 0px;
+    -webkit-border-radius:10px 10px 0px 0px;
+    border-radius:10px 10px 0px 0px;
+}
+
+#dBigArrow{
+    -moz-border-radius:0px 0px 10px 10px;
+    -webkit-border-radius:0px 0px 10px 10px;
+    border-radius:0px 0px 10px 10px;
 }
 
 /*Vertically align images in div*/
@@ -506,7 +562,21 @@ input[type='password'], textarea
     border-top: 1px dotted
 }
 
+#loading_animation{
+    width:40px;
+    height:40px;
+    z-index:40000;
+    background-color:black;
+    display:none;
+    background:url('http://www.lettersmarket.com/uploads/lettersmarket/blog/loaders/common_gray/ajax_loader_gray_256.gif') no-repeat;
+    background-size:40px 40px;
+}
 
+.leaf_num{
+    color:blue;
+    float:right;
+    z-index:40000;
+}
 
 /* --------------------------------------------------------------------- */
 
@@ -562,8 +632,8 @@ a {
     float: right;
 }
 #BRcontainer {
-    top:5px;
-    bottom:5px;
+    top:0px;
+    bottom:0px;
     width:100%;
     /*min-width:800px;*/
     z-index: 1;

@@ -84,6 +84,7 @@ function BookReader() {
 
     //OCR variable
     this.OCRstatus = null;
+    this.plainOCRstatus = false;
 
     //FTS variables
     $fts_dialog = null;
@@ -111,6 +112,7 @@ function BookReader() {
 
     //highlight image strings status
     this.imageHighlights = false;
+
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -418,6 +420,7 @@ BookReader.prototype.setupKeyListeners = function() {
 // drawLeafs()
 //______________________________________________________________________________
 BookReader.prototype.drawLeafs = function() {
+    showLoading();
     if (1 == this.mode) {
         this.drawLeafsOnePage();
     } else if (3 == this.mode) {
@@ -425,7 +428,7 @@ BookReader.prototype.drawLeafs = function() {
     } else {
         this.drawLeafsTwoPage();
     }
-    
+    hideLoading();
 }
 
 // bindGestures(jElement)
@@ -1355,9 +1358,9 @@ BookReader.prototype.jumpToIndex = function(index, pageX, pageY) {
         // By checking against min/max we do nothing if requested index
         // is current
         if (index < Math.min(this.twoPage.currentIndexL, this.twoPage.currentIndexR)) {
-            this.flipBackToIndex(index);
+            this.flipBackToIndex(index);            
         } else if (index > Math.max(this.twoPage.currentIndexL, this.twoPage.currentIndexR)) {
-            this.flipFwdToIndex(index);
+            this.flipFwdToIndex(index);            
         }
 
     } else if (this.constModeThumb == this.mode) {
@@ -2359,22 +2362,6 @@ BookReader.prototype.flipLeftToRight = function(newIndexL, newIndexR) {
             // self.twoPagePlaceFlipAreas(); // No longer used
             self.setMouseHandlers2UP();
             self.twoPageSetCursor();
-
-            // Reinstates OCR after page flip    
-            //Check OCR status, recreate if true
-            if (br.OCRstatus == true) {
-                // alert("OCR was here!");
-                $('.OCR_box').remove();
-                showOCR();
-            }
-
-            //redraw image highlights
-            if (br.imageHighlights == true){                
-                renderImageHighlights();                
-            }
-            else{
-                removeImageHighlights();
-            }
             
             if (self.animationFinishedCallback) {                
                 self.animationFinishedCallback();                
@@ -2523,22 +2510,6 @@ BookReader.prototype.flipRightToLeft = function(newIndexL, newIndexR) {
             // self.twoPagePlaceFlipAreas(); // No longer used
             self.setMouseHandlers2UP();     
             self.twoPageSetCursor();
-
-            // Reinstates OCR after page flip    
-            //Check OCR status, recreate if true
-            if (br.OCRstatus == true) {
-                // alert("OCR was here!");
-                $('.OCR_box').remove();
-                showOCR();
-            }
-
-            //redraw image highlights
-            if (br.imageHighlights == true){                
-                renderImageHighlights();                
-            }
-            else{
-                removeImageHighlights();
-            }
             
             if (self.animationFinishedCallback) {
                 self.animationFinishedCallback();

@@ -4,8 +4,9 @@
 <head>
     <title>POPULATE WITH METADATA FROM ItemID</title>   
    
-    <!--<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>-->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+    <!-- Can't remember why we need 
+    <!-- // <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script> --> 
     
     <script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="js/dragscrollable.js"></script>    
@@ -108,10 +109,11 @@
                 <span id="audio_load_alert" class='label' style="background-color:pink; display:none;" onclick="sayItstop();">audio playing (click to stop)</span>
             </div>
 
-            <!-- TEST ELUSIVE ICONS -->           
-           <!-- <i class="icon-zoom-in"/>
-           <i class="icon-zoom-out"/> -->
-           <!-- <img class="icon" src="css/elusive_icons/dev/svg/zoom-in.svg" height="22"/> -->
+           
+
+            <!-- <div class="item_title tools right">                
+                <span class="title label"></span>
+            </div>  -->
 
 
             <div id="iframe_pivots">
@@ -158,12 +160,11 @@
             <button class="" type="button" onclick='bigArrows();' title="temp: creates arrows">toggle Nav arrows</button>
             <button class="" type="button" onclick='plainText();' title="Switches to Plain Text / HTML">Plain Text</button>
             <button class="" type="button" onclick='removeImageHighlights();' title="highlight search_term on images">Remove Highlights</button>
+            <button class="" type="button" onclick='$("#WSUfooter").hide();' title="highlight search_term on images">Destroy Footer</button>
         </div>
         <!-- Experimental Tools -->
 
-        <div class="item_title tools right">                
-            <span class="title label"></span>
-        </div>    
+           
     </div>
 
     </div> <!--closes bookreader_wrapper-->

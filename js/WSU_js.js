@@ -1,18 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////
 //Postlaunch operations
-function postLaunch() {
-//////////////////////////////////////////////////////////////////////////////////////
-
-    // DEPRACATED (see lines 294-466)
-    // //Create hidden Full-Text Search dialog    
-    // $(document).ready(function() {
-    //     $fts_dialog = $('<div id="fts_box_text"></div>')            
-    //         .dialog({
-    //             autoOpen: false,
-    //             title: 'Full-Text Search Results',
-    //             autoResize: 'true'
-    //         });                   
-    // });      
+function postLaunch() {    
 
     //create minimize arrow
     $('#BookReader').append('<div id="WSUtoolbar_minimize" class="WSUdn" onclick="toolbarsMinimize(); return false;"" title="Show/hide nav bar">v</div>');
@@ -28,11 +16,8 @@ function postLaunch() {
 } //closes postLaunch()
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////
 //Other Functions
-//////////////////////////////////////////////////////////////////////////////////////
-
 
 //Get page number(s) and layout mode    
 function getPageInfo (){
@@ -62,6 +47,8 @@ function getPageInfo (){
 //FTS search results
 function getFTSResultsStatic (row_start, fts_box_mode) {
 
+    showLoading();
+
     //expands FTS results if collapsed
     var fts_accord = br.fts_accord;
     if (fts_accord == "collapsed") {
@@ -69,8 +56,10 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     }
 
     //Create hidden Full-Text Search static box
-    $fts_static = $('<div id="fts_box_text_static" class="shadow"></div>');
-    $('body').append($fts_static);
+    if (br.fts_displayed == false){
+        $fts_static = $('<div id="fts_box_text_static" class="shadow"></div>');
+        $('body').append($fts_static);
+    }
 
     //clear previous results            
     $("#fts_box_text_static").html('<p id="fts_terms"></p>');
@@ -78,27 +67,25 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
     var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback';
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     //conditional for plain text (follows acquisition of search term)                    
     if (br.plainTextStatus == true){
-
         //resize html_concat
         $('#html_concat').css('margin-left','325px');
         $('#html_concat').width($(window).width() - 365)
 
-        //unhighlight previous
-        //I THINK THIS IS MEMORY HOG....
-        $("#html_concat p").unhighlight();                        
+        //unhighlight previous        
+        $("#html_concat p").unhighlight(function(){
+            $("#html_concat p").highlight(br.search_term, { wordsOnly: true });
+        });                        
         
         // highlights all instances of word in HTML body
-        $("#html_concat p").highlight(search_term, { wordsOnly: true });
+        // $("#html_concat p").highlight(br.search_term, { wordsOnly: true });
 
         //could turn those matches into links too...
         // $("body p").highlight("jQuery", { element: 'a', className: 'jQueryLink'});
-        // $("body p a.jQueryLink").attr({ href: 'http://jquery.com' });                        
-    }                    
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+        // $("body p a.jQueryLink").attr({ href: 'http://jquery.com' });
+    }
 
     //pagination counters
     var prev = row_start - 10;
@@ -128,53 +115,37 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
         else {
 
-            //set counter for alternating background color
-            counter = 0;
+            //set class_counter for alternating background color
+            class_counter = 0;
 
             $('#fts_terms').html('Search results for: "<span class="fts_highlight">' + search_term + '</span>"');
             $('#fts_terms').append('<div id="fts_counts"></div>');            
             $('#fts_counts').append('Found on '+result.response.numFound+' pages.</br>');
             if (next < result.response.numFound){
-                $('#fts_counts').append('Displaying results: '+(row_start + 1)+' - '+(row_start + 10));
+                $('#fts_counts').append('Results for pages: '+(row_start + 1)+' - '+(row_start + 10));
             }
             else {
                 $('#fts_counts').append('Displaying pages '+(row_start + 1)+' - '+result.response.numFound);    
             }
 
-            for (var i = 0; i < result.response.docs.length; i++) { 
-                
-                
+            //create results wrapper
+            $("#fts_box_text_static").append("<div id='fts_results_wrapper'></div>");
+
+            //this represents all hits from Solr...            
+            for (var i = 0; i < result.response.docs.length; i++) {
+
                 //same for all instances in one page
                 var ftsURL = cURL.replace(/(.*?page\/).*?(\/.+?\/).*/, "$1" + result.response.docs[i].page_num + "$2");                
                 var page_text = result.response.docs[i].OCR_text.toString();                 
 
-                // grab OCR snippet                
-                // More difficult than originally thought.  The current setup returns only the first match for a given page of OCR text. We want every instance within a page.                
-                // The following function produces the indices of all occurences of the search term on a page.  
-                // Iterate over these instances as the OCR snippet each time.
-
-                // INDICES LOCATOR /////////////////////////////////////////////////////////////////////////
-                function getIndicesOf(searchStr, str, caseSensitive) {
-                    var startIndex = 0, searchStrLen = searchStr.length;
-                    var index, indices = [];
-                    if (!caseSensitive) {
-                        str = str.toLowerCase();
-                        searchStr = searchStr.toLowerCase();
-                    }
-                    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
-                        indices.push(index);
-                        startIndex = index + searchStrLen;
-                    }
-                    return indices;
-                }
-
+                // grab OCR snippet
                 search_term = search_term.replace(/["']/g, "");
-                var term_indices = getIndicesOf(search_term, page_text, false);                                
-                // INDICES LOCATOR /////////////////////////////////////////////////////////////////////////
+                var term_indices = getIndicesOf(search_term, page_text, false); //function defined below                               
+                
 
                 //Itereate through the indices and display results
-                for (var instance_counter = 0; instance_counter < term_indices.length; instance_counter++) {
-                    var search_loc = term_indices[instance_counter]; //search_term location
+                for (var instance_class_counter = 0; instance_class_counter < term_indices.length; instance_class_counter++) {
+                    var search_loc = term_indices[instance_class_counter]; //search_term location
 
                     if (page_text.length < 80) {
                         var snippet_start = 0;
@@ -199,30 +170,29 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
                         }
                     }                    
                     
-                    //create snippet and append to page DOM             
-                    OCR_snippet = page_text.slice(snippet_start,snippet_end).replace(search_term,'<span class="fts_highlight">'+search_term+'</span style="background-color:pink;">');
+                    //create snippet and append to page DOM                                 
+                    //uses RegExp, not case-sensitive
+                    OCR_snippet = page_text.slice(snippet_start,snippet_end).replace(new RegExp('(' + search_term + ')', 'gi'), "<span class='fts_highlight'>$1</span>");
                     var thisResult = '<a href="#" onclick="br.jumpToIndex('+(result.response.docs[i].page_num - 1)+');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
-                    $('#fts_box_text_static').append('<div class="fts_result" id="fts_result_'+counter+'"></div>');                
-                    $("#fts_result_"+counter).html(thisResult);
-                    if (counter % 2 === 0){
-                      $("#fts_result_"+counter).addClass('osc_dark');
+                    $('#fts_results_wrapper').append('<div class="fts_result" id="fts_result_'+class_counter+'"></div>');                
+                    $("#fts_result_"+class_counter).html(thisResult);
+                    if (class_counter % 2 === 0){
+                      $("#fts_result_"+class_counter).addClass('osc_dark');
                     }               
 
-                    //bump alternating background calss counter
-                    counter++;
+                    //bump alternating background class class_counter
+                    class_counter++;
                 } //closes iterations through page instances
-            } //closes page iteration
+            } //closes page iteration            
 
             //add pagination navigation
-            $('#fts_box_text_static').append('<div class="fts_nav"></div>');
+            $('#fts_box_text_static').append('<div class="fts_nav shadow_bottom" id="fts_top_nav"></div>');
             if (row_start == 0 && result.response.numFound < 10){                
                 return;
             }
-
             else if (row_start == 0 && result.response.numFound > 10){            
                 $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic('+next+'); return false;">Next 10</a>');
-            }           
-                    
+            }                    
             else {                
                 if (next < result.response.numFound) {
                     $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic('+next+'); return false;">/ Next 10</a>');
@@ -231,9 +201,14 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             }
 
             //prepend  fts_page_nav class to top
-            $('.fts_nav').clone().insertAfter('#fts_terms','</br>');
-            $('.fts_nav').append('</br></br>');
-            $('.fts_page_nav').css('color','#00594d');
+            $('.fts_nav').clone().insertAfter('#fts_terms','</br>');            
+            $('.fts_nav').append('</br></br>');            
+            $('.fts_nav').eq(1).attr('id','fts_bottom_nav'); //copies and creates version at bottom
+            
+            //if FTS displayed already, fts_wrapper here...
+            if (br.fts_displayed == true){
+                resizeFTSWrapper();
+            }
         }
         
       }
@@ -247,25 +222,25 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
 //Display FTS results Static
 function displayFTSResultsStatic(row_start, search_term){
+
+    //draw and position search results
     var fts_handle_static = $('#fts_box_text_static');                                        
     fts_handle_static.position({my: "left top", at: "left bottom", offset: "0 0", of: '#WSUtoolbar'});
-    $('#fts_box_text_static').height($('#BRcontainer').height() - 82);
+    $('#fts_box_text_static').height($('#BRcontainer').height() - ($("#WSUtoolbar").height() + $("#WSUfooter").height()));
 
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
     $('#fts_static_tools').append("<span style='font-size:1.5em; font-weight:bold;'>Full-Text Search Results</span>");    
-    var func_call = "getFTSResultsDialog("+row_start+",'"+search_term+"')";
-    // $('#fts_static_tools').prepend('<button class="right fts_popout tool_icon rollover" type="button" onclick="'+func_call+'"; return false;"></button>');
+    var func_call = "getFTSResultsDialog("+row_start+",'"+search_term+"')";    
     $('#fts_static_tools').prepend('<button id="fts_accordian" class="fts_buttons right fts_collapse tool_icon rollover" type="button" onclick="accordFTSResultsStatic(); return false;"></button>');
     $('#fts_static_tools').prepend('<button class="fts_buttons right fts_close tool_icon rollover" type="button" onclick="hideFTSResultsStatic(); return false;"></button>');
 
-    //display
-    fts_handle_static.fadeIn();
-
-    //highlight matched strings on image
-    // if (br.imageHighlights == true){
-    //     removeImageHighlights();
-    // }
+    //display if not already drawn, and resize fts_wrapper when animation complete
+    if (br.fts_displayed == false){    
+        fts_handle_static.fadeIn(function(){resizeFTSWrapper();});
+    }
+    
+    //highlight string(s) on image
     renderImageHighlights(search_term);
 
     //highlight matched strings on plain text
@@ -276,9 +251,18 @@ function displayFTSResultsStatic(row_start, search_term){
         renderPlainTextHighlights(search_term);
     }
 
+    //stop loading animation
+    hideLoading();
+
     //set variables
     br.fts_displayed = true;    
     return false;
+}
+
+function resizeFTSWrapper(){
+        $("#fts_box_text_static").ready(function(){
+            $("#fts_results_wrapper").height( $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + ($(".fts_nav").height() * 2)) );});
+        
 }
 
 //Hide FTS results Static
@@ -322,11 +306,11 @@ function accordFTSResultsStatic() {
     }
     //expand
     if (fts_accord == "collapsed") {
-        $('#fts_box_text_static').animate({
-            width:300,
-        },500);
-        $('#fts_box_text_static').children().show();
-        $('#fts_static_tools span').show();
+        $('#fts_box_text_static').animate({width:300},500,function(){
+            $('#fts_box_text_static').children().show();
+            $('#fts_static_tools span').show();
+        });        
+        
         $('#fts_accordian').removeClass('fts_expand').addClass('fts_collapse');        
         br.fts_accord = "expanded";
         return
@@ -379,17 +363,10 @@ function showOCR(adjust) {
 
         //1up mode --> call singlepageOCR()
         if (mode == "1up"){
-            singlepageOCR();
-            //listens for page change - hashchange - runs singlepageOCR() again
-            $(window).bind('hashchange', function() {
-                if (br.OCRstatus != false){
-                    singlepageOCR();
-                }
-            });
+            singlepageOCR();            
         }
 
-        //reveal
-        // $('.OCR_box').slideDown(500);
+        //reveal        
         $('.OCR_box').fadeIn();        
     }
 
@@ -440,30 +417,46 @@ function singlepageOCR() {
 //Hide OCR
 function hideOCR (){
     //add conditional for 2up & 1up modes
-    br.OCRstatus = false;
-    // $('.OCR_box, .OCR_box_single').slideUp(500, function() {
+    br.OCRstatus = false;    
     $('.OCR_box, .OCR_box_single').fadeOut(function() {
         $('.OCR_box, .OCR_box_single').remove();
     });        
 }
 
-function toggleOCR() {    
-    if (br.OCRstatus == false){
+function toggleOCR() {
 
-        showOCR();
-        // show OCR controls
-        $('.OCR_tools').fadeIn();
-        $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");        
-        return;
-    }
-    if (br.OCRstatus == true){
-        hideOCR();
-        // hide OCR tools
-        $('.OCR_tools').fadeOut();
-        $('.toggleOCR').css("border", "none");
-        return;
+    //plain text conditional
+    if (br.plainTextStatus == true){
+        if (br.plainOCRstatus == true){
+            $('.OCR_tools').fadeOut();
+            $('.toggleOCR').css("border", "none");
+            br.plainOCRstatus = false;            
+        }
+        else{
+            $('.OCR_tools').fadeIn();
+            $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");
+            br.plainOCRstatus = true;
+        }
+        return;        
     }
 
+    //image behaviour
+    else{
+        if (br.OCRstatus == false){
+            showOCR();
+            // show OCR controls
+            $('.OCR_tools').fadeIn();
+            $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");        
+            return;
+        }    
+        if (br.OCRstatus == true){
+            hideOCR();
+            // hide OCR tools
+            $('.OCR_tools').fadeOut();
+            $('.toggleOCR').css("border", "none");
+            return;
+        }
+    }
 }
 
 // read pages aloud
@@ -513,22 +506,34 @@ function speakPagealoud(source) {
 }
 
 // increase / decrease font size ("delta" as "increase" or "decrease")
+// works for both OCR overlays and plain text display
 function fontResize(delta){ 
 
     // font-size conversion array
     var conv_array = [ '6px', 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large', '72px', '90px' ];
 
-    if (br.plainTextStatus == true){
-        alert('soon');
+    if (br.plainTextStatus == true){                        
+        var font_tags = $('#html_concat font');        
+        font_tags.each(function () {  //each tag is"this"      
+            var font_handle = $(this); //removed children, as it is "this"            
+            var fsize = font_handle[0].style.fontSize;        
+            var fsize_index = conv_array.indexOf(fsize);        
+            if (delta == "increase"){
+                fsize_index += 1;
+                font_handle.css('font-size', conv_array[fsize_index])
+            }
+            if (delta == "decrease"){
+                fsize_index -= 1;
+                font_handle.css('font-size', conv_array[fsize_index])
+            }                
+        });
+        
     }
 
-    else{
-        var text_body = $('.OCR_box_text');
-        var paragraphs = text_body.children('p');    
-        paragraphs.each(function () {        
-            var font_handle = $(this).children('font');        
-            //consider iterating through the array that is font_handle...        
-            // var fsize = font_handle.css('font-size'); //previous method, did not work in Firefox
+    else{        
+        var font_tags = $('.OCR_box_text font');        
+        font_tags.each(function () {  //each tag is"this"
+            var font_handle = $(this); //removed children, as it is "this"                     
             var fsize = font_handle[0].style.fontSize;        
             var fsize_index = conv_array.indexOf(fsize);        
             if (delta == "increase"){
@@ -563,9 +568,17 @@ function arrowsFlip (new_mode) {
 
 // suite of functions to launch different modes from bookreader.html buttons, as a conditional for coming from thumbnail mode
 function launch1up (){
+    //redraws OCR if on
     if (br.OCRstatus == true) {
         toggleOCR();
-    }    
+        toggleOCR();
+    }
+
+    //turns off plain text if on
+    if (br.plainTextStatus == true){
+        plainText();
+    }
+
     var $current_layout = getPageInfo();    
     if ($current_layout.mode = 'thumb'){
         var to_1up = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+$current_layout.rootpage+"/mode/1up";        
@@ -577,9 +590,16 @@ function launch1up (){
 }
 
 function launch2up (){
+    //turns off OCR
     if (br.OCRstatus == true) {
         toggleOCR();
     }
+
+    //turns off plain text if on
+    if (br.plainTextStatus == true){
+        plainText();
+    }
+
     var $current_layout = getPageInfo();
     if ($current_layout.mode = 'thumb'){
         var to_2up = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+$current_layout.rootpage+"/mode/2up";
@@ -591,9 +611,16 @@ function launch2up (){
 }
 
 function launchThumbs (){
+    //turns off OCR
     if (br.OCRstatus == true) {
         toggleOCR();
     }
+
+    //turns off plain text if on
+    if (br.plainTextStatus == true){
+        plainText();
+    }
+
     var $current_layout = getPageInfo();
     var to_thumbs = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+$current_layout.rootpage+"/mode/thumb";
     window.location = to_thumbs;
@@ -718,8 +745,8 @@ function drawArrowsHoriz() {
     //sets size at 90% of height and offsets from page edges
     if (bookwidth + 120 < $(window).width()) {
         $('.bigArrowBoxHoriz').height($('.BRleafEdgeR').height() * .9);
-        $('#rBigArrow').position({my: "left center", at: "right center", offset: "10 0", of: '.BRleafEdgeR'});
-        $('#lBigArrow').position({my: "right center", at: "left center", offset: "-10 0", of: '.BRleafEdgeL'});
+        $('#rBigArrow').position({my: "left center", at: "right center", offset: "2 0", of: '.BRleafEdgeR'});
+        $('#lBigArrow').position({my: "right center", at: "left center", offset: "-2 0", of: '.BRleafEdgeL'});
     }
 
     else { //if boxes will not fit next to pages        
@@ -808,12 +835,17 @@ function toolbarsMinimize(){
         $('#WSUtoolbar_minimize').addClass('WSUup').removeClass('WSUdn');
         $('#WSUtoolbar_minimize').html("^");
         
-        // if (when) nav arrows are on screen
+        // if (when) nav arrows are on screen - 1up
         if (br.bigArrowStatus == true){
             if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
                 $('#dBigArrow').offset({ top: $(window).height() - 50});                
                 $('#uBigArrow').offset({ top: 10}); 
             }            
+        }
+
+        //extend plain text / HTML
+        if (br.plainTextStatus == true){
+            $("#html_concat").css('height','100%');            
         }
     }
     else {            
@@ -827,17 +859,17 @@ function toolbarsMinimize(){
             if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
                 bigArrows('resize');               
             }            
-        }
+        }        
     }
 }
 
-function plainText(plainStatus){    
+function plainText(){    
 
     var $current_layout = getPageInfo();    
 
     if (br.plainTextStatus == false){
 
-        br.plainTextStatus = true;
+        showLoading();        
 
         //2up
         if ($current_layout.mode == '2up'){            
@@ -847,17 +879,21 @@ function plainText(plainStatus){
         }
         //1up
         if ($current_layout.mode == '1up'){            
-            alert("not sure what to do...");
+            $("#BRpageview").hide();
+            $(".bigArrowHandle").hide();
         }
         //thumb
         if ($current_layout.mode == 'thumb'){
-            alert("not sure what to do...");
+            alert("Not Available in Thumbnail mode.");
+            return;
         }
-        
-        //insert HTML and resize
-        //add check for FTS status, if on, resize width to 365 and add margin of 325
-        $('#BRcontainer').append("<div id='html_concat' class='absoluteCenter'></div>");
-        var html_concat = '../data/'+ItemID+'/OCR/'+ItemID + '.htm';
+
+        //after conditionals, if still proceeding, show loading message and set status to true
+        br.plainTextStatus = true;                
+
+        //insert HTML and resize        
+        $('#BookReader').append("<div id='html_concat' class='absoluteCenter'></div>");
+        var html_concat = '../data/'+ItemID+'/fullbook/'+ItemID + '.htm';
         $('#html_concat').hide();            
         $('#html_concat').height($(window).height() - 112)
 
@@ -870,18 +906,31 @@ function plainText(plainStatus){
             $('#html_concat').width($(window).width() - 40)
         }
 
-        $('#html_concat').load(html_concat, function(){
+        $('#html_concat').load(html_concat, function(){            
+            //remove justified css from font tags (remove if too slow)
+            var font_tags = $('#html_concat p');        
+                font_tags.each(function () {  //each tag is"this"
+                    if( $(this).css('text-align') == "justify"){
+                        $(this).css('text-align','left');
+                    }
+                });
             $('#html_concat').scrollTo("#page_ID_" + $current_layout.rootpage);
+                
+            //create page numbers / links
+            var page_array = $("#html_concat_wrapper .html_page");
+            page_array.each(function(){
+                var page_num = $(this).attr('id').split('_')[2];
+                // $(this).prepend("<span style='color:blue; float:right;'>Leaf "+page_num+"</div>");
+                $(this).prepend('<a class="leaf_num" href="#" onclick="br.jumpToIndex('+page_num+');">Leaf '+page_num+'</a>');
+            });
+
+            // highlights br.search_term if active
             if(br.fts_displayed == true){
                 renderPlainTextHighlights();
             }
         });
 
-        //create page numbers / links
-        // var page_array = $("#html_concat").children('div').children('#page_ID_1').children();
-        // $.each(page_array, function(page){
-        //     $(page).prepend('<p>Hello World!</p>');
-        // });
+        
 
         // if FTS true, show highlights
         if (br.fts_displayed == true){                 
@@ -889,50 +938,93 @@ function plainText(plainStatus){
         }
 
         $('#html_concat').fadeIn();
+
+        //remove loading
+        hideLoading();
         return;
 
     }
 
     if (br.plainTextStatus == true){
 
+        //closes OCR tools if opened
+
+        toggleOCR();
+
+        //sets status to false
         br.plainTextStatus = false;
 
         //returns index / location of scroll
         var seg_locale = getPlainTextLocation().split('_')[2]; //value is return as "page_ID_#", split catches page number
 
+        //clears HTML
         $('#html_concat').remove();
         
         //refresh page entirely
         if ($current_layout.mode == '2up'){                        
             $("#BRtwopageview").fadeIn();
-            $(".bigArrowHandle").fadeIn();
-            // $("#BRtwopageview").css('visibility','visible');
-            // $(".bigArrowHandle").css('visibility','visible');                        
+            $(".bigArrowHandle").fadeIn();                                   
         }
         if ($current_layout.mode == '1up'){            
-            alert("not sure what to do...");
+            $("#BRpageview").fadeIn();
+            $(".bigArrowHandle").fadeIn();
         }
         if ($current_layout.mode == 'thumb'){
-            alert("not sure what to do...");
+            alert("Not sure how you created these conditions, but you shouldn't be able to close something that never existed...");
         }
 
         removePlainTextHighlights();
-
         br.jumpToIndex(parseInt(seg_locale));                
         return;
     }    
 }
 
+function resizePlainText(trigger){
+    var $current_layout = getPageInfo();
+
+    //hide text
+    $("#html_concat").hide();
+
+    showLoading();            
+
+    //2up
+    if ($current_layout.mode == '2up'){            
+        // 2up
+        $("#BRtwopageview").hide();
+        $(".bigArrowHandle").hide();            
+    }
+    //1up
+    if ($current_layout.mode == '1up'){            
+        $("#BRpageview").hide();
+        $(".bigArrowHandle").hide();
+    }
+
+    //resize to new window dimensions
+    $('#html_concat').height($(window).height() - 112)
+
+    //resizes plain text if FTS is true
+    if (br.fts_displayed == true){            
+        $('#html_concat').css('margin-left','325px');
+        $('#html_concat').width($(window).width() - 365)            
+    }
+    else{
+        $('#html_concat').width($(window).width() - 40)
+    }
+
+    //finally, show again
+    $("#html_concat").fadeIn();
+    hideLoading();
+
+}
+
 // returns page_ID_# of topmost .html_page segment
-// could be used with a scroll function when in plain text mode...
 function getPlainTextLocation(){
     
     var html_pages = $(".html_page");
     for (var i=1;i<html_pages.length;i++){
 
         if ($(html_pages[i]).position().top > 0 ) {
-            var seg_locale = $(html_pages[i]).attr('id');
-            // alert(seg_locale);
+            var seg_locale = $(html_pages[i]).attr('id');            
 
             return seg_locale;
         }
@@ -949,13 +1041,14 @@ function removePlainTextHighlights(){
     br.plainTextHighlights == false;
 }           
 
-// Function to scrollTo location
+// Function to scrollTo location 
+// Also called on line 1427 in WSU_bookreader.js....
 $.fn.scrollTo = function( target, options, callback ){
   if(typeof options == 'function' && arguments.length == 2){ callback = options; options = target; }
   var settings = $.extend({
     scrollTarget  : target,
     offsetTop     : 50,
-    duration      : 1000,
+    duration      : 400,
     easing        : 'swing'
   }, options);
   return this.each(function(){
@@ -968,15 +1061,21 @@ $.fn.scrollTo = function( target, options, callback ){
   });
 }
 
-function renderImageHighlights(search_term){
+function renderImageHighlights(){
 
     $current_layout = getPageInfo();
+
+    if ($current_layout.mode == undefined){
+        return;
+    }
+    
 
     //clear previous
     $(".image_highlight").remove();   
 
     // 2up
     if ($current_layout.mode == "2up") {
+
         //left XML location
         var leafStr = '00000';            
         var htmlStr = $current_layout.rootpage.toString();
@@ -989,9 +1088,197 @@ function renderImageHighlights(search_term){
         var re = new RegExp("0{"+htmlStr.length+"}$");
         var right_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
 
-        drawBoxes($current_layout.rootpage, left_xml_doc,br.search_term,'l');
-        drawBoxes($current_layout.secondarypage, right_xml_doc,br.search_term,'r');
+        drawBoxes($current_layout.mode, $current_layout.rootpage, left_xml_doc,br.search_term,'l');
+        drawBoxes($current_layout.mode, $current_layout.secondarypage, right_xml_doc,br.search_term,'r');
     }
+
+    // 1up
+    if ($current_layout.mode == "1up") {            
+        //current XML location
+        var leafStr = '00000';            
+        var htmlStr = $current_layout.rootpage.toString();
+        var re = new RegExp("0{"+htmlStr.length+"}$");
+        var single_current_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+
+        drawBoxes($current_layout.mode, $current_layout.rootpage, single_current_xml_doc, br.search_term,'single'); //current page
+    
+        // //page below XML location
+        // var leafStr = '00000';            
+        // var htmlStr = ($current_layout.rootpage + 1).toString();
+        // var re = new RegExp("0{"+htmlStr.length+"}$");
+        // var single_below_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+        // drawBoxes($current_layout.mode, ($current_layout.rootpage + 1), single_below_xml_doc, br.search_term,'single'); //page below            
+    
+        // //page above XML location
+        // var leafStr = '00000';            
+        // var htmlStr = ($current_layout.rootpage - 1).toString();
+        // var re = new RegExp("0{"+htmlStr.length+"}$");
+        // var single_above_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';                        
+        // drawBoxes($current_layout.mode, ($current_layout.rootpage - 1), single_above_xml_doc, br.search_term,'single'); //page above                            
+    }
+}
+
+function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, match_indices){
+
+    // 2up - prepare variables
+    if (page_mode == '2up'){   
+        var page_matches_array = new Array();
+
+        
+        $.get(xml_doc,{},function(xml){
+
+            //do once for each page
+            var c_info = new Array(); // current image as displayed
+            var img_container = $("#BRtwopageview").position();
+            var c_position = $("#"+image_index).position();
+            c_info['height'] = $("#"+image_index).height();
+            c_info['width'] = $("#"+image_index).width();
+            c_info['vpos'] = c_position.top;
+            c_info['hpos'] = c_position.left;
+            page_matches_array.push(c_info);               
+
+            var s_info = new Array(); // source image
+            s_info['height'] = parseInt($('PrintSpace',xml).attr('HEIGHT'));
+            s_info['width'] = parseInt($('PrintSpace',xml).attr('WIDTH'));
+            page_matches_array.push(s_info);              
+              
+            //itereate through Strings in page, match search_term, push info to page_array
+            var orig_boxes = new Array();
+            $('String',xml).each(function(i) {
+                //create fresh array for each match
+                var o_info = new Array(); // original dimensions and location of string relative to source image (s_info)            
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // .replace(new RegExp('(' + search_term + ')', 'gi'), "<span class='fts_highlight'>$1</span>")                
+                content_string = $(this).attr('CONTENT');
+
+                //clean variables for comparison
+                var content_string_stripped = content_string.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                // alert(content_string_stripped);
+                var search_term_stripped = search_term.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                // alert(search_term_stripped);
+
+                if (content_string_stripped == search_term_stripped) { //THIS IS WHERE YOU CAN MAKE THE HIGHLIGHT NOT AS SENSITIVE....
+                    // original dimensions and coordinates                                                            
+                    o_info['height'] = parseInt($(this).attr('HEIGHT'));
+                    o_info['width'] = parseInt($(this).attr('WIDTH'));
+                    o_info['vpos'] = parseInt($(this).attr('VPOS'));
+                    o_info['hpos'] = parseInt($(this).attr('HPOS'));
+                    orig_boxes.push(o_info);
+                    // console.log("original_string",o_info);                
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            }); //closes each loop
+            
+
+            // XML parsing done, push ORIGINAL box dimensions to page_matches_array
+            page_matches_array.push(orig_boxes);
+
+            //create boxes - iterate through page_matches_array[2] (matches dimensions)
+            for (var i=0;i<page_matches_array[2].length;i++){
+                // creates fresh highlight box array for each
+                var h_info = new Array(); // dimensions and coords of highlight box
+
+                //highlight box coordinates and size
+                h_info['height'] = parseInt((page_matches_array[2][i]['height'] / s_info['height']) * c_info['height']);
+                h_info['width'] = parseInt((page_matches_array[2][i]['width'] / s_info['width']) * c_info['width']);
+                h_info['vpos'] = parseInt((page_matches_array[2][i]['vpos'] / s_info['height']) * c_info['height']);
+                h_info['hpos'] = parseInt((page_matches_array[2][i]['hpos'] / s_info['width']) * c_info['width'] + c_info['hpos']);
+                // console.log("highlight box",h_info);
+
+                //draw boxes where "i" is the current match number
+                $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'></div>"); //number with match indices...
+                $('#'+leaf_side+'_match_'+i).css({
+                    'height': h_info['height'],
+                    'width': h_info['width'],
+                    'top': h_info['vpos'],
+                    'left': h_info['hpos']
+                },1000);
+                $('.image_highlight').fadeIn();            
+            }
+
+        }); //closes ajax "get" request
+        
+
+
+    } //closes 2up mode
+
+    // 1up
+    if (page_mode == "1up"){        
+        var page_matches_array = new Array();
+
+        $.get(xml_doc,{},function(xml){
+
+            //do once for each page            
+            var img_container = $("#pagediv"+(image_index - 1));
+
+            var c_info = new Array(); // current image as displayed
+            var c_position = img_container.position();
+            c_info['height'] = img_container.height();
+            c_info['width'] = img_container.width();
+            c_info['vpos'] = c_position.top;
+            c_info['hpos'] = c_position.left;
+            page_matches_array.push(c_info);   
+            // console.log("current image",c_info);
+
+            var s_info = new Array(); // source image
+            s_info['height'] = parseInt($('PrintSpace',xml).attr('HEIGHT'));
+            s_info['width'] = parseInt($('PrintSpace',xml).attr('WIDTH'));
+            page_matches_array.push(s_info);  
+            // console.log("source image",s_info);        
+
+            ///////////////////////////////////////////////////////////////////////////    
+            //itereate through Strings in page, match search_term, push info to page_array
+            var orig_boxes = new Array();
+            $('String',xml).each(function(i) {
+                //create fresh array for each match
+                var o_info = new Array(); // original dimensions and location of string relative to source image (s_info)            
+
+                content_string= $(this).attr('CONTENT');
+                if (content_string == search_term) {
+                    // original dimensions and coordinates                    
+                    o_info['height'] = parseInt($(this).attr('HEIGHT'));
+                    o_info['width'] = parseInt($(this).attr('WIDTH'));
+                    o_info['vpos'] = parseInt($(this).attr('VPOS'));
+                    o_info['hpos'] = parseInt($(this).attr('HPOS'));
+                    orig_boxes.push(o_info);
+                    // console.log("original_string",o_info);                
+                }
+            }); //closes each loop
+
+            // XML parsing done, push ORIGINAL box dimensions to page_matches_array
+            page_matches_array.push(orig_boxes);
+
+            //create boxes - iterate through page_matches_array[2] (matches dimensions)
+            for (var i=0;i<page_matches_array[2].length;i++){
+                // creates fresh highlight box array for each
+                var h_info = new Array(); // dimensions and coords of highlight box
+
+                //highlight box coordinates and size
+                h_info['height'] = parseInt((page_matches_array[2][i]['height'] / s_info['height']) * c_info['height']);
+                h_info['width'] = parseInt((page_matches_array[2][i]['width'] / s_info['width']) * c_info['width']);
+                h_info['vpos'] = parseInt((page_matches_array[2][i]['vpos'] / s_info['height']) * c_info['height']);
+                h_info['hpos'] = parseInt((page_matches_array[2][i]['hpos'] / s_info['width']) * c_info['width']);
+                // console.log("highlight box",h_info);
+
+                //draw boxes where "i" is the current match number
+                img_container.append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'></div>"); //number with match indices...
+                $('#'+leaf_side+'_match_'+i).css({
+                    'height': h_info['height'],
+                    'width': h_info['width'],
+                    'top': h_info['vpos'],
+                    'left': h_info['hpos']
+                },1000);
+            }
+
+            // Wrap elements and display           
+            $('.image_highlight').fadeIn();
+
+        }); //closes ajax "get" request                            
+    } //closes 1up mode
+
+    br.imageHighlights = true;
 }
 
 function removeImageHighlights(){
@@ -1000,78 +1287,31 @@ function removeImageHighlights(){
     br.imageHighlights == false;
 }
 
-function drawBoxes(image_index, xml_doc, search_term, leaf_side, match_indices){
+function showLoading(){
+    $("#overlays").append("<div id='loading_animation'></div>");
+    $("#loading_animation").position({my: "right top", at: "right bottom", offset: "-5 5", of: '#WSUtoolbar'});
+    $("#loading_animation").fadeIn();
+}
 
-    // 2up - prepare variables   
-    var page_matches_array = new Array();
+function hideLoading(){
+    $("#loading_animation").fadeOut(function(){
+        $(this).remove();
+    });
+}
 
-    $.get(xml_doc,{},function(xml){
-
-        //do once for each page
-        var c_info = new Array(); // current image as displayed
-        var img_container = $("#BRtwopageview").position();
-        var c_position = $("#"+image_index).position();
-        c_info['height'] = $("#"+image_index).height();
-        c_info['width'] = $("#"+image_index).width();
-        c_info['vpos'] = c_position.top;
-        c_info['hpos'] = c_position.left;
-        page_matches_array.push(c_info);   
-        // console.log("current image",c_info);
-
-        var s_info = new Array(); // source image
-        s_info['height'] = parseInt($('PrintSpace',xml).attr('HEIGHT'));
-        s_info['width'] = parseInt($('PrintSpace',xml).attr('WIDTH'));
-        page_matches_array.push(s_info);  
-        // console.log("source image",s_info);        
-
-        ///////////////////////////////////////////////////////////////////////////    
-        //itereate through Strings in page, match search_term, push info to page_array
-        var orig_boxes = new Array();
-        $('String',xml).each(function(i) {
-            //create fresh array for each match
-            var o_info = new Array(); // original dimensions and location of string relative to source image (s_info)            
-
-            content_string= $(this).attr('CONTENT');
-            if (content_string == search_term) {
-                // original dimensions and coordinates                    
-                o_info['height'] = parseInt($(this).attr('HEIGHT'));
-                o_info['width'] = parseInt($(this).attr('WIDTH'));
-                o_info['vpos'] = parseInt($(this).attr('VPOS'));
-                o_info['hpos'] = parseInt($(this).attr('HPOS'));
-                orig_boxes.push(o_info);
-                // console.log("original_string",o_info);                
-            }
-        }); //closes each loop
-
-        // XML parsing done, push ORIGINAL box dimensions to page_matches_array
-        page_matches_array.push(orig_boxes);
-
-        //create boxes - iterate through page_matches_array[2] (matches dimensions)
-        for (var i=0;i<page_matches_array[2].length;i++){
-            // creates fresh highlight box array for each
-            var h_info = new Array(); // dimensions and coords of highlight box
-
-            //highlight box coordinates and size
-            h_info['height'] = parseInt((page_matches_array[2][i]['height'] / s_info['height']) * c_info['height']);
-            h_info['width'] = parseInt((page_matches_array[2][i]['width'] / s_info['width']) * c_info['width']);
-            h_info['vpos'] = parseInt((page_matches_array[2][i]['vpos'] / s_info['height']) * c_info['height']);
-            h_info['hpos'] = parseInt((page_matches_array[2][i]['hpos'] / s_info['width']) * c_info['width'] + c_info['hpos']);
-            // console.log("highlight box",h_info);
-
-            //draw boxes where "i" is the current match number
-            $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'></div>"); //number with match indices...
-            $('#'+leaf_side+'_match_'+i).css({
-                'height': h_info['height'],
-                'width': h_info['width'],
-                'top': h_info['vpos'],
-                'left': h_info['hpos']
-            },1000);
-            $('.image_highlight').fadeIn();            
-        }
-
-
-    }); //closes ajax "get" request
-    br.imageHighlights = true;
+// Indices Locator
+function getIndicesOf(searchStr, str, caseSensitive) {
+    var startIndex = 0, searchStrLen = searchStr.length;
+    var index, indices = [];
+    if (!caseSensitive) {
+        str = str.toLowerCase();
+        searchStr = searchStr.toLowerCase();
+    }
+    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+        indices.push(index);
+        startIndex = index + searchStrLen;
+    }
+    return indices;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -1094,7 +1334,6 @@ $(window).resize(function() {
     if(this.resizeTO) clearTimeout(this.resizeTO);
     this.resizeTO = setTimeout(function() {
         $(this).trigger('resizeEnd');
-
     }, 500);
 });
 
@@ -1110,7 +1349,45 @@ $(window).bind('resizeEnd', function() {
     if (br.bigArrowStatus == true) {
         bigArrows('resize'); 
     }
+    //this is a little buggy, you can see background images reappear while window dragging
+    if (br.plainTextStatus == true){
+        resizePlainText();
+    }
+
 });
 
-/* Notes
-line 2397 in WSU_bookreader.js is the key...*/
+//listens for rootpage change - very helpful function...
+$(window).bind('hashchange', function() {    
+    
+    //draws highlights for new page    
+    if (br.imageHighlights == true){        
+        renderImageHighlights();
+    }
+
+    //REDO THIS, MESSY AFTER REORG/////////////////////////////
+    //redraws OCR
+    if (br.OCRstatus != false){
+        singlepageOCR();        
+    }
+
+    // Reinstates OCR after page flip                
+    if (br.OCRstatus == true) {                
+        $('.OCR_box').remove();
+        showOCR();
+    }
+    ///////////////////////////////////////////////////////////
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
