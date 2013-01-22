@@ -2,9 +2,8 @@
 //Postlaunch operations
 function postLaunch() {    
 
-    //create minimize arrow
-    $('#BookReader').append('<div id="WSUtoolbar_minimize" class="WSUdn" onclick="toolbarsMinimize(); return false;"" title="Show/hide nav bar">v</div>');
-    
+    //show minimize arrow, looks nicer post launch
+    $("#WSUtoolbar_minimize").show();
 
     //set OCR status
     br.OCRstatus = false;   
@@ -49,6 +48,17 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     showLoading();
 
+    // var search_term = form.fts.value;
+    var search_term = $('#fts_input').val();
+    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback';
+
+    //blank search conditional
+    if (search_term == ""){
+        hideLoading();
+        alert("Please enter a search term");
+        return;
+    }
+
     //expands FTS results if collapsed
     var fts_accord = br.fts_accord;
     if (fts_accord == "collapsed") {
@@ -64,9 +74,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     //clear previous results            
     $("#fts_box_text_static").html('<p id="fts_terms"></p>');
 
-    // var search_term = form.fts.value;
-    var search_term = $('#fts_input').val();
-    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&wt=json&json.wrf=callback';
+    
     
     //conditional for plain text (follows acquisition of search term)                    
     if (br.plainTextStatus == true){
@@ -186,24 +194,41 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             } //closes page iteration            
 
             //add pagination navigation
-            $('#fts_box_text_static').append('<div class="fts_nav shadow_bottom" id="fts_top_nav"></div>');
+            $('#fts_box_text_static').append('<div class="fts_nav shadow_bottom" id="fts_top_nav"></div>');                        
             if (row_start == 0 && result.response.numFound < 10){                
                 return;
             }
             else if (row_start == 0 && result.response.numFound > 10){            
-                $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic('+next+'); return false;">Next 10</a>');
+                $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic('+next+'); return false;">Next 10 pages</a>');
             }                    
             else {                
                 if (next < result.response.numFound) {
-                    $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic('+next+'); return false;">/ Next 10</a>');
+                    $('.fts_nav').append('<a class="fts_page_nav fts_next" onclick="getFTSResultsStatic('+next+'); return false;">/ Next 10 pages</a>');
                 }
-                $('.fts_nav').append('<a class="fts_page_nav fts_previous" onclick="getFTSResultsStatic('+prev+'); return false;">Previous 10</a>');
+                $('.fts_nav').append('<a class="fts_page_nav fts_previous" onclick="getFTSResultsStatic('+prev+'); return false;">Previous 10 pages</a>');
             }
 
-            //prepend  fts_page_nav class to top
-            $('.fts_nav').clone().insertAfter('#fts_terms','</br>');            
-            $('.fts_nav').append('</br></br>');            
-            $('.fts_nav').eq(1).attr('id','fts_bottom_nav'); //copies and creates version at bottom
+            //prepend fts_page_nav class to top
+            $('#fts_top_nav').insertAfter('#fts_terms','</br>');            
+            // $('.fts_nav').append('</br></br>');            
+            
+            //add result sets at bottom, use "result.response.numFound"
+            $('#fts_box_text_static').append('<div class="fts_set_nav shadow_top" id="fts_bottom_nav"></div>');            
+            var sets = Math.ceil(parseInt(result.response.numFound) / 10);
+            console.log(sets);
+            for (var i = 0; i < sets; i++){
+                var set_seed = i * 10;
+                var row_set = (i*10+1) + "-" + (i*10+10) + ", ";                
+                $("#fts_bottom_nav").append('<a class="fts_set" onclick="getFTSResultsStatic('+set_seed+'); return false;">'+row_set+'</a>');                
+            }
+            
+            // delete last comma
+            var temp_str = $(".fts_set:last-child").html();
+            var new_str = temp_str.substring(0, temp_str.length - 2);
+            $(".fts_set:last-child").html(new_str);
+            
+            
+                        
             
             //if FTS displayed already, fts_wrapper here...
             if (br.fts_displayed == true){
@@ -226,7 +251,7 @@ function displayFTSResultsStatic(row_start, search_term){
     //draw and position search results
     var fts_handle_static = $('#fts_box_text_static');                                        
     fts_handle_static.position({my: "left top", at: "left bottom", offset: "0 0", of: '#WSUtoolbar'});
-    $('#fts_box_text_static').height($('#BRcontainer').height() - ($("#WSUtoolbar").height() + $("#WSUfooter").height()));
+    $('#fts_box_text_static').height($('#BRcontainer').height() - 15);
 
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
@@ -261,8 +286,11 @@ function displayFTSResultsStatic(row_start, search_term){
 
 function resizeFTSWrapper(){
         $("#fts_box_text_static").ready(function(){
-            $("#fts_results_wrapper").height( $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + ($(".fts_nav").height() * 2)) );});
-        
+            $("#fts_results_wrapper").height(                 
+                //last integer equals total margin height of #fts_bottom_nav
+                $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 23)
+            );
+        });        
 }
 
 //Hide FTS results Static
@@ -568,10 +596,9 @@ function arrowsFlip (new_mode) {
 
 // suite of functions to launch different modes from bookreader.html buttons, as a conditional for coming from thumbnail mode
 function launch1up (){
-    //redraws OCR if on
+    //turns off OCR
     if (br.OCRstatus == true) {
-        toggleOCR();
-        toggleOCR();
+        toggleOCR();        
     }
 
     //turns off plain text if on
@@ -624,26 +651,6 @@ function launchThumbs (){
     var $current_layout = getPageInfo();
     var to_thumbs = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+$current_layout.rootpage+"/mode/thumb";
     window.location = to_thumbs;
-}
-
-//fades out Toolbar and Footer
-function toolbarTransToggle(){
-    if (br.toolbar_trans == false){
-        // $('#WSUtoolbar').css({ 'opacity' : 0.2 });
-        $('#WSUtoolbar,#WSUfooter').fadeTo("slow",.4);
-        $('#WSUtoolbar,#WSUfooter').css({backgroundColor:"transparent"});
-        $('#WSUtoolbar').removeClass('shadow');
-        //maybe do more here?  remove "full-text-search"?  actually, remove most of everything?
-
-        br.toolbar_trans = true;
-    }
-    else{
-        // $('#WSUtoolbar').css({ 'opacity' : 0.9 });
-        $('#WSUtoolbar,#WSUfooter').fadeTo("slow",.9);
-        $('#WSUtoolbar,#WSUfooter').css({backgroundColor:"rgba(225, 221, 201, .9)"});
-        $('#WSUtoolbar').addClass('shadow');
-        br.toolbar_trans = false;
-    }
 }
 
 
@@ -720,8 +727,9 @@ function drawArrowsVert(page_mode) {
     // conditional for width of page; if wider, make buttons 90% of window
     if (bookwidth < $(window).width()) {
         $('.bigArrowBoxVert').width(bookwidth * .95);
-        $('#dBigArrow').offset({ top: windowheight - 85, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
-        $('#uBigArrow').offset({ top: 45, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
+        // $('#dBigArrow').offset({ top: windowheight - 85, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
+        $('#dBigArrow').offset({ top: windowheight - 33, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
+        $('#uBigArrow').offset({ top: 38, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
     }
 
     else { //if boxes will not fit next to pages        
@@ -826,14 +834,27 @@ function bigArrowsPulse(){
 }
 
 function toolbarsMinimize(){
+    //seems to work without thumbnail conditionals...
 
-    var $current_layout = getPageInfo(); 
+    var $current_layout = getPageInfo();
 
-    if ($('#WSUtoolbar_minimize').hasClass('WSUdn')) {            
-        $('#WSUtoolbar, #WSUfooter').slideUp(750);
-        $('#WSUtoolbar_minimize').animate({bottom:'0px'},{duration:750});
-        $('#WSUtoolbar_minimize').addClass('WSUup').removeClass('WSUdn');
-        $('#WSUtoolbar_minimize').html("^");
+    if ($('#WSUtoolbar_minimize').hasClass('toolbar_exposed')) {      
+        $('#WSUtoolbar').slideUp(750);
+        $('#WSUtoolbar_minimize').animate({top:'0px'},{
+            duration: 750,
+            complete: function(){            
+                $("#BRcontainer").css({top:'0px'});
+                if ($current_layout.mode == "1up"){
+                    br.prepareOnePageView();
+                    return;
+                }
+                if ($current_layout.mode == "2up"){
+                    br.prepareTwoPageView();
+                }
+            }
+        });
+        $('#WSUtoolbar_minimize').addClass('toolbar_hidden').removeClass('toolbar_exposed');
+        $('#WSUtoolbar_minimize').html("v");       
         
         // if (when) nav arrows are on screen - 1up
         if (br.bigArrowStatus == true){
@@ -848,11 +869,23 @@ function toolbarsMinimize(){
             $("#html_concat").css('height','100%');            
         }
     }
+
     else {            
-        $('#WSUtoolbar, #WSUfooter').slideDown(750);
-        $('#WSUtoolbar_minimize').animate({bottom:'35px'},{duration:750});
-        $('#WSUtoolbar_minimize').addClass('WSUdn').removeClass('WSUup');
-        $('#WSUtoolbar_minimize').html("v");
+        $('#WSUtoolbar').slideDown(750);
+        $('#WSUtoolbar_minimize').animate({top:'35px'},{
+            duration: 750,
+            complete: function(){            
+                $("#BRcontainer").css({top:'30px'});
+                if ($current_layout.mode == "1up"){
+                    br.prepareOnePageView();                    
+                }
+                if ($current_layout.mode == "2up"){
+                    br.prepareTwoPageView();
+                }
+            }
+        });
+        $('#WSUtoolbar_minimize').addClass('toolbar_exposed').removeClass('toolbar_hidden');
+        $('#WSUtoolbar_minimize').html("^");
 
         // if (when) nav arrows are on screen
         if (br.bigArrowStatus == true){
@@ -895,7 +928,8 @@ function plainText(){
         $('#BookReader').append("<div id='html_concat' class='absoluteCenter'></div>");
         var html_concat = '../data/'+ItemID+'/fullbook/'+ItemID + '.htm';
         $('#html_concat').hide();            
-        $('#html_concat').height($(window).height() - 112)
+        $('#html_concat').height($(window).height() - 112);
+        // $('#html_concat').height($("#BRcontainer").height() - 30);
 
         //resizes plain text if FTS is true
         if (br.fts_displayed == true){            

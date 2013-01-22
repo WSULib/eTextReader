@@ -1048,10 +1048,6 @@ BookReader.prototype.zoom1up = function(direction) {
 // resizePageView()
 //______________________________________________________________________________
 BookReader.prototype.resizePageView = function() {
-
-    // $$$ This code assumes 1up mode
-    //     e.g. does not preserve position in thumbnail mode
-    //     See http://bugs.launchpad.net/bookreader/+bug/552972
     
     switch (this.mode) {
         case this.constMode1up:

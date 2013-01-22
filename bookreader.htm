@@ -72,7 +72,7 @@
 
 </head>
 <body>
-    <div id="bookreader_wrapper">
+    <div id="bookreader_wrapper">    
 
     <div id="overlays"></div>
 
@@ -109,6 +109,16 @@
                 <span id="audio_load_alert" class='label' style="background-color:pink; display:none;" onclick="sayItstop();">audio playing (click to stop)</span>
             </div>
 
+            
+            <div class="icon tools left">                                    
+                <button class="" type="button" onclick='magLoupe();' title="Click to use magnifying loupe">magLoupe</button>
+                <button class="" type="button" onclick='fullScreen();' title="Click to use magnifying loupe">fullscreen (FF)</button>
+                <button class="" type="button" onclick='bigArrows();' title="temp: creates arrows">toggle Nav arrows</button>
+                <button class="" type="button" onclick='plainText();' title="Switches to Plain Text / HTML">Plain Text</button>
+                <button class="" type="button" onclick='removeImageHighlights();' title="highlight search_term on images">Remove Highlights</button>
+                <button class="" type="button" onclick='$("#WSUfooter").hide();' title="highlight search_term on images">Destroy Footer</button>
+            </div>
+
            
 
             <!-- <div class="item_title tools right">                
@@ -132,9 +142,7 @@
                         <span class='label'>Page<input id='BRpagenum' type='text' size='2' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
                     </form>            
                 </div>
-            </div>
-
-                        
+            </div>                        
 
         </div> <!-- closes toolbar row --> 
 
@@ -142,30 +150,14 @@
 
     <div id="BookReader">        
         <p>
-            This book reader requires JavaScript to be enabled. Please check that your browser supports JavaScript and that it is enabled in the browser settings.  If you are unable to run javascript, a full-text PDF can be found here: <a id="pdf_url" href="#"></a>
+            This book reader requires JavaScript to be enabled. Please check that your browser supports JavaScript and that it is enabled in the browser settings.  If you are unable to run javascript, a PDF can be found here: <a id="pdf_url" href="#"></a>
         </p>
         <script type="text/javascript">
         </script>        
     </div>
 
-    <div id="WSUfooter">
-        <!-- Experimental Tools -->
-        <div class="tools left">
-            <span class="tools left">Experimental:</span>
-        </div>
-        <div class="icon tools left">            
-            <button class="" type="button" onclick='toolbarTransToggle();' title="Toggle Transparency of the Toolbars">Trans</button>         
-            <button class="" type="button" onclick='magLoupe();' title="Click to use magnifying loupe">magLoupe</button>
-            <button class="" type="button" onclick='fullScreen();' title="Click to use magnifying loupe">fullscreen (FF)</button>
-            <button class="" type="button" onclick='bigArrows();' title="temp: creates arrows">toggle Nav arrows</button>
-            <button class="" type="button" onclick='plainText();' title="Switches to Plain Text / HTML">Plain Text</button>
-            <button class="" type="button" onclick='removeImageHighlights();' title="highlight search_term on images">Remove Highlights</button>
-            <button class="" type="button" onclick='$("#WSUfooter").hide();' title="highlight search_term on images">Destroy Footer</button>
-        </div>
-        <!-- Experimental Tools -->
-
-           
-    </div>
+    <!--Create minimize arrow after load-->
+    <div id="WSUtoolbar_minimize" class="toolbar_exposed" onclick="toolbarsMinimize(); return false;" title="Show/hide nav bar">^</div>
 
     </div> <!--closes bookreader_wrapper-->
     
