@@ -1104,7 +1104,9 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
     }
 
     //prepare 1up and 2up variables
-    var confirmed_orig_boxes = new Array();
+    var confirmed_orig_boxes = new Array();    
+    var search_term_stripped = search_term.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");  
+
 
     // 2up - prepare variables
     if (page_mode == '2up'){   
@@ -1127,10 +1129,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
             s_info['width'] = parseInt($('PrintSpace',xml).attr('WIDTH'));
             page_matches_array.push(s_info);              
               
-            //itereate through Strings in page, match search_term, push info to page_array
-            //clean search term once
-            var search_term_stripped = search_term.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");  
-
+            //itereate through Strings in page, match search_term, push info to page_array            
             var orig_boxes = new Array();
             var temp_orig_boxes = new Array();
             var string_index = new Array();
@@ -1239,25 +1238,63 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
             s_info['width'] = parseInt($('PrintSpace',xml).attr('WIDTH'));
             page_matches_array.push(s_info);  
             // console.log("source image",s_info);        
-
-            ///////////////////////////////////////////////////////////////////////////    
-            //itereate through Strings in page, match search_term, push info to page_array
+               
+            //itereate through Strings in page, match search_term, push info to page_array            
             var orig_boxes = new Array();
-            $('String',xml).each(function(i) {
-                //create fresh array for each match
-                var o_info = new Array(); // original dimensions and location of string relative to source image (s_info)            
-
-                content_string= $(this).attr('CONTENT');
-                if (content_string == search_term) {
-                    // original dimensions and coordinates                    
-                    o_info['height'] = parseInt($(this).attr('HEIGHT'));
-                    o_info['width'] = parseInt($(this).attr('WIDTH'));
-                    o_info['vpos'] = parseInt($(this).attr('VPOS'));
-                    o_info['hpos'] = parseInt($(this).attr('HPOS'));
-                    orig_boxes.push(o_info);
-                    // console.log("original_string",o_info);                
+            var temp_orig_boxes = new Array();
+            var string_index = new Array();
+            $('String',xml).each(function(i) {                                
+                //XML strings                
+                content_string = $(this).attr('CONTENT');
+                //clean variables for comparison
+                var content_string_stripped = content_string.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");                                
+                
+                // phrase conditional
+                //consider making temp array, then popping out ones next to each other into "o_info" array
+                if (mult_terms_status == true){                    
+                    
+                    for (var j = 0; j < Object.keys(mult_terms_stripped).length; j++){
+                        // check for matching terms in document, push to list with location. Then, look for sequential numbers in index and pull those words out to highlight
+                        if (mult_terms_stripped[j] == content_string_stripped) {                                                        
+                            string_index.push(parseInt(i));
+                            temp_orig_boxes.push($(this));                                                        
+                        }
+                    }                    
                 }
-            }); //closes each loop
+
+                else { //single word
+                    if (content_string_stripped == search_term_stripped) {
+                        temp_orig_boxes.push($(this));             
+                    }
+                }                
+            }); //closes each loop                            
+                            
+            if (mult_terms_status == true){                
+                //find indices of sequential, pushes these from temp_orig_boxes into confirmed_orig_boxes array
+                var phrase_indices = findSeq(string_index); //gets indices of sequential numbers
+                if (phrase_indices == null){
+                    return;
+                }                                
+                for (var i = 0; i < phrase_indices.length; i++){
+                    for (var j = 0; j < mult_terms_stripped.length; j++){                        
+                        confirmed_orig_boxes.push(temp_orig_boxes[(phrase_indices[i]+j)]);
+                    }
+                }
+            }
+            else{//copy single word temp to confirmed
+                confirmed_orig_boxes = temp_orig_boxes;
+            }                
+            
+            // create orig_boxes array from confirmed_orig_boxes array elements
+            for (var i = 0; i < Object.keys(confirmed_orig_boxes).length; i++){
+                var o_info = new Array(); // original dimensions and location of string relative to source image (s_info)
+                // original dimensions and coordinates                                                            
+                o_info['height'] = parseInt(confirmed_orig_boxes[i].attr('HEIGHT'));
+                o_info['width'] = parseInt(confirmed_orig_boxes[i].attr('WIDTH'));
+                o_info['vpos'] = parseInt(confirmed_orig_boxes[i].attr('VPOS'));
+                o_info['hpos'] = parseInt(confirmed_orig_boxes[i].attr('HPOS'));
+                orig_boxes.push(o_info);
+            } 
 
             // XML parsing done, push ORIGINAL box dimensions to page_matches_array
             page_matches_array.push(orig_boxes);
