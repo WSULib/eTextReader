@@ -97,11 +97,16 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             $('#fts_terms').html('Search results for: "<span class="fts_highlight">' + search_term + '</span>"');
             $('#fts_terms').append('<div id="fts_counts"></div>');            
             $('#fts_counts').append('Found on '+result.response.numFound+' pages.</br>');
+            
+            // console.log(result.response.docs[0].page_num);
+            // console.log(result.response.docs.length);
+            // console.log(result.response.docs[9].page_num);
+            var results_pages = result.response.docs.length;
             if (next < result.response.numFound){
-                $('#fts_counts').append('Results for pages: '+(row_start + 1)+' - '+(row_start + 10));
+                $('#fts_counts').append('Results for pages: '+result.response.docs[0].page_num+' - '+result.response.docs[results_pages - 1].page_num);  //change to actual pages being displayed.
             }
             else {
-                $('#fts_counts').append('Displaying pages '+(row_start + 1)+' - '+result.response.numFound);    
+                $('#fts_counts').append('Displaying pages '+result.response.docs[0].page_num+' - '+result.response.docs[results_pages - 1].page_num);    
             }
 
             //create results wrapper
@@ -156,15 +161,15 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             // $('.fts_nav').append('</br></br>');            
             
             //add result sets at bottom, use "result.response.numFound"
-            $('#fts_box_text_static').append('<div class="fts_set_nav shadow_top" id="fts_bottom_nav"></div>');            
+            $('#fts_box_text_static').append('<div class="fts_set_nav shadow_top" id="fts_bottom_nav">Result sets: </div>');            
             var sets = Math.ceil(parseInt(result.response.numFound) / 10);
             // console.log("FTS sets: "+sets);
             for (var i = 0; i < sets; i++){
                 var set_seed = i * 10;
                 var row_set = (i*10+1) + "-" + (i*10+10) + ", ";                
                 $("#fts_bottom_nav").append('<a class="fts_set" onclick="getFTSResultsStatic('+set_seed+'); return false;">'+row_set+'</a>');                
-            }
-            
+            }                                                
+
             // delete last comma
             var temp_str = $(".fts_set:last-child").html();
             var new_str = temp_str.substring(0, temp_str.length - 2);
@@ -1105,7 +1110,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
 
     //prepare 1up and 2up variables
     var confirmed_orig_boxes = new Array();    
-    var search_term_stripped = search_term.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");  
+    var search_term_stripped = search_term.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase();  
 
 
     // 2up - prepare variables
@@ -1137,7 +1142,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
                 //XML strings                
                 content_string = $(this).attr('CONTENT');
                 //clean variables for comparison
-                var content_string_stripped = content_string.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");                                
+                var content_string_stripped = content_string.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase();                                
                 
                 // phrase conditional
                 //consider making temp array, then popping out ones next to each other into "o_info" array
@@ -1162,6 +1167,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
             if (mult_terms_status == true){                
                 //find indices of sequential, pushes these from temp_orig_boxes into confirmed_orig_boxes array
                 var phrase_indices = findSeq(string_index); //gets indices of sequential numbers
+                console.log(phrase_indices);
                 if (phrase_indices == null){
                     return;
                 }                                
@@ -1247,7 +1253,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
                 //XML strings                
                 content_string = $(this).attr('CONTENT');
                 //clean variables for comparison
-                var content_string_stripped = content_string.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");                                
+                var content_string_stripped = content_string.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase();                                
                 
                 // phrase conditional
                 //consider making temp array, then popping out ones next to each other into "o_info" array
