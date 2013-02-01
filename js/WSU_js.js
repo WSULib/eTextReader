@@ -6,7 +6,10 @@ function postLaunch() {
     $("#WSUtoolbar_minimize").show();
 
     //set OCR status
-    br.OCRstatus = false;   
+    br.OCRstatus = false;
+
+    //icons prep
+    $(".OCR_tools").hide();
 
     //create large navigation arrows - 2 second bold to show user they are there
     bigArrows();
@@ -200,10 +203,8 @@ function displayFTSResultsStatic(row_start, search_term){
 
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
-    $('#fts_static_tools').append("<span style='font-size:1.5em; font-weight:bold;'>Full-Text Search Results</span>");    
-    var func_call = "getFTSResultsDialog("+row_start+",'"+search_term+"')";    
-    $('#fts_static_tools').prepend('<button id="fts_accordian" class="fts_buttons right fts_collapse tool_icon rollover" type="button" onclick="accordFTSResultsStatic(); return false;"></button>');
-    $('#fts_static_tools').prepend('<button class="fts_buttons right fts_close tool_icon rollover" type="button" onclick="hideFTSResultsStatic(); return false;"></button>');
+    $('#fts_static_tools').append('<ul class="the-icons" id="fts_icons_list"><li><span style="font-size:1.5em; font-weight:bold;">Full-Text Search Results</span></li></ul>');
+    $('#fts_icons_list').append('<li><i class="icon-remove" onclick="hideFTSResultsStatic(); return false;"></i></li><li><i id="fts_accordian" class="icon-chevron-left" onclick="accordFTSResultsStatic(); return false;"></i></li>'); 
 
     //display if not already drawn, and resize fts_wrapper when animation complete
     if (br.fts_displayed == false){    
@@ -266,14 +267,12 @@ function accordFTSResultsStatic() {
         var accord_box = $('#fts_box_text_static');
         accord_box.css({
             'overflow':'hidden',
-            // 'padding':'2px'
-            // 'opacity':'.4',
         });        
         accord_box.animate({width:30,},500);
         $('#fts_box_text_static').children().hide();
         $('#fts_static_tools').show();
         $('#fts_static_tools span').hide();
-        $('#fts_accordian').removeClass('fts_collapse').addClass('fts_expand');
+        $('#fts_accordian').removeClass('icon-chevron-left').addClass('icon-chevron-right');
         br.fts_accord = "collapsed";
         return
     }
@@ -284,7 +283,7 @@ function accordFTSResultsStatic() {
             $('#fts_static_tools span').show();
         });        
         
-        $('#fts_accordian').removeClass('fts_expand').addClass('fts_collapse');        
+        $('#fts_accordian').removeClass('icon-chevron-right').addClass('icon-chevron-left');
         br.fts_accord = "expanded";
         return
     }
@@ -799,7 +798,7 @@ function toolbarsMinimize(){
             }
         });
         $('#WSUtoolbar_minimize').addClass('toolbar_hidden').removeClass('toolbar_exposed');
-        $('#WSUtoolbar_minimize').html("v");       
+        $("#minimize_handle").removeClass('icon-chevron-up').addClass('icon-chevron-down');
         
         // if (when) nav arrows are on screen - 1up
         if (br.bigArrowStatus == true){
@@ -827,10 +826,14 @@ function toolbarsMinimize(){
                 if ($current_layout.mode == "2up"){
                     br.prepareTwoPageView();
                 }
+                // if plain-text has taken over, resize
+                if (br.plainTextStatus == true){
+                    resizePlainText();
+                }
             }
         });
         $('#WSUtoolbar_minimize').addClass('toolbar_exposed').removeClass('toolbar_hidden');
-        $('#WSUtoolbar_minimize').html("^");
+        $("#minimize_handle").removeClass('icon-chevron-down').addClass('icon-chevron-up');
 
         // if (when) nav arrows are on screen
         if (br.bigArrowStatus == true){
@@ -1353,6 +1356,13 @@ function hideLoading(){
         $(this).remove();
     });
 }
+
+//item info and export tools
+function itemInfo(){
+    alert("coming soon...");
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 //Utilities

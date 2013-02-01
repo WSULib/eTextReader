@@ -4,9 +4,8 @@
 <head>
     <title>POPULATE WITH METADATA FROM ItemID</title>   
    
-    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
-    <!-- Can't remember why we need 
-    <!-- // <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script> --> 
+    <!--jquery load, 1.4 works best -->
+    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>        
     
     <script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="js/dragscrollable.js"></script>    
@@ -17,9 +16,10 @@
     <link rel="stylesheet" type="text/css" href="inc/jqueryui/css/ui-lightness/WSU_jquery-ui-1.8.23.custom.css"/>
 
     <!-- Main BookReader JS and CSS // "WSU" prefix for modified versions-->
-    <script type="text/javascript" src="js/WSU_bookreader.js"></script>
-    <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_BookReader.css"/>    
-    <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive_icons/css/elusive-webfont.css"/>
+    <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
+    <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive-iconset/css/elusive-webfont.css"/>
+    <link id="css_icons" rel="stylesheet" type="text/css" href="css/monochrome_icons.css"/>
+    <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_BookReader.css"/>
 
     <!-- Load BR init and local functionality -->
     <script type="text/javascript" src="js/WSUlaunch.js"></script>
@@ -77,8 +77,89 @@
     <div id="overlays"></div>
 
     <div id="WSUtoolbar" class="shadow">
-        
+
         <div class="tool_row">
+
+            <div class="logo tools left">
+                <a href="/eTextReader" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
+            </div>
+
+            <div class="fts_form left" id="fts_search">
+                <label>Full-text search:</label>                
+                <form id="fts_form" action='javascript:' onsubmit='getFTSResultsStatic(0)'>
+                    <input id='fts_input' class="fts_input_box input" type='text' size='20' />                    
+                    <button type="button" class="btn btn-append" onclick="getFTSResultsStatic(0); return false;">search</button> 
+                </form>                
+            </div>
+            
+            <div class="icon tools left">
+                <ul class="the-icons">       
+                    <li><i class="icon-zoom-out" onclick='br.zoom(-1); return false;' title="Zoom out"></i></li>
+                    <li><i class="icon-zoom-in" onclick='br.zoom(1); return false;' title="Zoom in"></i></li>
+                    <li><span id="zoom_level" class='label'><span id='BRzoom'></span></span></li>
+                </ul>                               
+                
+            </div>
+
+            <div class="icon tools left">
+                <ul class="the-icons">       
+                    <li><i class="icon-font toggleOCR" onclick='toggleOCR(); return false;' title="Click to toggle Text overlay"></i></li>
+                    <li><i style="font-size:2.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("increase"); return false;'></i></li>                    
+                    <li><i style="font-size:1.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("decrease"); return false;'></i></li>                    
+                </ul>                 
+            </div>
+
+            <div class="icon tools left">
+                <ul class="the-icons">  
+                    <li><i class="icon-speaker" onclick='speakPagealoud();' title="Click to Speak Aloud"></i></li>
+                    <li><span id="audio_load_alert" class='label' style="background-color:pink; display:none;" onclick="sayItstop();">audio playing (click to stop)</span></li>
+                </ul>                
+            </div>
+
+            
+            <div class="icon tools left">
+                <ul class="the-icons">                        
+                    <li><i class="icon-screenshot" onclick='magLoupe();' title="Click to use magnifying loupe"></i></li>
+                    <li><i class="icon-resize-full" onclick='fullScreen();' title="Click to use magnifying loupe"></i></li>
+                    <li><i class="icon-info-sign" onclick='itemInfo();' title="Book Info"></i></li>                                        
+                </ul>                                                     
+            </div>
+
+            <!-- <div class="icon tools left">
+                <ul class="the-icons">       
+                    <li><i class="icon-eye-open" onclick='magLoupe();' title="Click to use magnifying loupe"></i></li>
+                </ul>
+            </div> -->
+
+            
+                <div class="icon tools right iframe_pivot_node">                                
+                    <ul class="the-icons">                        
+                        <li><i class="icon-file" onclick="launch1up(); return false;"></i></li>
+                        <li><i class="icon-book" onclick="launch2up(); return false;"></i></li>
+                        <li><i class="icon-th" onclick="launchThumbs(); return false;"></i></li>                                                                        
+                        <li><i class="icon-align-justify" onclick='plainText();' title="Switches to Plain Text / HTML"></i></li>
+                    </ul>                    
+                </div>
+
+                <div class="icon tools right" id="jump_to_form">
+                    <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
+                        <span class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
+                    </form>
+                </div>
+
+                <div class="icon tools right iframe_pivot_node">
+                    <ul class="the-icons">                        
+                        <li><i class="icon-step-backward" onclick='br.leftmost(); return false;'></i></li>
+                        <li><i class="icon-arrow-left" onclick='br.left(); return false;'></i></li>
+                        <li><i class="icon-arrow-right" onclick='br.right(); return false;'></i></li>                                                                        
+                        <li><i class="icon-step-forward" onclick='br.rightmost(); return false;'></i></li>                                            
+                    </ul>           
+                    
+                </div>                           
+
+        </div> <!--closes tool row div -->
+        
+        <!-- <div class="tool_row">
 
             <div class="logo tools left">
                 <a href="/eTextReader" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
@@ -119,12 +200,11 @@
                 <button class="" type="button" onclick='$("#WSUfooter").hide();' title="highlight search_term on images">Destroy Footer</button>
             </div>
 
-           
-
-            <!-- <div class="item_title tools right">                
-                <span class="title label"></span>
-            </div>  -->
-
+            <div class="icon tools left">
+                <ul class="the-icons">       
+                    <li><i class="icon-eye-open" onclick='magLoupe();' title="Click to use magnifying loupe"></i></li>
+                </ul>
+            </div>
 
             <div id="iframe_pivots">
                 <div class="icon tools right iframe_pivot_node">            
@@ -135,8 +215,8 @@
 
                 <div class="icon tools right iframe_pivot_node">            
                     <button id="front_nav" class="tool_icon arrow_leftmost rollover" type="button" onclick='br.leftmost(); return false;'></button>
-                    <!-- <button id="previous_nav" class="tool_icon arrow_left rollover" type="button" onclick='br.left(); return false;'></button>
-                    <button id="next_nav" class="tool_icon arrow_right rollover" type="button" onclick='br.right(); return false;'></button> -->
+                    <button id="previous_nav" class="tool_icon arrow_left rollover" type="button" onclick='br.left(); return false;'></button>
+                    <button id="next_nav" class="tool_icon arrow_right rollover" type="button" onclick='br.right(); return false;'></button>
                     <button id="back_nav" class="tool_icon arrow_rightmost rollover" type="button" onclick='br.rightmost(); return false;'></button>
                     <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
                         <span class='label'>Page<input id='BRpagenum' type='text' size='2' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
@@ -144,7 +224,7 @@
                 </div>
             </div>                        
 
-        </div> <!-- closes toolbar row --> 
+        </div>  --><!-- closes toolbar row -->         
 
     </div>
 
@@ -157,7 +237,11 @@
     </div>
 
     <!--Create minimize arrow after load-->
-    <div id="WSUtoolbar_minimize" class="toolbar_exposed" onclick="toolbarsMinimize(); return false;" title="Show/hide nav bar">^</div>
+    <div id="WSUtoolbar_minimize" class="toolbar_exposed" onclick="toolbarsMinimize(); return false;" title="Show/hide nav bar">
+        <ul class="the-icons">                        
+            <li><i id="minimize_handle" class="icon-chevron-up"></i></li>
+        </ul>
+    </div>
 
     </div> <!--closes bookreader_wrapper-->
     
