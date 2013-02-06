@@ -41,8 +41,3 @@ function sayItstop () {
   $('#audio_load_alert').fadeOut();
 
 }
-
-
-
-
-

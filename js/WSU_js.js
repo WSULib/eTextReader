@@ -29,6 +29,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
     var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&hl=true&hl.fl=OCR_text&hl.snippets=1000&hl.fragmenter=gap&hl.fragsize=70&wt=json&json.wrf=callback';
+    console.log(squery);
 
     //blank search conditional
     if (search_term == ""){
@@ -234,7 +235,7 @@ function resizeFTSWrapper(){
         $("#fts_box_text_static").ready(function(){
             $("#fts_results_wrapper").height(                 
                 //last integer equals total margin height of #fts_bottom_nav
-                $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 30)
+                $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 75)
             );
         });        
 }
@@ -406,7 +407,8 @@ function toggleOCR() {
         }
         else{
             $('.OCR_tools').fadeIn();
-            $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");
+            // $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");
+            $('.toggleOCR').addClass("active_icon");            
             br.plainOCRstatus = true;
         }
         return;        
@@ -418,14 +420,16 @@ function toggleOCR() {
             showOCR();
             // show OCR controls
             $('.OCR_tools').fadeIn();
-            $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");        
+            // $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");        
+            $('.toggleOCR').addClass("active_icon");
             return;
         }    
         if (br.OCRstatus == true){
             hideOCR();
             // hide OCR tools
             $('.OCR_tools').fadeOut();
-            $('.toggleOCR').css("border", "none");
+            // $('.toggleOCR').css("border", "none");
+            $('.toggleOCR').removeClass("active_icon");
             return;
         }
     }
@@ -633,16 +637,29 @@ function magLoupe(){
 }
 
 // fullscreen mode
-function fullScreen(){   
+function fullScreen(callback){      
 
     //calls "fullscreen_API"
-    if (fullScreenApi.supportsFullScreen) {
-        var reader_handle = document.getElementById("bookreader_wrapper");
-        fullScreenApi.requestFullScreen(reader_handle);    
+    if (fullScreenApi.supportsFullScreen) {        
+        var reader_handle = $("#BRcontainer")[0]; //works, only for the pages...        
+        fullScreenApi.requestFullScreen(reader_handle);        
     }
+    callback();
 
 }
 
+function goFullScreen(){
+    fullScreen(function(){
+            //code for post-full screen operations can go here
+            // $("#BRcontainer").append($("#overlays")[0]);            
+            // bigArrows();
+            // bigArrowsPulse();
+            // console.log($("#BRcontainer"));
+        }
+    );
+}
+
+//draw up-down nav arrows
 function drawArrowsVert(page_mode) {
     //get book dimensions
     var bookwidth = $('#BRpageview').width();

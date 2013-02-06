@@ -18,6 +18,7 @@
     <!-- Main BookReader JS and CSS // "WSU" prefix for modified versions-->
     <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
     <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive-iconset/css/elusive-webfont.css"/>
+    <!--[if lte IE 7]><script src="css/elusive-iconset/lte-ie7.js"></script><![endif]-->
     <link id="css_icons" rel="stylesheet" type="text/css" href="css/monochrome_icons.css"/>
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_BookReader.css"/>
 
@@ -120,7 +121,7 @@
             <div class="icon tools left">
                 <ul class="the-icons">                        
                     <li><i class="icon-screenshot" onclick='magLoupe();' title="Click to use magnifying loupe"></i></li>
-                    <li><i class="icon-resize-full" onclick='fullScreen();' title="Click to use magnifying loupe"></i></li>
+                    <li><i class="icon-resize-full" onclick='goFullScreen();' title="Click to use magnifying loupe"></i></li>
                     <li><i class="icon-info-sign" onclick='itemInfo();' title="Book Info"></i></li>                                        
                 </ul>                                                     
             </div>

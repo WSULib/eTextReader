@@ -9,6 +9,7 @@
             prefix: ''
         },
         browserPrefixes = 'webkit moz o ms khtml'.split(' ');
+
  
     // check for native support
     if (typeof document.cancelFullScreen != 'undefined') {
@@ -61,5 +62,5 @@
     }
  
     // export api
-    window.fullScreenApi = fullScreenApi;
+    window.fullScreenApi = fullScreenApi;    
 })();
