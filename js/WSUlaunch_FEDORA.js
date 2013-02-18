@@ -3,25 +3,19 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
 //////////////////////////////////////////////////////////////////////////////////////    
 
     // Create the BookReader object
-    br = new BookReader();
-
-    // var pageHeight = 1000;
-    // var pageWidth = 750;
-
-    // Return the width of a given page.  Here we assume all images are 800 pixels wide
+    br = new BookReader();    
+    
     br.getPageWidth = function(index) {
         // return pageWidth;
         return parseInt(pwidth);
     }
-
-    // Return the height of a given page.  Here we assume all images are 1200 pixels high
+    
     br.getPageHeight = function(index) {
         // return pageHeight;
         return parseInt(pheight);
     }
 
-    // We load the images from archive.org -- you can modify this function to retrieve images
-    // using a different URL structure
+    // FEDORA
     br.getPageURI = function(index, reduce, rotate, mode) {
         // reduce and rotate are ignored in this simple implementation, but we
         // could e.g. look at reduce and load images from a different directory
@@ -29,20 +23,21 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
 
         // add logic for rendering smaller images for thumbnail mode                
         var $current_layout = getPageInfo();
-        var mode = $current_layout.mode;                     
+        var mode = $current_layout.mode;
+
+        // convert ItemID to PIDsafe
+        var PIDsafe = ItemID.replace(/_/g,"");                     
 
         if (mode != 'thumb') {
-            var imageSizeLoc = "/images/"
+            var imageSizeLoc = ":images/"
+            var url = 'http://141.217.172.45:8080/fedora/objects/'+PIDsafe+imageSizeLoc+"datastreams/IMAGE_"+index+'/content';
             }
         else {
-            var imageSizeLoc = "/images/thumbs/"
+            var imageSizeLoc = ":thumbs/";
+            var url = 'http://141.217.172.45:8080/fedora/objects/'+PIDsafe+imageSizeLoc+"datastreams/THUMB_"+index+'/content';                        
         }
 
-        var leafStr = '00000';        
-        var imgStr = (index+1).toString();        
-        var re = new RegExp("0{"+imgStr.length+"}$");
-        // var url = '../data/'+ItemID+'/images/'+ItemID+leafStr.replace(re, imgStr) + '.jpg'; //using ItemID for direcotry and image name
-        var url = '../data/'+ItemID+imageSizeLoc+ItemID+leafStr.replace(re, imgStr) + '.jpg'; // with different thumbnails location
+        
         return url;
     }
 
@@ -101,8 +96,8 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
     br.bookTitle= item_title;
     br.bookUrl  = '141.217.172.45';
 
-    // Override the path used to find UI images
-    br.imagesBaseURL = '../data/'+ItemID+'/images/';
+    // Override the path used to find UI images - DONT SEEM TO NEED THIS
+    // br.imagesBaseURL = '../data/'+ItemID+'/images/';
 
     br.getEmbedCode = function(frameWidth, frameHeight, viewParams) {
         return "Embed code not yet supported.";
@@ -112,10 +107,10 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
     br.init();
 
     // display options and update metadata
-    $('#BRtoolbar').find('.read').hide();
-    $('#textSrch').hide();
-    $('#btnSrch').hide();   
-    $('.item_title span.title').html(br.bookTitle.toString());
+    // $('#BRtoolbar').find('.read').hide();
+    // $('#textSrch').hide();
+    // $('#btnSrch').hide();   
+    // $('.item_title span.title').html(br.bookTitle.toString());
     $('#leaf_count').html(leafs.toString());
 } //closes launch
 
