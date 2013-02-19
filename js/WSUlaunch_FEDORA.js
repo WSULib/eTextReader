@@ -3,7 +3,8 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
 //////////////////////////////////////////////////////////////////////////////////////    
 
     // Create the BookReader object
-    br = new BookReader();    
+    br = new BookReader();
+   
     
     br.getPageWidth = function(index) {
         // return pageWidth;
@@ -17,16 +18,15 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
 
     // FEDORA
     br.getPageURI = function(index, reduce, rotate, mode) {
-        // reduce and rotate are ignored in this simple implementation, but we
-        // could e.g. look at reduce and load images from a different directory
-        // or pass the information to an image server
+        // decision to bump internal IA index
+        index = index + 1;            
 
         // add logic for rendering smaller images for thumbnail mode                
         var $current_layout = getPageInfo();
         var mode = $current_layout.mode;
 
         // convert ItemID to PIDsafe
-        var PIDsafe = ItemID.replace(/_/g,"");                     
+        var PIDsafe = ItemID.replace(/_/g,"");                          
 
         if (mode != 'thumb') {
             var imageSizeLoc = ":images/"

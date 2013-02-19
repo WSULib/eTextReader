@@ -304,33 +304,52 @@ function showOCR(adjust) {
         var mode = $current_layout.mode;  
         
         //2up mode --> ajax call for OCR html
-        if (mode == "2up"){
+        if (mode == "2up"){                           
+
+            // convert ItemID to PIDsafe
+            var PIDsafe = ItemID.replace(/_/g,"");
+
+            //page URL's
+            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(rootpage - 1).toString();
+            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(secondarypage - 1).toString();            
             
-            // left page
-            var leafStr = '00000';            
-            var htmlStr = rootpage.toString();
-            var re = new RegExp("0{"+htmlStr.length+"}$");
-            var leftOCR_URL = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';            
+            $(document).ready(function(){
+              $.ajax({
+                type: "GET",
+                url: leftOCR_URL,
+                dataType: "html",
+                success: paintOCR_left
+              });
+            });            
 
-            //right page
-            var leafStr = '00000';            
-            var htmlStr = secondarypage.toString(); //plus two for other page?
-            var re = new RegExp("0{"+htmlStr.length+"}$");
-            var rightOCR_URL = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';                
+            function paintOCR_left(html){                
+                if (rootpage == 1){ //conditional for cover
+                    $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");                            
+                    $('.OCR_box.right .OCR_box_text').load(leftOCR_URL);
+                }
+                else if (rootpage == br.numLeafs){ //conditional for back page
+                    $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
+                    $('.OCR_box.left .OCR_box_text').load(leftOCR_URL); 
+                }
+                else {
+                    $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
+                    $('.OCR_box.left .OCR_box_text').append(html);
+                    $(document).ready(function(){
+                      $.ajax({
+                        type: "GET",
+                        url: rightOCR_URL,
+                        dataType: "html",
+                        success: paintOCR_right
+                      });
+                    });                                        
+                }
+                $('.OCR_box').fadeIn();
+            }
 
-            if (rootpage == 1){ //conditional for cover
-                $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");                            
-                $('.OCR_box.right .OCR_box_text').load(leftOCR_URL);
-            }
-            else if (rootpage == br.numLeafs){ //conditoinal for back page
-                $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
-                $('.OCR_box.left .OCR_box_text').load(leftOCR_URL); 
-            }
-            else {
-                $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");                                
+            function paintOCR_right(html){                
                 $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");
-                $('.OCR_box.left .OCR_box_text').load(leftOCR_URL);
-                $('.OCR_box.right .OCR_box_text').load(rightOCR_URL);
+                $('.OCR_box.right .OCR_box_text').append(html);
+                $('.OCR_box').fadeIn();
             }
         } 
 
@@ -338,9 +357,7 @@ function showOCR(adjust) {
         if (mode == "1up"){
             singlepageOCR();            
         }
-
-        //reveal        
-        $('.OCR_box').fadeIn();        
+            
     }
 
 //1up OCR function
@@ -366,25 +383,35 @@ function singlepageOCR() {
     var left_offset = width * .05;
     var left = parseInt($(root_div).css('left')) + left_offset;
 
-    //insert OCR text
-    var leafStr = '00000';            
-    var htmlStr = rootpage.toString(); //plus two for other page?
-    var re = new RegExp("0{"+htmlStr.length+"}$");
-    var singleOCR_html = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';
-    $('.OCR_box_single .OCR_box_text').load(singleOCR_html);
+    // convert ItemID to PIDsafe
+    var PIDsafe = ItemID.replace(/_/g,"");
 
+    //page URL
+    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(rootpage - 1).toString();
 
-    //set OCR overlay dimensions and position
-    $('.OCR_box_single').css({
-        'height':height,
-        'width':width,
-        'top':top,
-        'left':left
-        });
+    //insert results
+    $(document).ready(function(){
+      $.ajax({
+        type: "GET",
+        url: leftOCR_URL,
+        dataType: "html",
+        success: paintOCR_single
+      });
+    });
 
-    //3) .show()
-    // $('.OCR_box_single').slideDown(500);
-    $('.OCR_box_single').fadeIn();
+    function paintOCR_single(html){        
+        $('.OCR_box_single .OCR_box_text').append(html);
+        
+        //set OCR overlay dimensions and position
+        $('.OCR_box_single').css({
+            'height':height,
+            'width':width,
+            'top':top,
+            'left':left
+            });   
+        
+        $('.OCR_box_single').fadeIn();
+        }    
 }
 
 //Hide OCR
