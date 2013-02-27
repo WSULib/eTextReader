@@ -1096,10 +1096,10 @@ $.fn.scrollTo = function( target, options, callback ){
   });
 }
 
-function renderImageHighlights(){
+function renderImageHighlights(){    
 
     $current_layout = getPageInfo();
-    if ($current_layout.mode == undefined){
+    if ($current_layout.mode == undefined){        
         return;
     }       
 
@@ -1108,18 +1108,6 @@ function renderImageHighlights(){
 
     // 2up
     if ($current_layout.mode == "2up") {
-
-        // //left XML location
-        // var leafStr = '00000';            
-        // var htmlStr = $current_layout.rootpage.toString();
-        // var re = new RegExp("0{"+htmlStr.length+"}$");
-        // var left_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
-
-        // //right page
-        // var leafStr = '00000';            
-        // var htmlStr = $current_layout.secondarypage.toString();
-        // var re = new RegExp("0{"+htmlStr.length+"}$");
-        // var right_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
 
         //create URLs
         var left_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';
@@ -1130,32 +1118,13 @@ function renderImageHighlights(){
     }
 
     // 1up
-    if ($current_layout.mode == "1up") {            
-        //current XML location
-        // var leafStr = '00000';            
-        // var htmlStr = $current_layout.rootpage.toString();
-        // var re = new RegExp("0{"+htmlStr.length+"}$");
-        // var single_current_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+    if ($current_layout.mode == "1up") {                    
 
         //create URLs
         var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';
         console.log(single_current_xml_doc);
 
-        drawBoxes($current_layout.mode, $current_layout.rootpage, single_current_xml_doc, br.search_term,'single'); //current page
-    
-        // //page below XML location
-        // var leafStr = '00000';            
-        // var htmlStr = ($current_layout.rootpage + 1).toString();
-        // var re = new RegExp("0{"+htmlStr.length+"}$");
-        // var single_below_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
-        // drawBoxes($current_layout.mode, ($current_layout.rootpage + 1), single_below_xml_doc, br.search_term,'single'); //page below            
-    
-        // //page above XML location
-        // var leafStr = '00000';            
-        // var htmlStr = ($current_layout.rootpage - 1).toString();
-        // var re = new RegExp("0{"+htmlStr.length+"}$");
-        // var single_above_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';                        
-        // drawBoxes($current_layout.mode, ($current_layout.rootpage - 1), single_above_xml_doc, br.search_term,'single'); //page above                            
+        drawBoxes($current_layout.mode, $current_layout.rootpage, single_current_xml_doc, br.search_term,'single'); //current page        
     }
 }
 
@@ -1429,20 +1398,18 @@ function itemInfo(){
 //Utilities
 //////////////////////////////////////////////////////////////////////////////////////
 
-//Get page number(s) and layout mode    
+// Once calculated by URL hash, now pulling internally from IA-JS
 function getPageInfo (){
-    var cURL = window.location.href.split('/');
-    var rootpage = parseInt(cURL[5]);
-    var secondarypage = parseInt(rootpage) + 1;
 
-    // sets mode
-    if (cURL[7] == "2up") {
-        var mode = "2up";    
-    };
-    if (cURL[7] == "1up") {
+    var rootpage = br.currentIndex() + 1;
+    var secondarypage = rootpage + 1;
+    if (br.mode == "1") {
         var mode = "1up";    
     };
-    if (cURL[7] == "thumb") {
+    if (br.mode == "2") {
+        var mode = "2up";    
+    };
+    if (br.mode == "3") {
         var mode = "thumb";    
     };
 
