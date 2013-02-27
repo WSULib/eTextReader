@@ -13,7 +13,8 @@ function postLaunch() {
 
     //create large navigation arrows - 2 second bold to show user they are there
     bigArrows();
-    bigArrowsPulse();
+    bigArrowsPulse();   
+
 
 } //closes postLaunch()
 
@@ -28,8 +29,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
-    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&hl=true&hl.fl=OCR_text&hl.snippets=1000&hl.fragmenter=gap&hl.fragsize=70&wt=json&json.wrf=callback';
-    console.log(squery);
+    // var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+br.ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&hl=true&hl.fl=OCR_text&hl.snippets=1000&hl.fragmenter=gap&hl.fragsize=70&wt=json&json.wrf=callback';    
 
     //blank search conditional
     if (search_term == ""){
@@ -76,12 +76,20 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
         return (value % 2 == 0);
     }
 
+    //construct URL for Solr query
+    var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(search_term) + "&ItemID=" + br.ItemID + "&row_start=" + row_start + "&datatype=json";
+
+    console.log(squery);
+
     //solr query
     $.ajax({          
       url: squery,
-      dataType: 'jsonp',
-      jsonpCallback: 'callback',
+      // dataType: 'jsonp',
+      // jsonpCallback: 'callback',
+      dataType: 'json',      
       success: function(result) {
+        console.log(result);
+
         var cURL = window.location.href;         
         var Parent = document.getElementById('fts_box_text_static');
         
@@ -304,33 +312,52 @@ function showOCR(adjust) {
         var mode = $current_layout.mode;  
         
         //2up mode --> ajax call for OCR html
-        if (mode == "2up"){
+        if (mode == "2up"){                           
+
+            // convert ItemID to PIDsafe
+            var PIDsafe = br.ItemID.replace(/_/g,"");
+
+            //page URL's
+            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(rootpage).toString();
+            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(secondarypage).toString();            
             
-            // left page
-            var leafStr = '00000';            
-            var htmlStr = rootpage.toString();
-            var re = new RegExp("0{"+htmlStr.length+"}$");
-            var leftOCR_URL = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';            
+            $(document).ready(function(){
+              $.ajax({
+                type: "GET",
+                url: leftOCR_URL,
+                dataType: "html",
+                success: paintOCR_left
+              });
+            });            
 
-            //right page
-            var leafStr = '00000';            
-            var htmlStr = secondarypage.toString(); //plus two for other page?
-            var re = new RegExp("0{"+htmlStr.length+"}$");
-            var rightOCR_URL = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';                
+            function paintOCR_left(html){                
+                if (rootpage == 1){ //conditional for cover
+                    $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");                            
+                    $('.OCR_box.right .OCR_box_text').load(leftOCR_URL);
+                }
+                else if (rootpage == br.numLeafs){ //conditional for back page
+                    $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
+                    $('.OCR_box.left .OCR_box_text').load(leftOCR_URL); 
+                }
+                else {
+                    $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
+                    $('.OCR_box.left .OCR_box_text').append(html);
+                    $(document).ready(function(){
+                      $.ajax({
+                        type: "GET",
+                        url: rightOCR_URL,
+                        dataType: "html",
+                        success: paintOCR_right
+                      });
+                    });                                        
+                }
+                $('.OCR_box').fadeIn();
+            }
 
-            if (rootpage == 1){ //conditional for cover
-                $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");                            
-                $('.OCR_box.right .OCR_box_text').load(leftOCR_URL);
-            }
-            else if (rootpage == br.numLeafs){ //conditoinal for back page
-                $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
-                $('.OCR_box.left .OCR_box_text').load(leftOCR_URL); 
-            }
-            else {
-                $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");                                
+            function paintOCR_right(html){                
                 $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");
-                $('.OCR_box.left .OCR_box_text').load(leftOCR_URL);
-                $('.OCR_box.right .OCR_box_text').load(rightOCR_URL);
+                $('.OCR_box.right .OCR_box_text').append(html);
+                $('.OCR_box').fadeIn();
             }
         } 
 
@@ -338,9 +365,7 @@ function showOCR(adjust) {
         if (mode == "1up"){
             singlepageOCR();            
         }
-
-        //reveal        
-        $('.OCR_box').fadeIn();        
+            
     }
 
 //1up OCR function
@@ -366,25 +391,35 @@ function singlepageOCR() {
     var left_offset = width * .05;
     var left = parseInt($(root_div).css('left')) + left_offset;
 
-    //insert OCR text
-    var leafStr = '00000';            
-    var htmlStr = rootpage.toString(); //plus two for other page?
-    var re = new RegExp("0{"+htmlStr.length+"}$");
-    var singleOCR_html = '../data/'+ItemID+'/OCR/'+ItemID+leafStr.replace(re, htmlStr) + '.htm';
-    $('.OCR_box_single .OCR_box_text').load(singleOCR_html);
+    // convert ItemID to PIDsafe
+    var PIDsafe = br.ItemID.replace(/_/g,"");
 
+    //page URL
+    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(rootpage).toString();
 
-    //set OCR overlay dimensions and position
-    $('.OCR_box_single').css({
-        'height':height,
-        'width':width,
-        'top':top,
-        'left':left
-        });
+    //insert results
+    $(document).ready(function(){
+      $.ajax({
+        type: "GET",
+        url: leftOCR_URL,
+        dataType: "html",
+        success: paintOCR_single
+      });
+    });
 
-    //3) .show()
-    // $('.OCR_box_single').slideDown(500);
-    $('.OCR_box_single').fadeIn();
+    function paintOCR_single(html){        
+        $('.OCR_box_single .OCR_box_text').append(html);
+        
+        //set OCR overlay dimensions and position
+        $('.OCR_box_single').css({
+            'height':height,
+            'width':width,
+            'top':top,
+            'left':left
+            });   
+        
+        $('.OCR_box_single').fadeIn();
+        }    
 }
 
 //Hide OCR
@@ -444,7 +479,7 @@ function speakPagealoud(source) {
         $current_layout.rootpage = $current_layout.rootpage + 2;
         $current_layout.secondarypage = $current_layout.secondarypage + 2;
     }
-    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+ItemID+'&wt=json&json.wrf=callback';
+    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';
 
     // loading information
     $('#audio_load_alert').fadeIn();
@@ -714,8 +749,8 @@ function drawArrowsHoriz() {
     //sets size at 90% of height and offsets from page edges
     if (bookwidth + 120 < $(window).width()) {
         $('.bigArrowBoxHoriz').height($('.BRleafEdgeR').height() * .9);
-        $('#rBigArrow').position({my: "left center", at: "right center", offset: "2 0", of: '.BRleafEdgeR'});
-        $('#lBigArrow').position({my: "right center", at: "left center", offset: "-2 0", of: '.BRleafEdgeL'});
+        $('#rBigArrow').position({my: "left center", at: "right center", offset: "10 0", of: '.BRleafEdgeR'});
+        $('#lBigArrow').position({my: "right center", at: "left center", offset: "-10 0", of: '.BRleafEdgeL'});
     }
 
     else { //if boxes will not fit next to pages        
@@ -890,11 +925,9 @@ function plainText(){
         br.plainTextStatus = true;                
 
         //insert HTML and resize        
-        $('#BookReader').append("<div id='html_concat' class='absoluteCenter'></div>");
-        var html_concat = '../data/'+ItemID+'/fullbook/'+ItemID + '.htm';
+        $('#BookReader').append("<div id='html_concat' class='absoluteCenter'></div>");        
         $('#html_concat').hide();            
-        $('#html_concat').height($(window).height() - 112);
-        // $('#html_concat').height($("#BRcontainer").height() - 30);
+        $('#html_concat').height($(window).height() - 112);       
 
         //resizes plain text if FTS is true
         if (br.fts_displayed == true){            
@@ -905,6 +938,8 @@ function plainText(){
             $('#html_concat').width($(window).width() - 40)
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        var html_concat = '../data/'+br.ItemID+'/fullbook/'+br.ItemID + '.htm';
         $('#html_concat').load(html_concat, function(){            
             //remove justified css from font tags (remove if too slow)
             var font_tags = $('#html_concat p');        
@@ -928,6 +963,7 @@ function plainText(){
                 renderPlainTextHighlights();
             }
         });
+        ////////////////////////////////////////////////////////////////////////////////////
 
         
 
@@ -1073,17 +1109,21 @@ function renderImageHighlights(){
     // 2up
     if ($current_layout.mode == "2up") {
 
-        //left XML location
-        var leafStr = '00000';            
-        var htmlStr = $current_layout.rootpage.toString();
-        var re = new RegExp("0{"+htmlStr.length+"}$");
-        var left_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+        // //left XML location
+        // var leafStr = '00000';            
+        // var htmlStr = $current_layout.rootpage.toString();
+        // var re = new RegExp("0{"+htmlStr.length+"}$");
+        // var left_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
 
-        //right page
-        var leafStr = '00000';            
-        var htmlStr = $current_layout.secondarypage.toString();
-        var re = new RegExp("0{"+htmlStr.length+"}$");
-        var right_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+        // //right page
+        // var leafStr = '00000';            
+        // var htmlStr = $current_layout.secondarypage.toString();
+        // var re = new RegExp("0{"+htmlStr.length+"}$");
+        // var right_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+
+        //create URLs
+        var left_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';
+        var right_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.secondarypage.toString()+'&datatype=html';
 
         drawBoxes($current_layout.mode, $current_layout.rootpage, left_xml_doc,br.search_term,'l');
         drawBoxes($current_layout.mode, $current_layout.secondarypage, right_xml_doc,br.search_term,'r');
@@ -1092,10 +1132,14 @@ function renderImageHighlights(){
     // 1up
     if ($current_layout.mode == "1up") {            
         //current XML location
-        var leafStr = '00000';            
-        var htmlStr = $current_layout.rootpage.toString();
-        var re = new RegExp("0{"+htmlStr.length+"}$");
-        var single_current_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+        // var leafStr = '00000';            
+        // var htmlStr = $current_layout.rootpage.toString();
+        // var re = new RegExp("0{"+htmlStr.length+"}$");
+        // var single_current_xml_doc = '../data/'+ItemID+'/altoXML/'+ItemID+leafStr.replace(re, htmlStr) + '.xml';
+
+        //create URLs
+        var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';
+        console.log(single_current_xml_doc);
 
         drawBoxes($current_layout.mode, $current_layout.rootpage, single_current_xml_doc, br.search_term,'single'); //current page
     

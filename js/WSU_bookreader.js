@@ -78,7 +78,11 @@ function BookReader() {
     this.firstIndex = null;
 
     //global variables needed
-    this.ItemID = null;    
+    this.ItemID = null; 
+    this.PIDsafeID = null;
+    this.collectionID = null;
+    this.FedoraPID = null;
+
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -4323,19 +4327,6 @@ BookReader.prototype.lastDisplayableIndex = function() {
         }
     }
 }
-
-// shortTitle(maximumCharacters)
-//________
-// Returns a shortened version of the title with the maximum number of characters
-// BookReader.prototype.shortTitle = function(maximumCharacters) {
-//     if (this.bookTitle.length < maximumCharacters) {
-//         return this.bookTitle;
-//     }
-    
-//     var title = this.bookTitle.substr(0, maximumCharacters - 3);
-//     title += '...';
-//     return title;
-// }
 
 // Parameter related functions
 
