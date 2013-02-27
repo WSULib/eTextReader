@@ -1,7 +1,8 @@
 //////////////////////////////////////////////////////////////////////////////////////
-function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
+function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID){
 //////////////////////////////////////////////////////////////////////////////////////    
-
+    // console.log("Coming from LAUNCH: ", PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID);
+    
     // Create the BookReader object
     br = new BookReader();
    
@@ -23,18 +24,15 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
 
         // add logic for rendering smaller images for thumbnail mode                
         var $current_layout = getPageInfo();
-        var mode = $current_layout.mode;
-
-        // convert ItemID to PIDsafe
-        var PIDsafe = ItemID.replace(/_/g,"");                          
+        var mode = $current_layout.mode;                               
 
         if (mode != 'thumb') {
             var imageSizeLoc = ":images/"
-            var url = 'http://141.217.172.45:8080/fedora/objects/'+PIDsafe+imageSizeLoc+"datastreams/IMAGE_"+index+'/content';
+            var url = 'http://141.217.172.45/fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/IMAGE_"+index+'/content';
             }
         else {
             var imageSizeLoc = ":thumbs/";
-            var url = 'http://141.217.172.45:8080/fedora/objects/'+PIDsafe+imageSizeLoc+"datastreams/THUMB_"+index+'/content';                        
+            var url = 'http://141.217.172.45/fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/THUMB_"+index+'/content';                        
         }
 
         
@@ -88,16 +86,8 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
         return index+1;
     }
 
-    // Total number of leafs
-    // br.numLeafs = 40;
+    // Total number of leafs    
     br.numLeafs = parseInt(leafs);
-
-    // Book title and the URL used for the book title link
-    br.bookTitle= item_title;
-    br.bookUrl  = '141.217.172.45';
-
-    // Override the path used to find UI images - DONT SEEM TO NEED THIS
-    // br.imagesBaseURL = '../data/'+ItemID+'/images/';
 
     br.getEmbedCode = function(frameWidth, frameHeight, viewParams) {
         return "Embed code not yet supported.";
@@ -106,11 +96,12 @@ function launchBookReader(ItemID, leafs, pheight, pwidth, item_title){
     // Let's go!
     br.init();
 
-    // display options and update metadata
-    // $('#BRtoolbar').find('.read').hide();
-    // $('#textSrch').hide();
-    // $('#btnSrch').hide();   
-    // $('.item_title span.title').html(br.bookTitle.toString());
+    //set some global variables -- REVISIT
+    br.ItemID = ItemID;
+    br.PIDsafeID = PIDsafeID;
+    br.collectionID = collectionID;
+    br.FedoraPID = collectionID + ":" + PIDsafeID;
+    
     $('#leaf_count').html(leafs.toString());
 } //closes launch
 

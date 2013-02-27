@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="inc/jqueryui/css/ui-lightness/WSU_jquery-ui-1.8.23.custom.css"/>
 
     <!-- Main BookReader JS and CSS // "WSU" prefix for modified versions-->
-    <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
+    <script type="text/javascript" src="js/WSU_bookreader_FEDORA.js"></script>        
     <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive-iconset/css/elusive-webfont.css"/>
     <!--[if lte IE 7]><script src="css/elusive-iconset/lte-ie7.js"></script><![endif]-->
     <link id="css_icons" rel="stylesheet" type="text/css" href="css/monochrome_icons.css"/>
@@ -45,19 +45,56 @@
 
     <!-- ////////////////////// Get Item ID & Metadata //////////////////////// -->
     <script type="text/javascript">
+        function getItemID(name) {
+            return decodeURI(
+                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+            );        
+        }
+
+        //this is setting global "ItemID" still used by Solr
+        var ItemID = getItemID('ItemID');        
+        var PIDsafe = ItemID.replace(/_/g,"");
+
+        $(document).ready(function() {
+            // currently pulling from ramsey collection objects only
+            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=STRUCT_META&datatype=xml';
+            // console.log(metaquery);            
+
+            //returns json
+            $(document).ready(function(){
+              $.ajax({
+                type: "GET",
+                url: metaquery,
+                dataType: "json",
+                success: pull_meta
+              });
+            });
+
+            function pull_meta(response){   
+                // console.log(response)
+                var pheight = response.dimensions.pheight;
+                var pwidth = response.dimensions.pwidth;
+                var leafs = response.dimensions.leafs;                
+                var PIDsafeID = response.PIDsafe;
+                var item_ID = response.item_ID;
+                var collectionID = response.collection;                
+                postMetaCall(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID);
+            }
+
+        });
+    </script>
+    <!-- ////////////////////// End Item ID & Metadata //////////////////////// -->
+    <!-- ////////////////////// Get Item ID & Metadata //////////////////////// -->
+    <script type="text/javascript">
         // function getItemID(name) {
         //     return decodeURI(
         //         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
         //     );        
         // }
-
-        // //get and convert ItemID
         // var ItemID = getItemID('ItemID');
-        // var PIDsafe = ItemID.replace(/_/g,"");
 
         // $(document).ready(function() {
-        //     // currently pulling from ramsey collection objects only
-        //     var metaquery = 'http://141.217.172.45:8080/fedora/objects/ramsey:'+PIDsafe+'/datastreams/STRUCT_META/content';
+        //     var metaquery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=ItemID:'+ItemID+'&fq=leafs:*&start=0&rows=10&indent=on&wt=json&json.wrf=callback';
 
         //     $.ajax({          
         //         url: metaquery,
@@ -72,33 +109,6 @@
         //             }                      
         //         });
         // });
-    </script>
-    <!-- ////////////////////// End Item ID & Metadata //////////////////////// -->
-    <!-- ////////////////////// Get Item ID & Metadata //////////////////////// -->
-    <script type="text/javascript">
-        function getItemID(name) {
-            return decodeURI(
-                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-            );        
-        }
-        var ItemID = getItemID('ItemID');
-
-        $(document).ready(function() {
-            var metaquery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=ItemID:'+ItemID+'&fq=leafs:*&start=0&rows=10&indent=on&wt=json&json.wrf=callback';
-
-            $.ajax({          
-                url: metaquery,
-                dataType: 'jsonp',
-                jsonpCallback: 'callback',                              
-                success: function(result) {
-                    var leafs = result.response.docs[0].leafs;
-                    var pheight = result.response.docs[0].pheight;                    
-                    var pwidth = result.response.docs[0].pwidth;
-                    var item_title =  result.response.docs[0].item_title;
-                    postMetaCall(leafs, pheight, pwidth, item_title);                     
-                    }                      
-                });
-        });
     </script>
     <!-- ////////////////////// End Item ID & Metadata //////////////////////// -->
 
@@ -222,9 +232,9 @@
             var iframe = true;
         }    
 
-        function postMetaCall(leafs, pheight, pwidth, item_title){
+        function postMetaCall(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID){            
             //launchBookReader() must be called first - launches and creates book scaffolding with item metadata            
-            launchBookReader(ItemID, leafs, pheight, pwidth, item_title);
+            launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID);
             //postLaunch() creates additions and overlays to the reader interface, encapsulated to follow metadata Ajax calls
             //postLaunch function can be found in WSU_js.js
             postLaunch();        

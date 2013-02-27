@@ -1,15 +1,31 @@
 <?php
 
-// http://141.217.172.45:8080/fedora/objects/ramsey:Sketchesandscraps/datastreams/STRUCT_META/content
 
+//get variables create URL
 $PIDsafe = $_GET['PIDsafe'];
 $datastream_request = $_GET['datastream'];
+$data_type = $_GET['datatype'];
+$request_URL = "http://141.217.172.45/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
 
-// $goober = simplexml_load_file('http://141.217.172.45:8080/fedora/objects/ramsey:Sketchesandscraps/datastreams/STRUCT_META/content');
-$datastream_bits = file_get_contents("http://141.217.172.45:8080/fedora/objects/$PIDsafe/datastreams/$datastream_request/content");
-print_r($datastream_bits);
 
-return $datastream_bits
+// XML
+if ($data_type == 'xml'){
+	// returns XML object - this might be more appropriate for content metadata
+	$xml_simple = simplexml_load_file($request_URL);	
+	// print_r($xml_simple);
+	$json_simple = json_encode($xml_simple);
+	// print_r($json_simple);
+	echo $json_simple;
+	return;
+}
+
+// HTML
+else {
+	//returns file contents untouched
+	$datastream_bits = file_get_contents($request_URL);	
+	echo $datastream_bits;
+	return;
+}
 
 
 ?>

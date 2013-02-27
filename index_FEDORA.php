@@ -11,7 +11,7 @@
 <div id="container">
 
 	<div id="title" class="row">
-		<h3>WSU eReader - example books</h3>
+		<h3>WSU eReader - Ramsey Collection example books</h3>
 	</div>
 
 	<div id='item_thumbs'>
@@ -19,7 +19,7 @@
 
 		////////////////////////////////
 		function createThumb($item_ID){
-			echo "<div class='fifth'><a href='bookreader_FEDORA.htm?ItemID=$item_ID#page/1/mode/2up'><img class='shadow' src='../data/$item_ID/".$item_ID."_cover.jpg'/></a>";
+			echo "<div class='fifth'><a href='bookreader_FEDORA.htm?ItemID=ramsey:$item_ID#page/1/mode/2up'><img class='shadow' src='../data/$item_ID/".$item_ID."_cover.jpg'/></a>";
 			echo 	"<div class='row container'>";
 	        echo 		"<div class='thumb_text'><em>$item_ID</em></div>";			          
 			echo 	"</div>";

@@ -241,7 +241,7 @@ BookReader.prototype.init = function() {
     
     // Set document title -- may have already been set in enclosing html for
     // search engine visibility
-    document.title = this.shortTitle(50);
+    // document.title = this.shortTitle(50);
     
     $("#BookReader").empty();
     
@@ -4327,15 +4327,15 @@ BookReader.prototype.lastDisplayableIndex = function() {
 // shortTitle(maximumCharacters)
 //________
 // Returns a shortened version of the title with the maximum number of characters
-BookReader.prototype.shortTitle = function(maximumCharacters) {
-    if (this.bookTitle.length < maximumCharacters) {
-        return this.bookTitle;
-    }
+// BookReader.prototype.shortTitle = function(maximumCharacters) {
+//     if (this.bookTitle.length < maximumCharacters) {
+//         return this.bookTitle;
+//     }
     
-    var title = this.bookTitle.substr(0, maximumCharacters - 3);
-    title += '...';
-    return title;
-}
+//     var title = this.bookTitle.substr(0, maximumCharacters - 3);
+//     title += '...';
+//     return title;
+// }
 
 // Parameter related functions
 
