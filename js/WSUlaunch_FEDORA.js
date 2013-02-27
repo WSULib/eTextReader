@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////
-function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID){
+function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL){
 //////////////////////////////////////////////////////////////////////////////////////    
     // console.log("Coming from LAUNCH: ", PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID);
     
@@ -28,11 +28,11 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 
         if (mode != 'thumb') {
             var imageSizeLoc = ":images/"
-            var url = 'http://141.217.172.45/fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/IMAGE_"+index+'/content';
+            var url = baseURL+'fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/IMAGE_"+index+'/content';
             }
         else {
             var imageSizeLoc = ":thumbs/";
-            var url = 'http://141.217.172.45/fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/THUMB_"+index+'/content';                        
+            var url = baseURL+'fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/THUMB_"+index+'/content';                        
         }
 
         
@@ -78,8 +78,6 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
         return spreadIndices;
     }
 
-    // For a given "accessible page index" return the page number in the book.
-    //
     // For example, index 5 might correspond to "Page 1" if there is front matter such
     // as a title page and table of contents.
     br.getPageNum = function(index) {
@@ -96,11 +94,13 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
     // Let's go!
     br.init();
 
-    //set some global variables -- REVISIT
+    //set some global variables
     br.ItemID = ItemID;
     br.PIDsafeID = PIDsafeID;
     br.collectionID = collectionID;
     br.FedoraPID = collectionID + ":" + PIDsafeID;
+    br.baseURL = baseURL;
+    br.solr_baseURL = solr_baseURL;
     
     $('#leaf_count').html(leafs.toString());
 } //closes launch

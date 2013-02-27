@@ -29,8 +29,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
-    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+br.ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&hl=true&hl.fl=OCR_text&hl.snippets=1000&hl.fragmenter=gap&hl.fragsize=70&wt=json&json.wrf=callback';
-    console.log(squery);
+    // var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+br.ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&hl=true&hl.fl=OCR_text&hl.snippets=1000&hl.fragmenter=gap&hl.fragsize=70&wt=json&json.wrf=callback';    
 
     //blank search conditional
     if (search_term == ""){
@@ -77,12 +76,20 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
         return (value % 2 == 0);
     }
 
+    //construct URL for Solr query
+    var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(search_term) + "&ItemID=" + br.ItemID + "&row_start=" + row_start + "&datatype=json";
+
+    console.log(squery);
+
     //solr query
     $.ajax({          
       url: squery,
-      dataType: 'jsonp',
-      jsonpCallback: 'callback',
+      // dataType: 'jsonp',
+      // jsonpCallback: 'callback',
+      dataType: 'json',      
       success: function(result) {
+        console.log(result);
+
         var cURL = window.location.href;         
         var Parent = document.getElementById('fts_box_text_static');
         
