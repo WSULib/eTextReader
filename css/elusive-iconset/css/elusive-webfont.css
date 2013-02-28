@@ -468,9 +468,12 @@ ul.the-icons li:hover i{
 .icon-folder-sign:before {
   content: "\e096";
 }
+
+/* troublesome "A" in Firefox */
 .icon-font:before {
   content: "\e095";
 }
+
 .icon-fontsize:before {
   content: "\e094";
 }

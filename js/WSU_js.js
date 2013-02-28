@@ -13,11 +13,9 @@ function postLaunch() {
 
     //create large navigation arrows - 2 second bold to show user they are there
     bigArrows();
-    bigArrowsPulse();   
-
+    bigArrowsPulse();
 
 } //closes postLaunch()
-
 
 //////////////////////////////////////////////////////////////////////////////////////
 //Other Functions
@@ -299,7 +297,6 @@ function accordFTSResultsStatic() {
 }
 
 // OCR overlays
-//Show OCR
 function showOCR(adjust) {
 
         //global variable for detecting if OCR is on or off
@@ -432,7 +429,6 @@ function hideOCR (){
 }
 
 function toggleOCR() {
-
     //plain text conditional
     if (br.plainTextStatus == true){
         if (br.plainOCRstatus == true){
@@ -471,7 +467,6 @@ function toggleOCR() {
 }
 
 // read pages aloud
-// e.g. http://141.217.97.167:8080/solr/bookreader/select/?q=page_num:15&fq=ItemID:letter_city&wt=json&json.wrf=callback
 function speakPagealoud(source) {
      
     var $current_layout = getPageInfo();
@@ -558,7 +553,6 @@ function fontResize(delta){
         });
     }
 }
-
 
 // flip navigation arrows for 1up / 2up (remove in thumbs?)
 function arrowsFlip (new_mode) {
@@ -672,8 +666,7 @@ function magLoupe(){
 }
 
 // fullscreen mode
-function fullScreen(callback){      
-
+function fullScreen(callback){
     //calls "fullscreen_API"
     if (fullScreenApi.supportsFullScreen) {        
         var reader_handle = $("#BRcontainer")[0]; //works, only for the pages...        
@@ -771,8 +764,7 @@ function drawArrowsHoriz() {
 // easy page flip arrows
 function bigArrows(state){
 
-    var $current_layout = getPageInfo();    
-
+    var $current_layout = getPageInfo();
     if (br.bigArrowStatus == false || state == "resize" || state == "state_change"){
 
         //sets status
@@ -829,8 +821,7 @@ function bigArrowsPulse(){
     },2500) 
 }
 
-function toolbarsMinimize(){
-    //seems to work without thumbnail conditionals...
+function toolbarsMinimize(){   
 
     var $current_layout = getPageInfo();
 
@@ -1121,9 +1112,7 @@ function renderImageHighlights(){
     if ($current_layout.mode == "1up") {                    
 
         //create URLs
-        var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';
-        console.log(single_current_xml_doc);
-
+        var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';        
         drawBoxes($current_layout.mode, $current_layout.rootpage, single_current_xml_doc, br.search_term,'single'); //current page        
     }
 }
@@ -1143,8 +1132,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
 
     //prepare 1up and 2up variables
     var confirmed_orig_boxes = new Array();    
-    var search_term_stripped = search_term.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase();  
-
+    var search_term_stripped = search_term.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase();
 
     // 2up - prepare variables
     if (page_mode == '2up'){   
@@ -1251,7 +1239,6 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
                 $('.image_highlight').fadeIn();            
             }
         }); //closes ajax "get" request
-
     } //closes 2up mode
 
     // 1up
@@ -1393,14 +1380,12 @@ function itemInfo(){
 }
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////
 //Utilities
 //////////////////////////////////////////////////////////////////////////////////////
 
 // Once calculated by URL hash, now pulling internally from IA-JS
 function getPageInfo (){
-
     var rootpage = br.currentIndex() + 1;
     var secondarypage = rootpage + 1;
     if (br.mode == "1") {
@@ -1412,13 +1397,11 @@ function getPageInfo (){
     if (br.mode == "3") {
         var mode = "thumb";    
     };
-
     return {
         "rootpage":rootpage,
         "secondarypage":secondarypage,
         "mode":mode
     }
-
 }
 
 // Indices Locator
