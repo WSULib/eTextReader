@@ -222,7 +222,7 @@ a { cursor: hand; cursor: pointer; }
 
 .OCR_box_text {
     text-align:left;
-    padding:50px;
+    padding:20px;
     color:black;
 }
 
@@ -614,7 +614,7 @@ input[type='password'], textarea
 
 /*Plain Text / HTML concat*/
 #html_concat{
-    width:100%;
+    width:80%;
     height:85%;
     z-index:20002;
     overflow-x:scroll;

@@ -172,11 +172,13 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             
             //add result sets at bottom, use "result.response.numFound"
             $('#fts_box_text_static').append('<div class="fts_set_nav shadow_top" id="fts_bottom_nav">Result sets: </div>');            
-            var sets = Math.ceil(parseInt(result.response.numFound) / 10);
-            // console.log("FTS sets: "+sets);
-            for (var i = 0; i < sets; i++){
+            var sets = Math.ceil(parseInt(result.response.numFound) / 10);            
+            console.log("Total found: "+result.response.numFound);
+            console.log("FTS sets: "+sets);
+            for (var i = 0; i <= sets; i++){
                 var set_seed = i * 10;
-                var row_set = (i*10+1) + "-" + (i*10+10) + ", ";                
+                // var row_set = (i*10+1) + "-" + (i*10+10) + ", ";
+                var row_set = i + 1;                
                 $("#fts_bottom_nav").append('<a class="fts_set" onclick="getFTSResultsStatic('+set_seed+'); return false;">'+row_set+'</a>');                
             }                                                
 
