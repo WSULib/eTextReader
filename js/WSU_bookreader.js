@@ -82,6 +82,8 @@ function BookReader() {
     this.PIDsafeID = null;
     this.collectionID = null;
     this.FedoraPID = null;
+    this.lastReadingMode = null;
+    this.bookMetaObj = null;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -589,7 +591,7 @@ BookReader.prototype.drawLeafsOnePage = function() {
 //______________________________________________________________________________
 // If seekIndex is defined, the view will be drawn with that page visible (without any
 // animated scrolling)
-BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
+BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {    
     //alert('drawing leafs!');
     this.timer = null;    
     
@@ -745,10 +747,12 @@ BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
                     // event.stopPropagation();
                     return
                 });
-                ///////////////////////////////////////////////////////////////                
-                var page_link = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+(leaf+1)+"/mode/1up";
+
+                // *WSU MODIFICATION* /////////////////////////////////////////////////////////////                
+                var page_link = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+(leaf+1)+"/mode/"+this.lastReadingMode+"up";
                 $(link).attr('href', page_link);
-                /////////////////////////////////////////////////////////////                
+                ///////////////////////////////////////////////////////////////////////////////////
+
                 $(div).append(link);
                 
                 $('#BRpageview').append(div);
@@ -1432,6 +1436,9 @@ BookReader.prototype.jumpToIndex = function(index, pageX, pageY) {
 // switchMode()
 //______________________________________________________________________________
 BookReader.prototype.switchMode = function(mode) {
+
+    // variable to remember last reading mode, this will be used in thumbnail to return to previous mode
+    this.lastReadingMode = br.mode;
 
     if (mode == this.mode) {
         return;

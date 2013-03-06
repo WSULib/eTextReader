@@ -15,6 +15,33 @@ function postLaunch() {
     bigArrows();
     bigArrowsPulse();
 
+    //retrieve book metadata and set to br.bookMetaObj
+    $(document).ready(function() {
+            // currently pulling from ramsey collection objects only
+            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=xml';
+            // console.log(metaquery);            
+
+            //returns json
+            $(document).ready(function(){
+              $.ajax({
+                type: "GET",
+                url: metaquery,
+                dataType: "json",
+                success: pull_meta,
+                error: set_bookMetaObj
+              });
+            });
+
+            function pull_meta(response){   
+                br.bookMetaObj = response;            
+            }
+
+            function set_bookMetaObj(){
+                br.bookMetaObj = null;
+            }
+
+        });
+
 } //closes postLaunch()
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -931,34 +958,42 @@ function plainText(){
             $('#html_concat').width($(window).width() - 40)
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////
-        var html_concat = '../data/'+br.ItemID+'/fullbook/'+br.ItemID + '.htm';
-        $('#html_concat').load(html_concat, function(){            
-            //remove justified css from font tags (remove if too slow)
-            var font_tags = $('#html_concat p');        
-                font_tags.each(function () {  //each tag is"this"
-                    if( $(this).css('text-align') == "justify"){
-                        $(this).css('text-align','left');
-                    }
+
+        // Load fullbook HTML
+        var html_concat = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':fullbook&datastream=HTML_FULL';
+        // console.log(html_concat);            
+            
+        $(document).ready(function(){
+          $.ajax({
+            type: "GET",
+            url: html_concat,
+            dataType: "html",
+            success: function(response){            
+                $('#html_concat').html(response);
+                //remove justified css from font tags (remove if too slow)
+                var font_tags = $('#html_concat p');        
+                    font_tags.each(function () {  //each tag is"this"
+                        if( $(this).css('text-align') == "justify"){
+                            $(this).css('text-align','left');
+                        }
+                    });
+                $('#html_concat').scrollTo("#page_ID_" + $current_layout.rootpage);
+                    
+                //create page numbers / links
+                var page_array = $("#html_concat_wrapper .html_page");
+                page_array.each(function(){
+                    var page_num = $(this).attr('id').split('_')[2];
+                    // $(this).prepend("<span style='color:blue; float:right;'>Leaf "+page_num+"</div>");
+                    $(this).prepend('<a class="leaf_num" href="#" onclick="br.jumpToIndex('+page_num+');">Leaf '+page_num+'</a>');
                 });
-            $('#html_concat').scrollTo("#page_ID_" + $current_layout.rootpage);
-                
-            //create page numbers / links
-            var page_array = $("#html_concat_wrapper .html_page");
-            page_array.each(function(){
-                var page_num = $(this).attr('id').split('_')[2];
-                // $(this).prepend("<span style='color:blue; float:right;'>Leaf "+page_num+"</div>");
-                $(this).prepend('<a class="leaf_num" href="#" onclick="br.jumpToIndex('+page_num+');">Leaf '+page_num+'</a>');
-            });
 
-            // highlights br.search_term if active
-            if(br.fts_displayed == true){
-                renderPlainTextHighlights();
-            }
-        });
-        ////////////////////////////////////////////////////////////////////////////////////
-
-        
+                // highlights br.search_term if active
+                if(br.fts_displayed == true){
+                    renderPlainTextHighlights();
+                }
+            }   
+          });
+        });        
 
         // if FTS true, show highlights
         if (br.fts_displayed == true){                 
@@ -998,7 +1033,7 @@ function plainText(){
             $(".bigArrowHandle").fadeIn();
         }
         if ($current_layout.mode == 'thumb'){
-            alert("Not sure how you created these conditions, but you shouldn't be able to close something that never existed...");
+            console.log("Not sure how you created these conditions, but you shouldn't be able to close something that never existed...");
         }
 
         removePlainTextHighlights();
@@ -1378,7 +1413,8 @@ function hideLoading(){
 
 //item info and export tools
 function itemInfo(){
-    alert("coming soon...");
+    
+
 }
 
 

@@ -43,6 +43,9 @@
     <!--jquery highlight-->
     <script type="text/javascript" src="js/jquery.highlight.js"></script> 
 
+    <!--colorbox for metadata information-->
+    <script src="inc/colorbox/jquery.colorbox-min.js"></script>
+
     <!-- ////////////////////// Get Item ID & Metadata //////////////////////// -->
     <script type="text/javascript">
         function getItemID(name) {
@@ -82,33 +85,8 @@
             }
 
         });
-    </script>    
-    
-    <script type="text/javascript">
-        // function getItemID(name) {
-        //     return decodeURI(
-        //         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-        //     );        
-        // }
-        // var ItemID = getItemID('ItemID');
 
-        // $(document).ready(function() {
-        //     var metaquery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=ItemID:'+ItemID+'&fq=leafs:*&start=0&rows=10&indent=on&wt=json&json.wrf=callback';
-
-        //     $.ajax({          
-        //         url: metaquery,
-        //         dataType: 'jsonp',
-        //         jsonpCallback: 'callback',                              
-        //         success: function(result) {
-        //             var leafs = result.response.docs[0].leafs;
-        //             var pheight = result.response.docs[0].pheight;                    
-        //             var pwidth = result.response.docs[0].pwidth;
-        //             var item_title =  result.response.docs[0].item_title;
-        //             postMetaCall(leafs, pheight, pwidth, item_title);                     
-        //             }                      
-        //         });
-        // });
-    </script>    
+    </script>       
 
 </head>
 <body>
