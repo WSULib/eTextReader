@@ -1,3 +1,14 @@
+body { 
+    -moz-user-select: auto !important;
+    cursor: auto !important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 a { cursor: hand; cursor: pointer; }
 
 #audio_load_alert {
@@ -493,7 +504,7 @@ a { cursor: hand; cursor: pointer; }
 input[type='text'], input[type='email'], input[type='search'],
 input[type='password'], textarea
 {
-        -webkit-user-select: text; 
+    -webkit-user-select: text; 
 }
 
 /* ---IE specifics--- */

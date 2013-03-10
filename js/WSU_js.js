@@ -445,6 +445,11 @@ function singlepageOCR() {
             });   
         
         $('.OCR_box_single').fadeIn();
+        
+        
+
+        
+
         }    
 }
 
@@ -1412,9 +1417,19 @@ function hideLoading(){
 }
 
 //item info and export tools
-function itemInfo(){
+function itemInfo(){    
     
+    //write metadata to HTML block
+    //PUT THIS IN A TABLE
+    itemMeta = document.createElement('div');    
+    $(itemMeta).append("<h2>Title: "+br.bookMetaObj.titleInfo.title+"</h2>");
+    $(itemMeta).append("<p>Author: "+br.bookMetaObj.name.namePart[0]+"</p>");
+    $(itemMeta).append("<p>Physical Description: "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form+"</p>");
+    // var coverURL = br.baseURL+'fedora/objects/'+br.PIDsafeID+':thumbs/datastreams/THUMB_1/content';
+    // $(itemMeta).append("<img src='"+coverURL+"'/>");
 
+    //create box with item HTML block
+    $.colorbox({html:itemMeta});
 }
 
 
@@ -1544,6 +1559,18 @@ $(window).bind('hashchange', function() {
     }
     ///////////////////////////////////////////////////////////
 });
+
+$(document).ready(function(){
+    var timeoutId = 0;
+    $('.OCR_box_single .OCR_box_text').mousedown(function() {
+        timeoutId = setTimeout(myFunction, 2000);
+    }).bind('mouseup mouseleave', function() {
+        clearTimeout(timeoutId);
+        alert('you done held that button for a GOOD while!');
+    });
+})
+
+
 
 
 
