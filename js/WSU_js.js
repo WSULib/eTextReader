@@ -42,6 +42,15 @@ function postLaunch() {
 
         });
 
+    // determine if embedded via iframe    
+    if (top === self) {             
+        var iframe = false;        
+    }
+    else {
+        //switch to mobile layout principles, but 2up mode (soon)
+        var iframe = true;
+    }      
+
 } //closes postLaunch()
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -103,8 +112,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     //construct URL for Solr query
     var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(search_term) + "&ItemID=" + br.ItemID + "&row_start=" + row_start + "&datatype=json";
-
-    console.log(squery);
+    // console.log(squery);
 
     //solr query
     $.ajax({          
@@ -113,7 +121,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
       // jsonpCallback: 'callback',
       dataType: 'json',      
       success: function(result) {
-        console.log(result);
+        // console.log(result);
 
         var cURL = window.location.href;         
         var Parent = document.getElementById('fts_box_text_static');
@@ -200,8 +208,8 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             //add result sets at bottom, use "result.response.numFound"
             $('#fts_box_text_static').append('<div class="fts_set_nav shadow_top" id="fts_bottom_nav">Result sets: </div>');            
             var sets = Math.ceil(parseInt(result.response.numFound) / 10);            
-            console.log("Total found: "+result.response.numFound);
-            console.log("FTS sets: "+sets);
+            // console.log("Total found: "+result.response.numFound);
+            // console.log("FTS sets: "+sets);
             for (var i = 0; i <= sets; i++){
                 var set_seed = i * 10;
                 // var row_set = (i*10+1) + "-" + (i*10+10) + ", ";
@@ -607,6 +615,11 @@ function arrowsFlip (new_mode) {
 
 // suite of functions to launch different modes from bookreader.html buttons, as a conditional for coming from thumbnail mode
 function launch1up (){
+
+    //highlight icon
+    $("#mode_icons>li>i").removeClass("active_icon");
+    $("#1up_icon").addClass('active_icon');
+
     //turns off OCR
     if (br.OCRstatus == true) {
         toggleOCR();        
@@ -622,12 +635,16 @@ function launch1up (){
         var to_1up = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+$current_layout.rootpage+"/mode/1up";        
         window.location = to_1up;
     }
-    else{
+    else{        
         br.SwitchMode(1);
     }
 }
 
 function launch2up (){
+    //highlight icon
+    $("#mode_icons>li>i").removeClass("active_icon");
+    $("#2up_icon").addClass('active_icon');
+
     //turns off OCR
     if (br.OCRstatus == true) {
         toggleOCR();
@@ -649,6 +666,10 @@ function launch2up (){
 }
 
 function launchThumbs (){
+    //highlight icon
+    $("#mode_icons>li>i").removeClass("active_icon");
+    $("#thumbs_icon").addClass('active_icon');
+
     //turns off OCR
     if (br.OCRstatus == true) {
         toggleOCR();
@@ -921,11 +942,16 @@ function toolbarsMinimize(){
     }
 }
 
-function plainText(){    
+function plainText(){
+
+
 
     var $current_layout = getPageInfo();    
 
     if (br.plainTextStatus == false){
+
+        $("#mode_icons>li>i").removeClass("active_icon");
+        $("#plain_text_icon").addClass("active_icon");
 
         showLoading();        
 
@@ -1013,7 +1039,7 @@ function plainText(){
 
     }
 
-    if (br.plainTextStatus == true){
+    if (br.plainTextStatus == true){       
 
         //closes OCR tools if opened
 
@@ -1230,7 +1256,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
             if (mult_terms_status == true){                
                 //find indices of sequential, pushes these from temp_orig_boxes into confirmed_orig_boxes array
                 var phrase_indices = findSeq(string_index); //gets indices of sequential numbers
-                console.log(phrase_indices);
+                // console.log(phrase_indices);
                 if (phrase_indices == null){
                     return;
                 }                                
@@ -1494,6 +1520,12 @@ function findSeq ( arr ) {
     }
 
     return result.length > 0 ? result : null;
+}
+
+function getURLParam(name) {
+    return decodeURI(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+    );        
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

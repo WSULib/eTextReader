@@ -767,7 +767,7 @@ BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
                     // Store the URL of the image that will replace this one
                     .data('srcURL',  this._getPageURI(leaf, thumbReduce));
                 $(link).append(img);
-                console.log(img);
+                // console.log(img);
                 //console.log('displaying thumbnail: ' + leaf);
             }   
         }

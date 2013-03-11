@@ -367,7 +367,7 @@ a { cursor: hand; cursor: pointer; }
     -webkit-padding-start: 0px;
     -moz-padding-start: 0px;    
     list-style:none;
-    margin-top:8px;
+    margin-top:0px;
     margin-bottom:0px;
     /* Padding is for IE */
     padding-left:0px; 
@@ -657,13 +657,13 @@ input[type='password'], textarea
 }
 
 #WSUtoolbar ul.the-icons li i{
-    margin-top:-8px;    
+    /*margin-top:-8px;    */
     font-size:2em;
     padding:0px;    
 }
 
 #WSUtoolbar_minimize ul.the-icons li i{
-    margin-top:-8px;    
+    margin-top:0px;    
     font-size:2em;
     padding:0px;
     /*background-color:rgba(71,86,73,.3);*/

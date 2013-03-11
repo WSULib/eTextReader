@@ -1,3 +1,13 @@
+//responds to metadata call from bookreader.htm, precludes eventually invokes lanchBookReader
+function postMetaCall(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID){    
+    var baseURL = "http://141.217.172.45/";
+    var solr_baseURL = "http://141.217.97.167:8080/solr/bookreader/";            
+    //launchBookReader() must be called first - launches and creates book scaffolding with item metadata            
+    launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL);
+    //postLaunch() creates additions and overlays to the reader interface, encapsulated to follow metadata Ajax calls - postLaunch function can be found in WSU_js.js
+    postLaunch();        
+}
+
 //////////////////////////////////////////////////////////////////////////////////////
 function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL){
 //////////////////////////////////////////////////////////////////////////////////////    
