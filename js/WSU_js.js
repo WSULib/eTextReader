@@ -1,56 +1,4 @@
 //////////////////////////////////////////////////////////////////////////////////////
-//Postlaunch operations
-function postLaunch() {    
-
-    //show minimize arrow, looks nicer post launch
-    $("#WSUtoolbar_minimize").show();
-
-    //OCR prep    
-    $(".OCR_tools").hide();
-
-    //create large navigation arrows - 2 second bold to show user they are there
-    bigArrows();
-    bigArrowsPulse();
-
-    //retrieve book metadata and set to br.bookMetaObj
-    $(document).ready(function() {
-            // currently pulling from ramsey collection objects only
-            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=xml';
-            // console.log(metaquery);            
-
-            //returns json
-            $(document).ready(function(){
-              $.ajax({
-                type: "GET",
-                url: metaquery,
-                dataType: "json",
-                success: pull_meta,
-                error: set_bookMetaObj
-              });
-            });
-
-            function pull_meta(response){   
-                br.bookMetaObj = response;            
-            }
-
-            function set_bookMetaObj(){
-                br.bookMetaObj = null;
-            }
-
-        });
-
-    // determine if embedded via iframe    
-    if (top === self) {             
-        var iframe = false;        
-    }
-    else {
-        //switch to mobile layout principles, but 2up mode (soon)
-        var iframe = true;
-    }      
-
-} //closes postLaunch()
-
-//////////////////////////////////////////////////////////////////////////////////////
 //Other Functions
 
 //FTS search results
@@ -60,7 +8,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
-    // var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=OCR_text:'+search_term+'&fq=ItemID:'+br.ItemID+'&sort=page_num%20asc&start='+row_start+'&rows=10&indent=on&hl=true&hl.fl=OCR_text&hl.snippets=1000&hl.fragmenter=gap&hl.fragsize=70&wt=json&json.wrf=callback';    
+    var solr_search_term = search_term.replace(/['’‘]/g,"*");
 
     //blank search conditional
     if (search_term == ""){
@@ -108,8 +56,8 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     }
 
     //construct URL for Solr query
-    var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(search_term) + "&ItemID=" + br.ItemID + "&row_start=" + row_start + "&datatype=json";
-    // console.log(squery);
+    var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(solr_search_term) + "&ItemID=" + br.ItemID + "&row_start=" + row_start + "&datatype=json";
+    console.log(squery);
 
     //solr query
     $.ajax({          
@@ -252,7 +200,7 @@ function displayFTSResultsStatic(row_start, search_term){
         fts_handle_static.fadeIn(function(){resizeFTSWrapper();});
     }
     
-    //highlight string(s) on image
+    //highlight string(s) on image    
     renderImageHighlights(search_term);
 
     //highlight matched strings on plain text

@@ -659,7 +659,8 @@ input[type='password'], textarea
 #WSUtoolbar ul.the-icons li i{
     /*margin-top:-8px;    */
     font-size:2em;
-    padding:0px;    
+    padding:0px;
+    cursor: pointer;
 }
 
 #WSUtoolbar_minimize ul.the-icons li i{

@@ -104,5 +104,59 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
     postLaunch();
 } //closes launch
 
+//////////////////////////////////////////////////////////////////////////////////////
+//Postlaunch operations
+function postLaunch() {    
 
+    //show minimize arrow, looks nicer post launch
+    $("#WSUtoolbar_minimize").show();
+
+    //OCR prep    
+    $(".OCR_tools").hide();
+
+    //create large navigation arrows - 2 second bold to show user they are there
+    bigArrows();
+    bigArrowsPulse();
+
+    //retrieve book metadata and set to br.bookMetaObj, set title of browser page
+    $(document).ready(function() {
+            // currently pulling from ramsey collection objects only
+            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=xml';
+            // console.log(metaquery);            
+
+            //returns json
+            $(document).ready(function(){
+              $.ajax({
+                type: "GET",
+                url: metaquery,
+                dataType: "json",
+                success: pull_meta,
+                error: pull_meta_fail
+              });
+            });
+
+            function pull_meta(response){   
+                br.bookMetaObj = response;
+                $("#doc_title").html(br.bookMetaObj.titleInfo.title);
+
+            }
+
+            function pull_meta_fail(){
+                br.bookMetaObj = null;
+            }
+
+        });
+
+    // determine if embedded via iframe    
+    if (top === self) {             
+        var iframe = false;        
+    }
+    else {
+        //switch to mobile layout principles, but 2up mode (soon)
+        var iframe = true;
+    }
+
+    //set mode highlighting?     
+
+} //closes postLaunch()
 
