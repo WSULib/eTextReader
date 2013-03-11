@@ -5,10 +5,7 @@ function postLaunch() {
     //show minimize arrow, looks nicer post launch
     $("#WSUtoolbar_minimize").show();
 
-    //set OCR status
-    br.OCRstatus = false;
-
-    //icons prep
+    //OCR prep    
     $(".OCR_tools").hide();
 
     //create large navigation arrows - 2 second bold to show user they are there
@@ -1039,10 +1036,9 @@ function plainText(){
 
     }
 
-    if (br.plainTextStatus == true){       
+    if (br.plainTextStatus == true){
 
         //closes OCR tools if opened
-
         toggleOCR();
 
         //sets status to false

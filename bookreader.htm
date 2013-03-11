@@ -144,16 +144,14 @@
 
     </div> <!--closes bookreader_wrapper-->
     
-    <!-- // Get Item ID & Metadata, launch BookReader -->
+    <!-- Get Item ID & Metadata, launch BookReader -->
     <script type="text/javascript">
         //this is setting global "ItemID" still used by Solr
         var ItemID = getURLParam('ItemID');        
         var PIDsafe = ItemID.replace(/_/g,"");
 
-        $(document).ready(function() {
-            // currently pulling from ramsey collection objects only
-            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=STRUCT_META&datatype=xml';
-            // console.log(metaquery);            
+        $(document).ready(function() {            
+            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=STRUCT_META&datatype=xml';                       
 
             //returns json
             $(document).ready(function(){
@@ -172,9 +170,11 @@
                 var leafs = response.dimensions.leafs;                
                 var PIDsafeID = response.PIDsafe;
                 var item_ID = response.item_ID;
-                var collectionID = response.collection;                
-                //sets things in motion to launche bookreader: 1) postMetaCall(), which then calls 2)launchBookReader()
-                postMetaCall(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID);
+                var collectionID = response.collection;
+                var baseURL = "http://141.217.172.45/";
+                var solr_baseURL = "http://141.217.97.167:8080/solr/bookreader/";
+                //sets things in motion to launchBookReader()
+                launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL);
             }
         });
     </script>    

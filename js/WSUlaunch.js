@@ -1,21 +1,8 @@
-//responds to metadata call from bookreader.htm, precludes eventually invokes lanchBookReader
-function postMetaCall(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID){    
-    var baseURL = "http://141.217.172.45/";
-    var solr_baseURL = "http://141.217.97.167:8080/solr/bookreader/";            
-    //launchBookReader() must be called first - launches and creates book scaffolding with item metadata            
-    launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL);
-    //postLaunch() creates additions and overlays to the reader interface, encapsulated to follow metadata Ajax calls - postLaunch function can be found in WSU_js.js
-    postLaunch();        
-}
-
 //////////////////////////////////////////////////////////////////////////////////////
-function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL){
-//////////////////////////////////////////////////////////////////////////////////////    
-    // console.log("Coming from LAUNCH: ", PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID);
-    
+function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL){    
+
     // Create the BookReader object
-    br = new BookReader();
-   
+    br = new BookReader();   
     
     br.getPageWidth = function(index) {
         // return pageWidth;
@@ -27,7 +14,7 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
         return parseInt(pheight);
     }
 
-    // FEDORA
+    // pulling from Fedora backend
     br.getPageURI = function(index, reduce, rotate, mode) {
         // decision to bump internal IA index
         index = index + 1;            
@@ -44,7 +31,6 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
             var imageSizeLoc = ":thumbs/";
             var url = baseURL+'fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/THUMB_"+index+'/content';                        
         }
-
         
         return url;
     }
@@ -113,6 +99,9 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
     br.solr_baseURL = solr_baseURL;
     
     $('#leaf_count').html(leafs.toString());
+
+    //finally, laucnh postLaunch()
+    postLaunch();
 } //closes launch
 
 

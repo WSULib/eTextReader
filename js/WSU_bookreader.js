@@ -89,7 +89,7 @@ function BookReader() {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     //OCR variable
-    this.OCRstatus = null;
+    this.OCRstatus = false;
     this.plainOCRstatus = false;
 
     //FTS variables
@@ -1655,42 +1655,6 @@ BookReader.prototype.prepareTwoPageView = function(centerPercentageX, centerPerc
     }).appendTo('#BRtwopageview');
     
     var self = this; // for closure
-    
-    /* Flip areas no longer used
-    this.twoPage.leftFlipArea = document.createElement('div');
-    this.twoPage.leftFlipArea.className = 'BRfliparea';
-    $(this.twoPage.leftFlipArea).attr('id', 'BRleftflip').css({
-        border: '0',
-        width:  this.twoPageFlipAreaWidth() + 'px',
-        height: this.twoPageFlipAreaHeight() + 'px',
-        position: 'absolute',
-        left:   this.twoPageLeftFlipAreaLeft() + 'px',
-        top:    this.twoPageFlipAreaTop() + 'px',
-        cursor: 'w-resize',
-        zIndex: 100
-    }).click(function(e) {
-        self.left();
-    }).bind('mousedown', function(e) {
-        e.preventDefault();
-    }).appendTo('#BRtwopageview');
-    
-    this.twoPage.rightFlipArea = document.createElement('div');
-    this.twoPage.rightFlipArea.className = 'BRfliparea';
-    $(this.twoPage.rightFlipArea).attr('id', 'BRrightflip').css({
-        border: '0',
-        width:  this.twoPageFlipAreaWidth() + 'px',
-        height: this.twoPageFlipAreaHeight() + 'px',
-        position: 'absolute',
-        left:   this.twoPageRightFlipAreaLeft() + 'px',
-        top:    this.twoPageFlipAreaTop() + 'px',
-        cursor: 'e-resize',
-        zIndex: 100
-    }).click(function(e) {
-        self.right();
-    }).bind('mousedown', function(e) {
-        e.preventDefault();
-    }).appendTo('#BRtwopageview');
-    */
     
     this.prepareTwoPagePopUp();
     
@@ -3697,97 +3661,6 @@ BookReader.prototype.addChapterFromEntry = function(tocEntryObject) {
     });
 }
 
-// BookReader.prototype.initToolbar = function(mode, ui) {
-//     if (ui == "embed") {
-//         return; // No toolbar at top in embed mode
-//     }
-
-//     // $$$mang should be contained within the BookReader div instead of body
-//     var readIcon = '';
-//     if (!navigator.userAgent.match(/mobile/i)) {
-//         readIcon = "<button class='BRicon read modal'></button>";
-//     }
-
-//     //BACKUP CODE    
-//     // $("#BookReader").append(
-//     //       "<div id='BRtoolbar'>"
-//     //     +   "<span id='BRtoolbarbuttons'>"                
-//     //     +     "<button class='BRicon play'></button>"
-//     //     +     "<button class='BRicon pause'></button>"
-//     //     +     "<button class='BRicon info'></button>"
-//     //     +     "<button class='BRicon share'></button>"
-//     //     +     "<form name='fts' action='' method='GET'><input type='text' name='fts' id='fts_search_box' value=''><input id='show_fts' type='button' name='button' Value='Click' onClick='getResults(this.form)'></form>"        
-//     //     +     readIcon
-//     //     +     "<button class='BRicon full'></button>"
-//     //     +   "</span>"
-//     //     +   "<span><a class='logo' href='" + this.logoURL + "'></a></span>"
-//     //     +   "<span id='BRreturn'><a></a></span>"
-//     //     +   "<div id='BRnavCntlTop' class='BRnabrbuvCntl'></div>"
-//     //     + "</div>"
- 
-//     //     );
-
-//     $("#BookReader").append(
-//           "<div id='BRtoolbar'>"
-//         +   "<div id='header'><img src='images/wsu_logo2.png'/><span id='item_title'><a>Item Title Will Go Here</a></span>"
-//         +   "<span id='BRtoolbarbuttons'><form name='fts' action='' method='GET'><input type='text' name='fts' id='fts_search_box' value=''><input id='show_fts' type='button' name='button' Value='Click' onClick='getResults(this.form)'></form></span></div>" 
-//         );
-
-//     // Browser hack - bug with colorbox on iOS 3 see https://bugs.launchpad.net/bookreader/+bug/686220
-//     if ( navigator.userAgent.match(/ipad/i) && $.browser.webkit && (parseInt($.browser.version, 10) <= 531) ) {
-//        $('#BRtoolbarbuttons .info').hide();
-//        $('#BRtoolbarbuttons .share').hide();
-//     }
-
-//     $('#BRreturn a').attr('href', this.bookUrl).text(this.bookTitle);
-
-//     $('#BRtoolbar .BRnavCntl').addClass('BRup');
-//     $('#BRtoolbar .pause').hide();    
-    
-//     this.updateToolbarZoom(this.reduce); // Pretty format
-        
-//     if (ui == "embed" || ui == "touch") {
-//         $("#BookReader a.logo").attr("target","_blank");
-//     }
-
-//     // $$$ turn this into a member variable
-//     var jToolbar = $('#BRtoolbar'); // j prefix indicates jQuery object
-    
-//     // We build in mode 2
-//     jToolbar.append();
-        
-//     // Hide mode buttons and autoplay if 2up is not available
-//     // $$$ if we end up with more than two modes we should show the applicable buttons
-//     if ( !this.canSwitchToMode(this.constMode2up) ) {
-//         jToolbar.find('.two_page_mode, .play, .pause').hide();
-//     }
-//     if ( !this.canSwitchToMode(this.constModeThumb) ) {
-//         jToolbar.find('.thumbnail_mode').hide();
-//     }
-    
-//     // Hide one page button if it is the only mode available
-//     if ( ! (this.canSwitchToMode(this.constMode2up) || this.canSwitchToMode(this.constModeThumb)) ) {
-//         jToolbar.find('.one_page_mode').hide();
-//     }
-    
-//     // $$$ Don't hardcode ids
-//     var self = this;
-//     jToolbar.find('.share').colorbox({inline: true, opacity: "0.5", href: "#BRshare", onLoad: function() { self.autoStop(); self.ttsStop(); } });
-//     jToolbar.find('.info').colorbox({inline: true, opacity: "0.5", href: "#BRinfo", onLoad: function() { self.autoStop(); self.ttsStop(); } });
-
-//     $('<div style="display: none;"></div>').append(this.blankShareDiv()).append(this.blankInfoDiv()).appendTo($('body'));
-
-//     $('#BRinfo .BRfloatTitle a').attr( {'href': this.bookUrl} ).text(this.bookTitle).addClass('title');
-    
-//     // These functions can be overridden
-//     this.buildInfoDiv($('#BRinfo'));
-//     this.buildShareDiv($('#BRshare'));
-    
-//     // Switch to requested mode -- binds other click handlers
-//     //this.switchToolbarMode(mode);
-    
-// }
-
 BookReader.prototype.blankInfoDiv = function() {
     return $([
         '<div class="BRfloat" id="BRinfo">',
@@ -4002,25 +3875,6 @@ BookReader.prototype.bindNavigationHandlers = function() {
         // Not implemented
     });
     
-    // $('.BRnavCntl').click(
-    //     function(){
-    //         if ($('#BRnavCntlBtm').hasClass('BRdn')) {
-    //             $('#BRtoolbar').animate({top:-40});
-    //             $('#BRnav').animate({bottom:-55});
-    //             $('#BRnavCntlBtm').addClass('BRup').removeClass('BRdn');
-    //             $('#BRnavCntlTop').addClass('BRdn').removeClass('BRup');
-    //             $('#BRnavCntlBtm.BRnavCntl').animate({height:'45px'});
-    //             $('.BRnavCntl').delay(1000).animate({opacity:.25},1000);
-    //         } else {
-    //             $('#BRtoolbar').animate({top:0});
-    //             $('#BRnav').animate({bottom:0});
-    //             $('#BRnavCntlBtm').addClass('BRdn').removeClass('BRup');
-    //             $('#BRnavCntlTop').addClass('BRup').removeClass('BRdn');
-    //             $('#BRnavCntlBtm.BRnavCntl').animate({height:'30px'});
-    //             $('.BRvavCntl').animate({opacity:1})
-    //         };
-    //     }
-    // );
     $('#BRnavCntlBtm').mouseover(function(){
         if ($(this).hasClass('BRup')) {
             $('.BRnavCntl').animate({opacity:1},250);
@@ -5231,72 +5085,6 @@ BookReader.prototype.ttsStartPolling = function () {
         self.ttsNextChunk();
     },500);    
 }
-
-// BookReader.prototype.buildShareDiv = function(jShareDiv)
-// {
-//     var pageView = document.location + '';
-//     var bookView = (pageView + '').replace(/#.*/,'');
-//     var self = this;
-    
-//     var jForm = $([
-//         '<p>Copy and paste one of these options to share this book elsewhere.</p>',
-//         '<form method="post" action="">',
-//             '<fieldset>',
-//                 '<label for="pageview">Link to this page view:</label>',
-//                 '<input type="text" name="pageview" id="pageview" value="' + pageView + '"/>',
-//             '</fieldset>',
-//             '<fieldset>',
-//                 '<label for="booklink">Link to the book:</label>',
-//                 '<input type="text" name="booklink" id="booklink" value="' + bookView + '"/>',
-//             '</fieldset>',
-//             '<fieldset>',
-//                 '<label for="iframe">Embed a mini Book Reader:</label>',
-//                 '<fieldset class="sub">',
-//                     '<label class="sub">',
-//                         '<input type="radio" name="pages" value="' + this.constMode1up + '" checked="checked"/>',
-//                         '1 page',
-//                     '</label>',
-//                     '<label class="sub">',
-//                         '<input type="radio" name="pages" value="' + this.constMode2up + '"/>',
-//                         '2 pages',
-//                     '</label>',
-//                     '<label class="sub">',
-//                         '<input type="checkbox" name="thispage" value="thispage"/>',
-//                         'Open to this page?',
-//                     '</label>',
-//                 '</fieldset>',
-//                 '<textarea cols="30" rows="4" name="iframe" class="BRframeEmbed"></textarea>',
-//                 '<p class="meta"><strong>NOTE:</strong> We\'ve tested EMBED on blogspot.com blogs as well as self-hosted Wordpress blogs. This feature will NOT work on wordpress.com blogs.</p>',
-//             '</fieldset>',
-//             '<fieldset class="center">',
-//                 '<button type="button" onclick="$.fn.colorbox.close();">Finished</button>',
-//             '</fieldset>',
-//         '</form>'].join('\n'));
-        
-//     jForm.appendTo(jShareDiv);
-      
-//     jForm.find('input').bind('change', function() {
-//         var form = $(this).parents('form:first');
-//         var params = {};
-//         params.mode = $(form.find('input[name=pages]:checked')).val();
-//         if (form.find('input[name=thispage]').attr('checked')) {
-//             params.page = self.getPageNum(self.currentIndex());
-//         }
-        
-//         // $$$ changeable width/height to be added to share UI
-//         var frameWidth = "480px";
-//         var frameHeight = "430px";
-//         form.find('.BRframeEmbed').val(self.getEmbedCode(frameWidth, frameHeight, params));
-//     })
-//     jForm.find('input[name=thispage]').trigger('change');
-//     jForm.find('input, textarea').bind('focus', function() {
-//         this.select();
-//     });
-    
-//     jForm.appendTo(jShareDiv);
-//     jForm = ''; // closure
-        
-// }
 
 // Should be overridden
 BookReader.prototype.buildInfoDiv = function(jInfoDiv) 
