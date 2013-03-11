@@ -1,0 +1,35 @@
+body {
+	background-color:#666666;
+}
+
+#container {
+	background-color:rgba(255,255,255,.7);
+	float:center;
+	margin:auto;
+	width:960px;
+	padding:20px;
+}
+
+#item_thumbs {
+	float:center;
+	margin:auto;
+	width:100%;	
+}
+
+#item_thumbs .row .fifth {
+	text-align:center;
+}
+
+.shadow {
+    -moz-box-shadow: 0px 1px 15px #303030;
+    -webkit-box-shadow: 0px 1px 15px #303030;
+    box-shadow: 0px 1px 15px #303030;
+}
+
+.thumb_text {
+	text-align:center;
+}
+
+#title {
+	/*text-align:center;*/
+}
