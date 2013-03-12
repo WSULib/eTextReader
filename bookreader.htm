@@ -171,8 +171,8 @@
                 var PIDsafeID = response.PIDsafe;
                 var item_ID = response.item_ID;
                 var collectionID = response.collection;
-                var baseURL = "http://141.217.172.45/";
-                var solr_baseURL = "http://141.217.97.167:8080/solr/bookreader/";
+                var baseURL = "http://141.217.172.152:8080/";
+                var solr_baseURL = "http://141.217.172.152:8080/solr4/bookreader/";
                 //sets things in motion to launchBookReader()
                 launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL);
             }
