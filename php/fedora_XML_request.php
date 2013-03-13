@@ -5,7 +5,7 @@
 $PIDsafe = $_GET['PIDsafe'];
 $datastream_request = $_GET['datastream'];
 $data_type = $_GET['datatype'];
-$request_URL = "http://141.217.172.152:8080/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
+$request_URL = "http://localhost:8080/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
 
 
 // XML
