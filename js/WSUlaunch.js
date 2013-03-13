@@ -97,7 +97,8 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
     br.FedoraPID = collectionID + ":" + PIDsafeID;
     br.baseURL = baseURL;
     br.solr_baseURL = solr_baseURL;
-    
+
+    //populate leaf location
     $('#leaf_count').html(leafs.toString());
 
     //finally, laucnh postLaunch()
@@ -107,6 +108,8 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 //////////////////////////////////////////////////////////////////////////////////////
 //Postlaunch operations
 function postLaunch() {    
+
+    
 
     //show minimize arrow, looks nicer post launch
     $("#WSUtoolbar_minimize").show();
@@ -146,17 +149,38 @@ function postLaunch() {
             }
 
         });
-
-    // determine if embedded via iframe    
-    if (top === self) {             
-        var iframe = false;        
-    }
-    else {
-        //switch to mobile layout principles, but 2up mode (soon)
-        var iframe = true;
+    
+    //detect interface - load standard or mobile toolbar
+    console.log("You are on "+isMobile.any());
+    if (isMobile.any() != null){
+        toggleCondToolbar();
+        $(".bigArrowHandle").remove();
     }
 
-    //set mode highlighting?     
+    //detect small browser window, load condensed if need be
+    if ($(window).width() < 1160){
+        toggleCondToolbar();
+    }    
+    
 
 } //closes postLaunch()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,0 +1,34 @@
+<div class="tool_row">
+
+    <div class="logo tools left">
+        <a href="/wsuls/eTextReader/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
+    </div>
+
+    <div class="fts_form left" id="fts_search">
+        <label>Full-text search:</label>                
+        <form id="fts_form" action='javascript:' onsubmit='getFTSResultsStatic(0)'>
+            <input id='fts_input' class="fts_input_box input" type='text' size='20' />                    
+            <button type="button" class="btn btn-append" onclick="getFTSResultsStatic(0); return false;">search</button> 
+        </form>                
+    </div>   
+
+    <div class="icon tools left">
+        <ul class="the-icons">
+            <li><i class="icon-arrow-left" onclick='br.left(); return false;'></i></li>
+            <li><i class="icon-arrow-right" onclick='br.right(); return false;'></i></li>            
+        </ul>        
+    </div>
+
+    <div class="icon tools left" id="jump_to_form">
+        <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
+            <span class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
+        </form>
+    </div>
+
+    <div class="icon tools left">
+        <ul class="the-icons">
+            <li><i class="icon-cog" onclick='toggleCondTools(); return false;'></i></li>            
+        </ul>        
+    </div>                           
+
+</div> <!--closes tool row div -->

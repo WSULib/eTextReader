@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title id="doc_title">[Unknown Title!!!!!!!!!!!!]</title>   
+    <title id="doc_title">[Unknown Title]</title>   
    
     <!--jquery load, 1.4 works best -->
     <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>    
@@ -56,7 +56,7 @@
             <div class="tool_row">
 
                 <div class="logo tools left">
-                    <a href="/eTextReader/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
+                    <a href="/wsuls/eTextReader/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
                 </div>
 
                 <div class="fts_form left" id="fts_search">
@@ -164,7 +164,7 @@
             });
 
             function pull_meta(response){   
-                // console.log(response)
+                console.log(response)
                 var pheight = response.dimensions.pheight;
                 var pwidth = response.dimensions.pwidth;
                 var leafs = response.dimensions.leafs;                

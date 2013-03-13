@@ -102,6 +102,7 @@ function BookReader() {
 
     //toolbar variable
     this.toolbar_trans = false;
+    this.toolbarStatus = "standard";
 
     //magnifying loupe varialbe
     this.loupe_status = false;
@@ -118,6 +119,8 @@ function BookReader() {
 
     //highlight image strings status
     this.imageHighlights = false;
+
+
 
 
     //////////////////////////////////////////////////////////////////////////////////////////

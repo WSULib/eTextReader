@@ -348,7 +348,7 @@ a { cursor: hand; cursor: pointer; }
 #WSUtoolbar {
     position:absolute;
     width:100%;
-    min-width:800px;
+    min-width:640px;
     height:35px;    
     color:#1D1D1D;
     z-index:3;

@@ -34,7 +34,7 @@
         // dataObject.data_type = "json";
         var baseURL = "http://localhost:8080/fedora/risearch?"; //this needs to be "localhost" when running in parallel, this is passed to a PHP script
         var queryOptions = "type=tuples&lang=itql&format=json&dt=on&stream=on&query=";
-        var baseQuery = "select $subject from <#ri> where $subject <fedora-rels-ext:hasContentModel> <fedora:singleObjectCM:WSUebook>";
+        var baseQuery = "select $subject from <#ri> where $subject <fedora-rels-ext:isMemberOfCollection> <fedora:collection:MIM>";
         dataObject.encodedQueryURL = baseURL + queryOptions + encodeURIComponent(baseQuery);        
 
 		//returns json

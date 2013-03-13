@@ -288,8 +288,8 @@ function showOCR(adjust) {
         var $current_layout = getPageInfo();
         var rootpage = $current_layout.rootpage;
         var secondarypage = $current_layout.secondarypage;
-        var mode = $current_layout.mode;  
-        
+        var mode = $current_layout.mode;
+
         //2up mode --> ajax call for OCR html
         if (mode == "2up"){                           
 
@@ -301,43 +301,44 @@ function showOCR(adjust) {
             var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(secondarypage).toString();            
             
             $(document).ready(function(){
-              $.ajax({
-                type: "GET",
-                url: leftOCR_URL,
-                dataType: "html",
-                success: paintOCR_left
-              });
-            });            
+                $.ajax({
+                    type: "GET",
+                    url: leftOCR_URL,
+                    dataType: "html",
+                    success: paintOCR_left
+                });
 
-            function paintOCR_left(html){                
-                if (rootpage == 1){ //conditional for cover
-                    $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");                            
-                    $('.OCR_box.right .OCR_box_text').load(leftOCR_URL);
-                }
-                else if (rootpage == br.numLeafs){ //conditional for back page
-                    $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
-                    $('.OCR_box.left .OCR_box_text').load(leftOCR_URL); 
-                }
-                else {
-                    $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
-                    $('.OCR_box.left .OCR_box_text').append(html);
-                    $(document).ready(function(){
-                      $.ajax({
-                        type: "GET",
-                        url: rightOCR_URL,
-                        dataType: "html",
-                        success: paintOCR_right
-                      });
-                    });                                        
-                }
-                $('.OCR_box').fadeIn();
-            }
+                function paintOCR_left(html){                
+                    if (rootpage == 1){ //conditional for cover
+                        $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");                            
+                        $('.OCR_box.right .OCR_box_text').load(leftOCR_URL);
+                    }
+                    else if (rootpage == br.numLeafs){ //conditional for back page
+                        $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
+                        $('.OCR_box.left .OCR_box_text').load(leftOCR_URL); 
+                    }
+                    else {
+                            $('#BRtwopageview').append("<div class='OCR_box left pbox_border OCR_shadow'><div class='OCR_box_text OCR_left'></div></div>");
+                            $('.OCR_box.left .OCR_box_text').append(html);
+                            $(document).ready(function(){
+                                $.ajax({
+                                    type: "GET",
+                                    url: rightOCR_URL,
+                                    dataType: "html",
+                                    success: paintOCR_right
+                                });
+                                function paintOCR_right(html){                
+                                    $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");
+                                    $('.OCR_box.right .OCR_box_text').append(html);
+                                    $('.OCR_box').fadeIn();
+                                }
+                            });                                        
+                        }
+                        $('.OCR_box').fadeIn();
+                    }
 
-            function paintOCR_right(html){                
-                $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");
-                $('.OCR_box.right .OCR_box_text').append(html);
-                $('.OCR_box').fadeIn();
-            }
+                    
+            });                        
         } 
 
         //1up mode --> call singlepageOCR()
@@ -1402,6 +1403,83 @@ function itemInfo(){
     $.colorbox({html:itemMeta});
 }
 
+//toggle condensed toolbar
+function toggleCondToolbar(){
+
+    //go condensed
+    if (br.toolbarStatus == "standard") {
+        //empties tooblar HTML (think about recreating)
+        $("#WSUtoolbar").empty();
+
+        //loading works, but 
+        $("#WSUtoolbar").load('inc/views/condToolbar.htm', function(){
+            //OCR prep    
+            $(".OCR_tools").hide();
+
+            // Update page number box.  $$$ refactor to function
+            if (null !== br.getPageNum(br.currentIndex()))  {
+                $("#BRpagenum").val(br.getPageNum(br.currentIndex()));
+            } else {
+                $("#BRpagenum").val('');
+            }
+
+            //populate leaf location
+            $('#leaf_count').html(br.numLeafs);
+
+            //sets status
+            br.toolbarStatus = "cond"        
+        });
+        
+    }
+
+    //go standard
+    if (br.toolbarStatus == "cond") {
+        //empties tooblar HTML (think about recreating)
+        $("#WSUtoolbar").empty();
+
+        //loading works, but 
+        $("#WSUtoolbar").load('inc/views/stanToolbar.htm', function() {
+            //OCR prep    
+            $(".OCR_tools").hide();
+
+            // Update page number box.  $$$ refactor to function
+            if (null !== br.getPageNum(br.currentIndex()))  {
+                $("#BRpagenum").val(br.getPageNum(br.currentIndex()));
+            } else {
+                $("#BRpagenum").val('');
+            }
+
+            //populate leaf location
+            $('#leaf_count').html(br.numLeafs);
+
+            //sets status
+            br.toolbarStatus = "standard" 
+        });    
+    }   
+
+
+}
+
+function toggleCondTools(){
+    //write metadata to HTML block    
+    itemGearTools = document.createElement('div');
+    
+    // //option 1, load this string
+    // var condTools =  "\
+    // <p>Hello World.</p> \
+    // <p>This is just a test.</p> \
+    // "
+    // $(itemGearTools).html(condTools);
+
+    //option 2, load external file
+    $(itemGearTools).load("inc/views/condTools.htm",function(){
+       console.log("success"); 
+    });    
+
+    //create box with item HTML block
+    $.colorbox({html:itemGearTools});
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 //Utilities
@@ -1504,12 +1582,18 @@ $(window).bind('resizeEnd', function() {
         var row_start = br.fts_results_row;
         getFTSResultsStatic(row_start);        
     }
-    if (br.bigArrowStatus == true) {
+    if (br.bigArrowStatus == true && isMobile.any() == null) {
         bigArrows('resize'); 
     }
     //this is a little buggy, you can see background images reappear while window dragging
     if (br.plainTextStatus == true){
         resizePlainText();
+    }
+    if ($(window).width() < 1160 && br.toolbarStatus == "standard"){
+        toggleCondToolbar();
+    }
+    if ($(window).width() >= 1160 && br.toolbarStatus == "cond" && isMobile.any() == null){
+        toggleCondToolbar();
     }
 
 });
