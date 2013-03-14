@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////
-function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL){    
+function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL, mobileRequest){    
 
     // Create the BookReader object
     br = new BookReader();   
@@ -97,6 +97,7 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
     br.FedoraPID = collectionID + ":" + PIDsafeID;
     br.baseURL = baseURL;
     br.solr_baseURL = solr_baseURL;
+    br.mobileRequest = mobileRequest;
 
     //populate leaf location
     $('#leaf_count').html(leafs.toString());
@@ -151,10 +152,34 @@ function postLaunch() {
         });
     
     //detect interface - load standard or mobile toolbar
+    //add catch here to simulate mobile
     console.log("You are on "+isMobile.any());
-    if (isMobile.any() != null){
+    //go mobile
+    if (isMobile.any() != null || br.mobileRequest == "true"){
+        br.mobileStatus = "true";
         toggleCondToolbar();
         $(".bigArrowHandle").remove();
+    }
+
+    //go standard
+    else{
+        $("#WSUtoolbar").load('inc/views/stanToolbar.htm', function() {
+            //OCR prep    
+            $(".OCR_tools").hide();
+
+            // Update page number box.  $$$ refactor to function
+            if (null !== br.getPageNum(br.currentIndex()))  {
+                $("#BRpagenum").val(br.getPageNum(br.currentIndex()));
+            } else {
+                $("#BRpagenum").val('');
+            }
+
+            //populate leaf location
+            $('#leaf_count').html(br.numLeafs);
+
+            //sets status
+            br.toolbarStatus = "standard" 
+        });
     }
 
     //detect small browser window, load condensed if need be

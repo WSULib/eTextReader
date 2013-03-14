@@ -120,6 +120,9 @@ function BookReader() {
     //highlight image strings status
     this.imageHighlights = false;
 
+    //mobile status
+    this.mobileStatus = null;
+
 
 
 

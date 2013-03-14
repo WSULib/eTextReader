@@ -780,7 +780,7 @@ textarea {
 }
 
 #condTools_wrapper{
-    width:640px;
+    /*width:px;*/
     /*height:400px;*/
     margin:20px;
     margin-bottom:40px;
@@ -805,7 +805,7 @@ textarea {
 .row {
     clear:both;
     width:100%;
-    height:30px;
+    height:50px;
 }
 
 .row_left{

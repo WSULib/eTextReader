@@ -1437,7 +1437,7 @@ function toggleCondToolbar(){
         //empties tooblar HTML (think about recreating)
         $("#WSUtoolbar").empty();
 
-        //loading works, but 
+        //
         $("#WSUtoolbar").load('inc/views/stanToolbar.htm', function() {
             //OCR prep    
             $(".OCR_tools").hide();
@@ -1462,7 +1462,7 @@ function toggleCondToolbar(){
 
 function toggleCondTools(){
     //write metadata to HTML block    
-    itemGearTools = document.createElement('div');    
+    itemGearTools = document.createElement('div'); 
 
     //option 2, load external file    
     $(itemGearTools).load("inc/views/condTools_rows.htm", function(){
@@ -1586,8 +1586,8 @@ $(window).bind('resizeEnd', function() {
     if ($(window).width() < 1160 && br.toolbarStatus == "standard"){
         toggleCondToolbar();
     }
-    if ($(window).width() >= 1160 && br.toolbarStatus == "cond" && isMobile.any() == null){
-        toggleCondToolbar();
+    if ($(window).width() >= 1160 && br.toolbarStatus == "cond" && br.mobileStatus != "true"){
+        toggleCondToolbar();        
     }
 
 });

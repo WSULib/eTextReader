@@ -53,7 +53,7 @@
 
         <div id="WSUtoolbar" class="shadow">
 
-            <div class="tool_row">
+            <!-- <div class="tool_row">
 
                 <div class="logo tools left">
                     <a href="/wsuls/eTextReader/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>                
@@ -78,8 +78,7 @@
 
                 <div class="icon tools left">
                     <ul class="the-icons">       
-                        <li><i class="toggleOCR" onclick='toggleOCR(); return false;' style="font-size:1.6em;">text overlay</i></li>
-                        <!-- <li><i class="toggleOCR icon-font" onclick='toggleOCR(); return false;'></i></li> -->
+                        <li><i class="toggleOCR" onclick='toggleOCR(); return false;' style="font-size:1.6em;">text overlay</i></li>                        
                         <li><i style="font-size:2.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("increase"); return false;'></i></li>                    
                         <li><i style="font-size:1.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("decrease"); return false;'></i></li>                    
                     </ul>                 
@@ -126,7 +125,7 @@
                     
                 </div>                           
 
-            </div> <!--closes tool row div -->             
+            </div> --> <!--closes tool row div -->             
 
         </div>
 
@@ -148,6 +147,7 @@
     <script type="text/javascript">
         //this is setting global "ItemID" still used by Solr
         var ItemID = getURLParam('ItemID');        
+        var mobileRequest = getURLParam('m');        
         var PIDsafe = ItemID.replace(/_/g,"");
 
         $(document).ready(function() {            
@@ -174,7 +174,7 @@
                 var baseURL = "http://141.217.172.152:8080/";
                 var solr_baseURL = "http://localhost:8080/solr4/bookreader/";
                 //sets things in motion to launchBookReader()
-                launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL);
+                launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
             }
         });
     </script>    
