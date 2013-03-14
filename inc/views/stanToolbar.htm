@@ -25,8 +25,7 @@
 
         <div class="icon tools left">
             <ul class="the-icons">       
-                <li><i class="toggleOCR" onclick='toggleOCR(); return false;' style="font-size:1.6em;">text overlay</i></li>
-                <!-- <li><i class="toggleOCR icon-font" onclick='toggleOCR(); return false;'></i></li> -->
+                <li><i class="toggleOCR" onclick='toggleOCR(); return false;' style="font-size:1.6em;">text overlay</i></li>                
                 <li><i style="font-size:2.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("increase"); return false;'></i></li>                    
                 <li><i style="font-size:1.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("decrease"); return false;'></i></li>                    
             </ul>                 
@@ -34,44 +33,41 @@
 
         <div class="icon tools left">
             <ul class="the-icons">  
-                <li><i class="icon-speaker" onclick='speakPagealoud();' title="Click to Speak Aloud"></i></li>
-                <li><span id="audio_load_alert" class='label' style="background-color:pink; display:none;" onclick="sayItstop();">audio playing (click to stop)</span></li>
+                <li><i class="icon-speaker" onclick='speakPagealoud();' title="Click to Speak Aloud"></i></li>                
             </ul>                
         </div>
-
         
-        <div class="icon tools left">
-            <ul class="the-icons">                        
-                <li><i class="icon-screenshot" onclick='magLoupe();' title="Click to use magnifying loupe"></i></li>
-                <li><i class="icon-resize-full" onclick='goFullScreen();' title="Click to use magnifying loupe"></i></li>
-                <li><i class="icon-info-sign" onclick='itemInfo();' title="Book Info"></i></li>                                        
-            </ul>                                                     
-        </div>
-        
-        <div class="icon tools right iframe_pivot_node">                                
+        <div class="icon tools right">                                
             <ul id="mode_icons" class="the-icons">                        
                 <li><i id="1up_icon" class="icon-file" onclick="launch1up(); return false;"></i></li>
                 <li><i id="2up_icon" class="icon-book" onclick="launch2up(); return false;"></i></li>
                 <li><i id="thumbs_icon" class="icon-th" onclick="launchThumbs(); return false;"></i></li>                                                                        
                 <li><i id="plain_text_icon" class="icon-align-justify" onclick='plainText();' title="Switches to Plain Text / HTML"></i></li>                        
             </ul>                    
+        </div>             
+
+        <div class="icon tools right">
+            <ul class="the-icons">                        
+                <li><i class="icon-screenshot" onclick='magLoupe();' title="Click to use magnifying loupe"></i></li>
+                <li><i class="icon-resize-full" onclick='goFullScreen();' title="Click to use magnifying loupe"></i></li>
+                <li><i class="icon-info-sign" onclick='itemInfo();' title="Book Info"></i></li>                                        
+            </ul>                                                     
         </div>
 
         <div class="icon tools right" id="jump_to_form">
             <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
                 <span class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
             </form>
-        </div>
+        </div>  
 
-        <div class="icon tools right iframe_pivot_node">
+         <div class="icon tools right">
             <ul class="the-icons">                        
                 <li><i class="icon-step-backward" onclick='br.leftmost(); return false;'></i></li>
                 <li><i class="icon-arrow-left" onclick='br.left(); return false;'></i></li>
                 <li><i class="icon-arrow-right" onclick='br.right(); return false;'></i></li>                                                                        
                 <li><i class="icon-step-forward" onclick='br.rightmost(); return false;'></i></li>                                            
-            </ul>           
-            
-        </div>                           
+            </ul>            
+        </div>                          
 
     </div> <!--closes tool row div -->             
 

@@ -399,11 +399,6 @@ function singlepageOCR() {
             });   
         
         $('.OCR_box_single').fadeIn();
-        
-        
-
-        
-
         }    
 }
 
@@ -457,45 +452,50 @@ function toggleOCR() {
 // read pages aloud
 function speakPagealoud(source) {
      
-    var $current_layout = getPageInfo();
-    if (source=="autoflip"){
-        $current_layout.rootpage = $current_layout.rootpage + 2;
-        $current_layout.secondarypage = $current_layout.secondarypage + 2;
-    }
-    var squery = 'http://141.217.97.167:8080/solr/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';
+    //if playing, then stop
+    if ( $(".icon-speaker").hasClass('playing') ){
+        sayItstop();
+    }    
 
-    // loading information
-    $('#audio_load_alert').fadeIn();
-    // sayIt("loading","null","null","audio loading");    
+    //if not playing, start
+    else{
+        var $current_layout = getPageInfo();
 
-    //1up solr query and speak
-    if ($current_layout.mode == "1up") {        
-        $.ajax({          
-          url: squery,
-          dataType: 'jsonp',
-          jsonpCallback: 'callback',
-          success: function(result) {
-            var Singletext = result.response.docs[0].OCR_text;
-            var Speaktext = "Single Page - "+Singletext;
-            sayIt("page_text","null","null",Speaktext);        
-          }
-        });
+        //solr query for text
+        var squery = 'http://141.217.172.152:8080/solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
+
+        //1up solr query and speak
+        if ($current_layout.mode == "1up") {        
+            $.ajax({          
+              url: squery,
+              dataType: 'jsonp',
+              jsonpCallback: 'callback',
+              success: function(result) {
+                var Singletext = result.response.docs[0].OCR_text;
+                var Speaktext = "Single Page - "+Singletext;
+                sayIt("page_text","null","null",Speaktext);        
+              }
+            });
+        }
+
+        //2up solr query and speak
+        if ($current_layout.mode == "2up") {        
+            $.ajax({          
+              url: squery,
+              dataType: 'jsonp',
+              jsonpCallback: 'callback',
+              success: function(result) {
+                var Ltext = result.response.docs[0].OCR_text;
+                var Rtext = result.response.docs[1].OCR_text;
+                var Speaktext = "Left page - "+Ltext+"- Right page - "+Rtext;
+                sayIt("page_text",Ltext,Rtext,Speaktext);        
+              }
+            });
+        }
     }
 
-    //2up solr query and speak
-    if ($current_layout.mode == "2up") {        
-        $.ajax({          
-          url: squery,
-          dataType: 'jsonp',
-          jsonpCallback: 'callback',
-          success: function(result) {
-            var Ltext = result.response.docs[0].OCR_text;
-            var Rtext = result.response.docs[1].OCR_text;
-            var Speaktext = "Left page - "+Ltext+"- Right page - "+Rtext;
-            sayIt("page_text",Ltext,Rtext,Speaktext);        
-          }
-        });
-    }
+    //toggles color of icon and status
+    $(".icon-speaker").toggleClass("active_icon playing");  
     
 }
 
@@ -860,7 +860,13 @@ function toolbarsMinimize(){
 
     else {            
         $('#WSUtoolbar').slideDown(750);
-        $('#WSUtoolbar_minimize').animate({top:'35px'},{
+        if (br.secondaryToolRowStatus == "true"){
+            distance = "70px";
+        }
+        else{
+            distance= "35px";
+        }
+        $('#WSUtoolbar_minimize').animate({top:distance},{
             duration: 750,
             complete: function(){            
                 $("#BRcontainer").css({top:'30px'});
@@ -1460,17 +1466,24 @@ function toggleCondToolbar(){
 
 }
 
-function toggleCondTools(){
-    //write metadata to HTML block    
-    itemGearTools = document.createElement('div'); 
+function toggleSecondaryToolRow(){
 
-    //option 2, load external file    
-    $(itemGearTools).load("inc/views/condTools_rows.htm", function(){
-        //create box with item HTML block
-        $.colorbox({html:itemGearTools});
+    if (br.secondaryToolRowStatus != "true"){    
+        $(".icon-cog").addClass("active_icon");
+        $(".secondary").slideDown();        
+        $('#WSUtoolbar_minimize').animate({top:'70px'},{
+            duration: 500});
+        br.secondaryToolRowStatus = "true";
 
-        //iterate through, and activate icons that need it    
-    });    
+    }
+
+    else {
+        $(".icon-cog").removeClass("active_icon");
+        $(".secondary").slideUp();        
+        $('#WSUtoolbar_minimize').animate({top:'35px'},{
+            duration: 500});
+        br.secondaryToolRowStatus = "false";   
+    }
 
 }
 
@@ -1568,7 +1581,7 @@ $(window).resize(function() {
 });
 
 //redraws after resizing
-$(window).bind('resizeEnd', function() {
+$(window).bind('resizeEnd', function() {    
     if (br.OCRstatus == true) {
         showOCR(); //rename to redrawOCR (and create that function)                        
     }
@@ -1583,10 +1596,10 @@ $(window).bind('resizeEnd', function() {
     if (br.plainTextStatus == true){
         resizePlainText();
     }
-    if ($(window).width() < 1160 && br.toolbarStatus == "standard"){
+    if ($(window).width() < 1150 && br.toolbarStatus == "standard"){
         toggleCondToolbar();
     }
-    if ($(window).width() >= 1160 && br.toolbarStatus == "cond" && br.mobileStatus != "true"){
+    if ($(window).width() >= 1150 && br.toolbarStatus == "cond" && br.mobileStatus != "true"){
         toggleCondToolbar();        
     }
 

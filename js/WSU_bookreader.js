@@ -120,8 +120,10 @@ function BookReader() {
     //highlight image strings status
     this.imageHighlights = false;
 
-    //mobile status
+    //mobile and responsive menus status
     this.mobileStatus = null;
+    this.secondaryToolRowStatus = null;
+
 
 
 
