@@ -1462,22 +1462,16 @@ function toggleCondToolbar(){
 
 function toggleCondTools(){
     //write metadata to HTML block    
-    itemGearTools = document.createElement('div');
-    
-    // //option 1, load this string
-    // var condTools =  "\
-    // <p>Hello World.</p> \
-    // <p>This is just a test.</p> \
-    // "
-    // $(itemGearTools).html(condTools);
+    itemGearTools = document.createElement('div');    
 
-    //option 2, load external file
-    $(itemGearTools).load("inc/views/condTools.htm",function(){
-       console.log("success"); 
+    //option 2, load external file    
+    $(itemGearTools).load("inc/views/condTools_rows.htm", function(){
+        //create box with item HTML block
+        $.colorbox({html:itemGearTools});
+
+        //iterate through, and activate icons that need it    
     });    
 
-    //create box with item HTML block
-    $.colorbox({html:itemGearTools});
 }
 
 
