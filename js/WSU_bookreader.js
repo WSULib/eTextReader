@@ -124,9 +124,8 @@ function BookReader() {
     this.mobileStatus = null;
     this.secondaryToolRowStatus = null;
 
-
-
-
+    //minimizer
+    this.minimizerD = null;
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -756,7 +755,10 @@ BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
                     return
                 });
 
-                // *WSU MODIFICATION* /////////////////////////////////////////////////////////////                
+                // *WSU MODIFICATION* /////////////////////////////////////////////////////////////
+                if (this.lastReadingMode == this.mode){
+                    this.lastReadingMode = "2";
+                }
                 var page_link = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+(leaf+1)+"/mode/"+this.lastReadingMode+"up";
                 $(link).attr('href', page_link);
                 ///////////////////////////////////////////////////////////////////////////////////

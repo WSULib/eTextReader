@@ -110,10 +110,8 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 //Postlaunch operations
 function postLaunch() {    
 
-    
-
     //show minimize arrow, looks nicer post launch
-    $("#WSUtoolbar_minimize").show();
+    // $("#WSUtoolbar_minimize").show();
 
     //OCR prep    
     $(".OCR_tools").hide();
@@ -121,6 +119,9 @@ function postLaunch() {
     //create large navigation arrows - 2 second bold to show user they are there
     bigArrows();
     bigArrowsPulse();
+
+    //populate leaf location
+    $('#leaf_count').html(br.numLeafs);    
 
     //retrieve book metadata and set to br.bookMetaObj, set title of browser page
     $(document).ready(function() {
@@ -148,45 +149,33 @@ function postLaunch() {
             function pull_meta_fail(){
                 br.bookMetaObj = null;
             }
-
         });
     
-    //detect interface - load standard or mobile toolbar
-    //add catch here to simulate mobile
-    console.log("You are on "+isMobile.any());
+    //Device Detectiong -----------------------------------------------
+    
     //go mobile
     if (isMobile.any() != null || br.mobileRequest == "true"){
-        br.mobileStatus = "true";
-        toggleCondToolbar();
+        br.mobileStatus = "true";        
         $(".bigArrowHandle").remove();
+        // br.switchMode(1); //launches in 1up mode
+    }   
+
+    //resolution check
+    // alert("Width: "+$(window).width()+" / Height: "+$(window).height());    
+
+    //indicate launched book mode
+    if (br.mode == 1){
+        $("#mode_icons>li>i").removeClass("active_icon");
+        $("#1up_icon").toggleClass('active_icon');
     }
-
-    //go standard
-    else{
-        $("#WSUtoolbar").load('inc/views/stanToolbar.htm', function() {
-            //OCR prep    
-            $(".OCR_tools").hide();
-
-            // Update page number box.  $$$ refactor to function
-            if (null !== br.getPageNum(br.currentIndex()))  {
-                $("#BRpagenum").val(br.getPageNum(br.currentIndex()));
-            } else {
-                $("#BRpagenum").val('');
-            }
-
-            //populate leaf location
-            $('#leaf_count').html(br.numLeafs);
-
-            //sets status
-            br.toolbarStatus = "standard" 
-        });
+    if (br.mode == 2){
+        $("#mode_icons>li>i").removeClass("active_icon");
+        $("#2up_icon").toggleClass('active_icon');
     }
-
-    //detect small browser window, load condensed if need be
-    if ($(window).width() < 1160){
-        toggleCondToolbar();
-    }    
-    
+    if (br.mode == 3){
+        $("#mode_icons>li>i").removeClass("active_icon");
+        $("#thumbs_icon").toggleClass('active_icon');
+    }
 
 } //closes postLaunch()
 

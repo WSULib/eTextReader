@@ -564,7 +564,7 @@ function launch1up (){
 
     //highlight icon
     $("#mode_icons>li>i").removeClass("active_icon");
-    $("#1up_icon").addClass('active_icon');
+    $("#1up_icon").toggleClass('active_icon');
 
     //turns off OCR
     if (br.OCRstatus == true) {
@@ -589,7 +589,7 @@ function launch1up (){
 function launch2up (){
     //highlight icon
     $("#mode_icons>li>i").removeClass("active_icon");
-    $("#2up_icon").addClass('active_icon');
+    $("#2up_icon").toggleClass('active_icon');
 
     //turns off OCR
     if (br.OCRstatus == true) {
@@ -765,6 +765,10 @@ function drawArrowsHoriz() {
 // easy page flip arrows
 function bigArrows(state){
 
+    //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
+    return;
+    //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
+
     var $current_layout = getPageInfo();
     if (br.bigArrowStatus == false || state == "resize" || state == "state_change"){
 
@@ -816,6 +820,10 @@ function bigArrows(state){
 }
 
 function bigArrowsPulse(){
+    //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
+    return;
+    //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
+    
     $(".bigArrowHandle").stop(true, false).animate({opacity: .35}, 500);
     minimalArrowTimeout = setTimeout(function (){
         $(".bigArrowHandle").stop(true, false).animate({opacity: 0}, 2000);
@@ -827,6 +835,10 @@ function toolbarsMinimize(){
     var $current_layout = getPageInfo();
 
     if ($('#WSUtoolbar_minimize').hasClass('toolbar_exposed')) {      
+        
+        //get current distance from top, will return to this
+        br.minimizerD = $("#WSUtoolbar_minimize").css('top');
+
         $('#WSUtoolbar').slideUp(750);
         $('#WSUtoolbar_minimize').animate({top:'0px'},{
             duration: 750,
@@ -858,36 +870,31 @@ function toolbarsMinimize(){
         }
     }
 
-    else {            
-        $('#WSUtoolbar').slideDown(750);
-        if (br.secondaryToolRowStatus == "true"){
-            distance = "70px";
-        }
-        else{
-            distance= "35px";
-        }
-        $('#WSUtoolbar_minimize').animate({top:distance},{
-            duration: 750,
-            complete: function(){            
-                $("#BRcontainer").css({top:'30px'});
-                if ($current_layout.mode == "1up"){
-                    br.prepareOnePageView();                    
-                }
-                if ($current_layout.mode == "2up"){
-                    br.prepareTwoPageView();
-                }
-                // if plain-text has taken over, resize
-                if (br.plainTextStatus == true){
-                    resizePlainText();
-                }
+    else {
+        $('#WSUtoolbar').slideDown(750, function(){            
+            $("#BRcontainer").css({ top:$("#WSUtoolbar").height() }); //this needs to change based on screen size we're in...
+            if ($current_layout.mode == "1up"){
+                br.prepareOnePageView();                    
+            }
+            if ($current_layout.mode == "2up"){
+                br.prepareTwoPageView();
+            }
+            // if plain-text has taken over, resize
+            if (br.plainTextStatus == true){
+                resizePlainText();
             }
         });
+
+        $('#WSUtoolbar_minimize').animate({top:br.minimizerD},750, function(){
+            $(this).removeAttr('style');
+        });        
+
         $('#WSUtoolbar_minimize').addClass('toolbar_exposed').removeClass('toolbar_hidden');
         $("#minimize_handle").removeClass('icon-chevron-down').addClass('icon-chevron-up');
 
         // if (when) nav arrows are on screen
         if (br.bigArrowStatus == true){
-            if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
+            if (br.mobileStatus != "true" && $current_layout.mode == "1up" || $current_layout.mode == "thumb"){
                 bigArrows('resize');               
             }            
         }        
@@ -896,14 +903,15 @@ function toolbarsMinimize(){
 
 function plainText(){
 
-
-
     var $current_layout = getPageInfo();    
 
     if (br.plainTextStatus == false){
 
         $("#mode_icons>li>i").removeClass("active_icon");
-        $("#plain_text_icon").addClass("active_icon");
+        $("#plain_text_icon").toggleClass("active_icon");
+
+        //opens OCR tools if opened
+        toggleOCR();
 
         showLoading();        
 
@@ -940,7 +948,6 @@ function plainText(){
         else{
             $('#html_concat').width($(window).width() - 40)
         }
-
 
         // Load fullbook HTML
         var html_concat = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':fullbook&datastream=HTML_FULL';
@@ -985,16 +992,28 @@ function plainText(){
 
         $('#html_concat').fadeIn();
 
-        //remove loading
+        //remove loading and set BR mode        
         hideLoading();
         return;
-
     }
 
-    if (br.plainTextStatus == true){
+    //remove plainText
+    else {        
 
-        //closes OCR tools if opened
-        toggleOCR();
+        $("#plain_text_icon").toggleClass("active_icon");
+        //indicate launched book mode
+        if (br.mode == 1){
+            $("#mode_icons>li>i").removeClass("active_icon");
+            $("#1up_icon").toggleClass('active_icon');
+        }
+        if (br.mode == 2){
+            $("#mode_icons>li>i").removeClass("active_icon");
+            $("#2up_icon").toggleClass('active_icon');
+        }
+        if (br.mode == 3){
+            $("#mode_icons>li>i").removeClass("active_icon");
+            $("#thumbs_icon").toggleClass('active_icon');
+        }        
 
         //sets status to false
         br.plainTextStatus = false;
@@ -1409,83 +1428,21 @@ function itemInfo(){
     $.colorbox({html:itemMeta});
 }
 
-//toggle condensed toolbar
-function toggleCondToolbar(){
-
-    //go condensed
-    if (br.toolbarStatus == "standard") {
-        //empties tooblar HTML (think about recreating)
-        $("#WSUtoolbar").empty();
-
-        //loading works, but 
-        $("#WSUtoolbar").load('inc/views/condToolbar.htm', function(){
-            //OCR prep    
-            $(".OCR_tools").hide();
-
-            // Update page number box.  $$$ refactor to function
-            if (null !== br.getPageNum(br.currentIndex()))  {
-                $("#BRpagenum").val(br.getPageNum(br.currentIndex()));
-            } else {
-                $("#BRpagenum").val('');
-            }
-
-            //populate leaf location
-            $('#leaf_count').html(br.numLeafs);
-
-            //sets status
-            br.toolbarStatus = "cond"        
-        });
-        
-    }
-
-    //go standard
-    if (br.toolbarStatus == "cond") {
-        //empties tooblar HTML (think about recreating)
-        $("#WSUtoolbar").empty();
-
-        //
-        $("#WSUtoolbar").load('inc/views/stanToolbar.htm', function() {
-            //OCR prep    
-            $(".OCR_tools").hide();
-
-            // Update page number box.  $$$ refactor to function
-            if (null !== br.getPageNum(br.currentIndex()))  {
-                $("#BRpagenum").val(br.getPageNum(br.currentIndex()));
-            } else {
-                $("#BRpagenum").val('');
-            }
-
-            //populate leaf location
-            $('#leaf_count').html(br.numLeafs);
-
-            //sets status
-            br.toolbarStatus = "standard" 
-        });    
-    }   
-
-
+function showMoreTools(){
+    $(".collapseRow").toggle();
 }
 
-function toggleSecondaryToolRow(){
 
-    if (br.secondaryToolRowStatus != "true"){    
-        $(".icon-cog").addClass("active_icon");
-        $(".secondary").slideDown();        
-        $('#WSUtoolbar_minimize').animate({top:'70px'},{
-            duration: 500});
-        br.secondaryToolRowStatus = "true";
 
-    }
 
-    else {
-        $(".icon-cog").removeClass("active_icon");
-        $(".secondary").slideUp();        
-        $('#WSUtoolbar_minimize').animate({top:'35px'},{
-            duration: 500});
-        br.secondaryToolRowStatus = "false";   
-    }
 
-}
+
+
+
+
+
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -1560,11 +1517,12 @@ function getURLParam(name) {
 //////////////////////////////////////////////////////////////////////////////////////
 //Resizing
 //////////////////////////////////////////////////////////////////////////////////////
-
 //hooked into: switchMode(), zoom1up(), zoom2up(),
 function stateChange(){    
-    bigArrows('state_change');
-    bigArrowsPulse();
+    if (br.mobileStatus != "true"){
+        bigArrows('state_change');            
+        bigArrowsPulse();
+    }
 }
 
 
@@ -1589,19 +1547,17 @@ $(window).bind('resizeEnd', function() {
         var row_start = br.fts_results_row;
         getFTSResultsStatic(row_start);        
     }
-    if (br.bigArrowStatus == true && isMobile.any() == null) {
+    if (br.bigArrowStatus == true && br.mobileStatus != "true") {        
         bigArrows('resize'); 
     }
     //this is a little buggy, you can see background images reappear while window dragging
     if (br.plainTextStatus == true){
         resizePlainText();
     }
-    if ($(window).width() < 1150 && br.toolbarStatus == "standard"){
-        toggleCondToolbar();
-    }
-    if ($(window).width() >= 1150 && br.toolbarStatus == "cond" && br.mobileStatus != "true"){
-        toggleCondToolbar();        
-    }
+
+    //fix hanging minimize arrow - remove element css
+    // $("#WSUtoolbar_minimize").removeAttr('style');
+      
 
 });
 
@@ -1626,16 +1582,6 @@ $(window).bind('hashchange', function() {
     }
     ///////////////////////////////////////////////////////////
 });
-
-$(document).ready(function(){
-    var timeoutId = 0;
-    $('.OCR_box_single .OCR_box_text').mousedown(function() {
-        timeoutId = setTimeout(myFunction, 2000);
-    }).bind('mouseup mouseleave', function() {
-        clearTimeout(timeoutId);
-        alert('you done held that button for a GOOD while!');
-    });
-})
 
 
 

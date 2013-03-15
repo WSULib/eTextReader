@@ -1,351 +1,7 @@
-a { cursor: hand; cursor: pointer; }
-
-#audio_load_alert {
-    cursor: pointer;
-}
-
-#fts_box {
-    display:none;
-    position:absolute;
-    width:300px;
-    height:400px;
-    top:85px;
-    left:5px;
-    background-color:rgba(243,249,148,.8);
-    text-align:left;
-    z-index: 99;
-}
-
-#fts_box_text {
-    padding-left:5px;
-    text-align:left;
-}
-
-#fts_counts {
-    font-weight:normal;
-    font-size:10pt;
-}
-
-.fts_form{
-    z-index:10000;
-}
-
-.fts_page_nav {
-    /*text-align:center;*/
-    font-weight:bold;
-    float:left;
-    margin-left:10px;    
-}
-
-#fts_search_button {
-    margin-left:-5px;
-}
-
-.fts_input_box{
-    z-index:10001;
-}
-
-.highlighted {
-    background-color:rgba(150,255,150,.9);
-}
-
-/*1up mode*/
-.OCR_box_single {
-    position:absolute;
-    height:90%;
-    width:90%;    
-    z-index:3;
-    /*background-color:rgba(243,249,148,.9);*/
-    background-color:rgba(252,244,214,.9);
-    display:none;
-    overflow-y:scroll;
-    border-radius: 4px;
-}
-
-
-
-/* 2up mode */
-.OCR_box {
-    position:absolute;
-    margin-top:5%;    
-    width:45%;
-    height:90%;
-    z-index:2;
-    background-color:rgba(252,244,214,.9);
-    display:none;
-    overflow-y:scroll;
-}
-
-/*Positiong relative to the leaf dimensions <div> */
-.OCR_box.right {        
-    right:2.5%;   
-}
-
-/*Positiong relative to the leaf dimensions <div> */
-.OCR_box.left { 
-    left:2.5%;
-}
-
-.OCR_box_text {
-    text-align:left;
-    padding:50px;
-    color:black;
-}
-
-.OCR_controls {
-    color:black;
-}
-
-.OCR_shadow {
-    -moz-box-shadow: 0px 2px 5px #303030;
-    -webkit-box-shadow: 0px 2px 5px #303030;
-    box-shadow: 0px 2px 5px #303030;
-}
-
-.OCR_tools {
-    display:none;
-}
-
-.shadow {
-    -moz-box-shadow: 0px 1px 15px #303030;
-    -webkit-box-shadow: 0px 1px 15px #303030;
-    box-shadow: 0px 1px 15px #303030;
-}
-
-.pbox_border {
-    /*border: 1px solid rgb(120,120,120);*/
-}
-
-.ui-dialog{
-    font-size:12px;
-}
-
-.ui-dialog .ui-dialog-titlebar { 
-    padding: 0px; 
-}
-
-.ui-widget-header { 
-    border: 1px solid white; 
-    background:black; 
-    color: #ffffff; 
-    font-weight: bold; 
-}
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {    
-    background-color:rgba(252,244,214,.9);
-    position:absolute;
-    /*background-color:rgba(225,221,201,.9);*/
-}
-
-/*rollover CSS for buttons ----------------------------------------------------------------- */
-.tool_icon{
-    height:22px;
-    border:none;
-    vertical-align: middle;
-    padding:0px;
-    margin:0px;
-}
-
-/* rollover buttons */
-.toggleOCR { background:url('../images/icons/text_overlay.png') no-repeat; width:24px; }
-.text_increase { background:url('../images/icons/text_increase.png') no-repeat; width:24px; border-left: 1px solid rgba(71,86,73,.8); }
-.text_decrease { background:url('../images/icons/text_decrease.png') no-repeat; width:24px; }
-.zoom_in { background:url('../images/icons/zoom_in.png') no-repeat; width:24px; }
-.zoom_out { background:url('../images/icons/zoom_out.png') no-repeat; width:24px; }
-.speak { background:url('../images/icons/speak.png') no-repeat; width:24px; }
-.two_page_mode { background:url('../images/icons/2up_icon.png') no-repeat; width:24px; }
-.one_page_mode { background:url('../images/icons/1up_icon.png') no-repeat; width:24px; }
-.thumbs_page_mode { background:url('../images/icons/thumbs_icon.png') no-repeat; width:24px; }
-
-    /* navigation arrows */
-    .arrow_right { background:url('../images/icons/arrow_right.png') no-repeat; width:24px; }
-    .arrow_left { background:url('../images/icons/arrow_left.png') no-repeat; width:24px; }
-    .arrow_rightmost { background:url('../images/icons/arrow_rightmost.png') no-repeat; width:24px; }
-    .arrow_leftmost { background:url('../images/icons/arrow_leftmost.png') no-repeat; width:24px; }
-    .arrow_up { background:url('../images/icons/arrow_up.png') no-repeat; width:24px; }
-    .arrow_down { background:url('../images/icons/arrow_down.png') no-repeat; width:24px; }
-    .arrow_upmost { background:url('../images/icons/arrow_upmost.png') no-repeat; width:24px; }
-    .arrow_downmost { background:url('../images/icons/arrow_downmost.png') no-repeat; width:24px; }
-
-/*rounded edge for highlight toggle */
-.rounded_edge_highlight {
-    -moz-border-radius:4px;  /* for Firefox */
-    -webkit-border-radius:4px; /* for Webkit-Browsers */
-    border-radius:4px; /* regular */
-    border: 1px solid rgba(247,227,0,.8);
-}
-
-.rollover:hover { background-position: 0 -22px; }
-/* ----------------------------------------------------------------------------------------- */
-
-.tool_row {    
-    height:100%;
-}
-
-.tool_row button{    
-}
-
-
-#WSUtoolbar {
-    position:absolute;
-    width:100%;
-    /*min-width:800px;*/
-    height:35px;    
-    background-color:rgba(225,221,201,.9);
-    color:#1D1D1D;
-    z-index:3;
-    border-top: .5px solid rgba(71,86,73,.8);
-
-}
-
-#WSUtoolbar .tools {
-    height:22px;    
-    margin-top:4px;
-}
-
-#WSUtoolbar ul {
-    list-style:none;
-}
-
-#WSUtoolbar ul li {
-    display:inline;
-}
-
-#WSUtoolbar .left {            
-    float:left;    
-}
-
-#WSUtoolbar .right {
-    float:right;    
-}
-
-#WSUtoolbar .center {
-    float:center;
-    margin:auto;
-}
-
-#WSUtoolbar .logo {
-    margin-top:1px;
-    margin-left:5px; /* offsets from left of page */
-    margin-right:5px; /* offsets from tools */
-
-}
-
-.item_title {    
-    margin-right:5px;
-    font-weight:bold;
-    font-size:18px;
-}
-
-#WSUtoolbar .icon {
-    /*background-color:rgba(100,94,76,.3);*/
-    background-color:rgba(71,86,73,.3);
-    padding:2px;
-    margin-left:10px;
-    margin-right:10px;
-    -moz-border-radius:4px;  /* for Firefox */
-    -webkit-border-radius:4px; /* for Webkit-Browsers */
-    border-radius:4px; /* regular */
-}
-
-#WSUtoolbar form {
-    margin:0px;
-    display: inline;
-}
-
-#WSUfooter {
-    position:absolute;
-    width:100%;
-    /*min-width:800px;*/
-    height:35px;
-    margin-bottom:0px;
-    bottom:0px;    
-    background-color:rgba(225,221,201,.9);
-    color:#1D1D1D;
-    z-index:100;
-}
-
-#WSUfooter .tools {
-    height:22px;
-    margin-top:4px;    
-}
-
-#WSUfooter .icon {
-    /*background-color:rgba(100,94,76,.3);*/
-    background-color:rgba(71,86,73,.3);
-    padding:2px;
-    margin-left:10px;
-    margin-right:10px;
-    -moz-border-radius:4px;  /* for Firefox */
-    -webkit-border-radius:4px; /* for Webkit-Browsers */
-    border-radius:4px; /* regular */
-}
-
-#WSUfooter form {
-    margin:0px;
-    display: inline;
-}
-
-#WSUfooter ul {
-    list-style:none;
-}
-
-#WSUfooter ul li {
-    display:inline;
-}
-
-#WSUfooter .left {            
-    float:left;
-    margin-left:10px;
-}
-
-#WSUfooter .right {
-    float:right;
-    margin-right:10px;
-}
-
-#WSUfooter .center {
-    float:center;
-    margin:auto;
-}
-
-#WSUtoolbar_minimize {
-    background-color:rgba(225,221,201,.7);
-    position: absolute;
-    right: 16px;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    z-index:50;
-    bottom: 35px;
-    -moz-border-radius-topright: 8px;
-    -webkit-border-top-right-radius: 8px;
-    -moz-border-radius-topleft: 8px;
-    -webkit-border-top-left-radius: 8px;
-    text-align:center;
-}
-
-#zoom_level {
-    color:rgb(20,20,20);
-    padding:3px;
-    padding-left:4px;
-    /*border-left: 1px solid rgba(71,86,73,.8);    */
-}
-
-
-
-input[type='text'], input[type='email'], input[type='search'],
-input[type='password'], textarea
-{
-        -webkit-user-select: text; 
-}
-
-
-/* --------------------------------------------------------------------- */
-
-
 body {
  /* XXX we shouldn't change the body CSS, just within our container */
- background-color: #9A9B9D;  /* Pantone Cool Grey 7 C */
+ /*background-color: #9A9B9D;*/
+ background-color: #666666;
  font-size: 67.5%;
  margin: 0;
  padding: 0;
@@ -377,7 +33,7 @@ a {
     width: 100%;
     z-index: 100;
     /*background-color: #e2dcc5;*/
-    /*background-color: #666666;*/
+    background-color: #666666;
     -webkit-box-shadow: 0 1px 3px #999;
     /* Shadow here on FF causes scroll bars */
     overflow: hidden;
@@ -394,8 +50,8 @@ a {
     float: right;
 }
 #BRcontainer {
-    top:5px;
-    bottom:5px;
+    top:30px;
+    bottom:0px;
     width:100%;
     /*min-width:800px;*/
     z-index: 1;
@@ -650,7 +306,7 @@ form#booksearch input[type=search] {
     border: 1px inset #ccc;
     outline: none;
 }
-form#booksearch button {
+/*form#booksearch button {
     width: 30px;
     height: 24px;
     line-height: 24px;
@@ -666,7 +322,7 @@ form#booksearch button {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-}
+}*/
 
 .BRlogotype {
     float:left;
@@ -816,3 +472,6 @@ a.BRgrey:visited   { color: #666; }
     font-weight: normal;
     font-size: 1.4em;
     color
+}
+
+
