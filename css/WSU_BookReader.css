@@ -1,3 +1,15 @@
+/* ---IE specifics--- */
+
+#BRpageview a img {
+    border: none; 
+}
+
+.tools a img {
+    border: none; 
+}
+
+/* ------------------ */
+
 body { 
     -moz-user-select: auto !important;
     cursor: auto !important;
@@ -15,6 +27,9 @@ a { cursor: hand; cursor: pointer; }
     cursor: pointer;
 }
 
+/***************************/
+/*FULL-TEXT SEARCH*/
+/***************************/
 #fts_box_text {
     padding-left:5px;
     text-align:left;
@@ -177,10 +192,23 @@ a { cursor: hand; cursor: pointer; }
     background-color: #FFFF88;
 }
 
+.osc_dark {
+    background-color:rgba(160,160,160,.25);
+}
+
 .highlight {
     background-color: #FFFF88;
 }
 
+#fts_static_tools ul.the-icons li i{
+    font-size:1.5em;
+    padding:0px;
+    float:right;
+}
+
+/***************************/
+/* Image Highlighting
+/****************************/
 .image_highlight {
     /*background-color: #FFFF88;*/
     background-color: yellow;
@@ -190,10 +218,9 @@ a { cursor: hand; cursor: pointer; }
     padding:2px;
 }
 
-.osc_dark {
-    background-color:rgba(160,160,160,.25);
-}
-
+/***************************/
+/* OCR text overlay
+/****************************/
 /*1up mode*/
 .OCR_box_single {
     position:absolute;
@@ -257,12 +284,6 @@ a { cursor: hand; cursor: pointer; }
     box-shadow: 0px 1px 15px #303030;
 }
 
-/*.shadow_bottom {
-   -webkit-box-shadow: 0 2px 4px -3px #303030;
-   -moz-box-shadow: 0 2px 4px -3px #303030;
-        box-shadow: 0 2px 4px -3px #303030;
-}*/
-
 .shadow_bottom {
    border-bottom: 1px solid rgba(0,0,0,.2);
 }
@@ -271,75 +292,10 @@ a { cursor: hand; cursor: pointer; }
    border-top: 1px solid rgba(0,0,0,.2);
 }
 
-.pbox_border {
-    /*border: 1px solid rgb(120,120,120);*/
-}
 
-.ui-dialog{
-    font-size:12px;
-}
-
-.ui-dialog .ui-dialog-titlebar { 
-    padding: 0px; 
-}
-
-.ui-widget-header { 
-    border: 1px solid white; 
-    background:black; 
-    color: #ffffff; 
-    font-weight: bold; 
-}
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {    
-    background-color:rgba(252,244,214,.9);
-    position:absolute;
-}
-
-/*rollover CSS for buttons ----------------------------------------------------------------- */
-.tool_icon{
-    height:22px;
-    border:none;
-    vertical-align: middle;
-    padding:0px;
-    margin:0px;
-}
-
-/* rollover buttons */
-/*.toggleOCR { background:url('../images/icons/text_overlay.png') no-repeat; width:24px; }*/
-.text_increase { background:url('../images/icons/text_increase.png') no-repeat; width:24px; border-left: 1px solid rgba(71,86,73,.8);}
-.text_decrease { background:url('../images/icons/text_decrease.png') no-repeat; width:24px; /*padding-right: 31px*/}
-.zoom_in { background:url('../images/icons/zoom_in.png') no-repeat; width:24px; }
-.zoom_out { background:url('../images/icons/zoom_out.png') no-repeat; width:24px; }
-.speak { background:url('../images/icons/speak.png') no-repeat; width:24px; }
-.two_page_mode { background:url('../images/icons/2up_icon.png') no-repeat; width:24px; }
-.one_page_mode { background:url('../images/icons/1up_icon.png') no-repeat; width:24px; }
-.thumbs_page_mode { background:url('../images/icons/thumbs_icon.png') no-repeat; width:24px; }
-
-/* navigation arrows */
-.arrow_right { background:url('../images/icons/arrow_right.png') no-repeat; width:24px; }
-.arrow_left { background:url('../images/icons/arrow_left.png') no-repeat; width:24px; }
-.arrow_rightmost { background:url('../images/icons/arrow_rightmost.png') no-repeat; width:24px; }
-.arrow_leftmost { background:url('../images/icons/arrow_leftmost.png') no-repeat; width:24px; }
-.arrow_up { background:url('../images/icons/arrow_up.png') no-repeat; width:24px; }
-.arrow_down { background:url('../images/icons/arrow_down.png') no-repeat; width:24px; }
-.arrow_upmost { background:url('../images/icons/arrow_upmost.png') no-repeat; width:24px; }
-.arrow_downmost { background:url('../images/icons/arrow_downmost.png') no-repeat; width:24px; }
-
-/*FTS results box */
-.fts_close { background:url('../images/icons/close.png') no-repeat; width:24px; }
-.fts_popout { background:url('../images/icons/popout.png') no-repeat; width:24px; }
-.fts_collapse { background:url('../images/icons/collapse.png') no-repeat; width:24px; }
-.fts_expand { background:url('../images/icons/expand.png') no-repeat; width:24px; }
-
-/*rounded edge for highlight toggle */
-.rounded_edge_highlight {
-    -moz-border-radius:4px;  /* for Firefox */
-    -webkit-border-radius:4px; /* for Webkit-Browsers */
-    border-radius:4px; /* regular */
-    border: 1px solid rgba(247,227,0,.8);
-}
-
-.rollover:hover { background-position: 0 -22px; }
-/* ----------------------------------------------------------------------------------------- */
+/***************************/
+/* Toolbar and Icons
+/****************************/
 
 #WSUtoolbar {
     position:absolute;
@@ -405,6 +361,25 @@ a { cursor: hand; cursor: pointer; }
     border-radius:4px; /* regular */
 }
 
+#WSUtoolbar ul.the-icons li i{
+    /*margin-top:-8px;    */
+    font-size:2em;
+    padding:0px;
+    cursor: pointer;
+}
+
+#WSUtoolbar_minimize ul.the-icons li i{
+    margin-top:0px;    
+    font-size:2em;
+    padding:0px;
+    /*background-color:rgba(71,86,73,.3);*/
+    overflow:hidden;
+    -moz-border-radius-bottomright: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -webkit-border-bottom-left-radius: 8px;   
+}
+
 #WSUtoolbar form {    
     display: inline;
     margin-top:0px;
@@ -427,22 +402,6 @@ a { cursor: hand; cursor: pointer; }
     display:none;
 }
 
-.tool_row {    
-    height:100%;
-    width:100%;
-    clear:both;
-    float:left;
-}
-
-/*Secondary rows*/
-.secondary {
-    height:35px;
-    background-color:rgba(255,250,221,.9);
-    display:none;
-}
-
-/*End secondary rows */
-
 #zoom_level {
     color:rgb(20,20,20);
     padding:3px;
@@ -456,20 +415,13 @@ input[type='password'], textarea
     -webkit-user-select: text; 
 }
 
-/* ---IE specifics--- */
-
-#BRpageview a img {
-    border: none; 
+.active_icon{
+    color:#F0C;
 }
 
-.tools a img {
-    border: none; 
-}
-
-/* ------------------ */
-
-
-/*EXPERIMENTAL*/
+/***************************/
+/* Tools
+/****************************/
 /* Magnifying Loupe */
 .loupe { 
     background-color:#555; 
@@ -477,6 +429,7 @@ input[type='password'], textarea
     border:5px solid rgba(0, 0, 0, 0); cursor:url(blank.png), url(blank.cur), none; 
     z-index:1000000; 
 }
+
 /*rotate*/
 .right90{
     -webkit-transform: rotate(90deg); 
@@ -490,6 +443,13 @@ input[type='password'], textarea
   height: 100%;
 }
 
+/***************************/
+/* Overlays
+/****************************/
+#overlays{
+    position:absolute;
+}
+/*Arrows*/
 .bigArrowBoxHoriz {
     position:fixed;
     width:30px;
@@ -516,39 +476,48 @@ input[type='password'], textarea
 }
 
 .bigArrowHandle{
-    opacity:0.06;
-    
-    /*-moz-border-radius:10px;
-    -webkit-border-radius:10px;
-    border-radius:10px;*/
-    
+    opacity:0.06;   
 }
 
-/* Arrow rounding */
-#lBigArrow{
-    -moz-border-radius:10px 0px 0px 10px;
-    -webkit-border-radius:10px 0px 0px 10px;
-    border-radius:10px 0px 0px 10px;
+    /* Arrow rounding */
+    #lBigArrow{
+        -moz-border-radius:10px 0px 0px 10px;
+        -webkit-border-radius:10px 0px 0px 10px;
+        border-radius:10px 0px 0px 10px;
+    }
+
+    #rBigArrow{
+        -moz-border-radius:0px 10px 10px 0px;
+        -webkit-border-radius:0px 10px 10px 0px;
+        border-radius:0px 10px 10px 0px;
+    }
+
+    #uBigArrow{
+        -moz-border-radius:10px 10px 0px 0px;
+        -webkit-border-radius:10px 10px 0px 0px;
+        border-radius:10px 10px 0px 0px;
+    }
+
+    #dBigArrow{
+        -moz-border-radius:0px 0px 10px 10px;
+        -webkit-border-radius:0px 0px 10px 10px;
+        border-radius:0px 0px 10px 10px;
+    }
+
+#loading_animation{
+    position:absolute;
+    width:40px;
+    height:40px;
+    z-index:40000;
+    background-color:black;
+    display:none;
+    background:url('http://www.lettersmarket.com/uploads/lettersmarket/blog/loaders/common_gray/ajax_loader_gray_256.gif') no-repeat;
+    background-size:40px 40px;
 }
 
-#rBigArrow{
-    -moz-border-radius:0px 10px 10px 0px;
-    -webkit-border-radius:0px 10px 10px 0px;
-    border-radius:0px 10px 10px 0px;
-}
-
-#uBigArrow{
-    -moz-border-radius:10px 10px 0px 0px;
-    -webkit-border-radius:10px 10px 0px 0px;
-    border-radius:10px 10px 0px 0px;
-}
-
-#dBigArrow{
-    -moz-border-radius:0px 0px 10px 10px;
-    -webkit-border-radius:0px 0px 10px 10px;
-    border-radius:0px 0px 10px 10px;
-}
-
+/***************************/
+/* Positioning
+/****************************/
 /*Vertically align images in div*/
 .absoluteCenterWrapper {
  position:relative; /* Contains the image in the div */
@@ -566,12 +535,10 @@ input[type='password'], textarea
  max-height:100%;
  max-width:100%;
 }
-/*END -- Vertically align images in div*/
 
-#overlays{
-    position:absolute;
-}
-
+/***************************/
+/* Plain/Full text
+/****************************/
 /*Plain Text / HTML concat*/
 #html_concat{
     width:80%;
@@ -588,49 +555,13 @@ input[type='password'], textarea
     border-top: 1px dotted
 }
 
-#loading_animation{
-    position:absolute;
-    width:40px;
-    height:40px;
-    z-index:40000;
-    background-color:black;
-    display:none;
-    background:url('http://www.lettersmarket.com/uploads/lettersmarket/blog/loaders/common_gray/ajax_loader_gray_256.gif') no-repeat;
-    background-size:40px 40px;
-}
-
 .leaf_num{
     color:blue;
     float:right;
     z-index:40000;
 }
 
-#WSUtoolbar ul.the-icons li i{
-    /*margin-top:-8px;    */
-    font-size:2em;
-    padding:0px;
-    cursor: pointer;
-}
-
-#WSUtoolbar_minimize ul.the-icons li i{
-    margin-top:0px;    
-    font-size:2em;
-    padding:0px;
-    /*background-color:rgba(71,86,73,.3);*/
-    overflow:hidden;
-    -moz-border-radius-bottomright: 8px;
-    -webkit-border-bottom-right-radius: 8px;
-    -moz-border-radius-bottomleft: 8px;
-    -webkit-border-bottom-left-radius: 8px;   
-}
-
-#fts_static_tools ul.the-icons li i{
-    font-size:1.5em;
-    padding:0px;
-    float:right;
-}
-
-/* Lifted from KUBE css framework for text input --------------------------------------------- */
+/* from KUBE CSS framework for text input --------------------------------------------- */
 .btn {
   position: relative;
   cursor: pointer;
@@ -715,18 +646,12 @@ textarea {
 textarea {
   line-height: 1.4em;
 }
-/* From KUBE.css --------------------------------------------- */
+/* END KUBE CSS --------------------------------------------- */
 
 
-.custom_png_icons{
-    height:22px;    
-    background:url('images/full-text.png') no-repeat; width:22px;
-    
-}
 
-.active_icon{
-    color:#F0C;
-}
+
+
 
 
 

@@ -967,7 +967,7 @@ function plainText(){
                 page_array.each(function(){
                     var page_num = $(this).attr('id').split('_')[2];
                     // $(this).prepend("<span style='color:blue; float:right;'>Leaf "+page_num+"</div>");
-                    $(this).prepend('<a class="leaf_num" href="#" onclick="br.jumpToIndex('+page_num+');">Leaf '+page_num+'</a>');
+                    $(this).prepend('<a class="leaf_num" href="#" onclick="br.jumpToIndex('+page_num+');">Page '+page_num+'</a>');
                 });
 
                 // highlights br.search_term if active
