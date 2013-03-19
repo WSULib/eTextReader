@@ -151,17 +151,48 @@ function postLaunch() {
             }
         });
     
-    //Device Detectiong -----------------------------------------------
+    //Device Detection -----------------------------------------------
     
-    //go mobile
+    //mobile conditionals
     if (isMobile.any() != null || br.mobileRequest == "true"){
-        br.mobileStatus = "true";        
-        $(".bigArrowHandle").remove();
-        // br.switchMode(1); //launches in 1up mode
-    }   
+        br.mobileStatus = "true";                        
+    }
 
-    //resolution check
-    // alert("Width: "+$(window).width()+" / Height: "+$(window).height());    
+    //iphone
+    if (isMobile.any() == "iPhone"){
+        br.switchMode(1); //launches in 1up mode if iphone
+        $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'css/iPhone.css') );
+    }
+
+    //iphone
+    if (isMobile.any() == "iPad"){                
+        // $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'your stylesheet url') );
+    }
+    
+
+    //Modernizr
+    if (Modernizr.touch == true){
+        //remove functions that do not work with touch
+        $(".icon-screenshot, .icon-resize-full").remove();        
+    }
+
+
+    // // DIAGNOSTIC //////////////////////////////////////////////////////////////
+    // //retina / high resolution check
+    // var retina = window.devicePixelRatio > 1;
+    // if (retina) {
+    // alert('you on a retina!');
+    // }
+    // else {
+    //     alert('you is NOT on a retina.');
+    // }
+
+    // //resolution check
+    // alert("Width: "+$(window).width()+" / Height: "+$(window).height());      
+
+    // //your mobile device
+    // alert(isMobile.any());
+    // // DIAGNOSTIC //////////////////////////////////////////////////////////////
 
     //indicate launched book mode
     if (br.mode == 1){

@@ -330,21 +330,26 @@ function showOCR(adjust) {
                                 function paintOCR_right(html){                
                                     $('#BRtwopageview').append("<div class='OCR_box right pbox_border OCR_shadow'><div class='OCR_box_text OCR_right'></div></div>");
                                     $('.OCR_box.right .OCR_box_text').append(html);
-                                    $('.OCR_box').fadeIn();
+                                    // alert('here I am');
+                                    fontNormalize(); //increases font size two steps
+                                    $('.OCR_box').fadeIn();                                    
                                 }
                             });                                        
                         }
-                        $('.OCR_box').fadeIn();
+
+                    //only runs if cover or back
+                    $('.OCR_box').fadeIn();
                     }
 
                     
-            });                        
+            });
+
         } 
 
         //1up mode --> call singlepageOCR()
-        if (mode == "1up"){
+        else if (mode == "1up"){            
             singlepageOCR();            
-        }
+        }        
             
     }
 
@@ -396,10 +401,12 @@ function singlepageOCR() {
             'width':width,
             'top':top,
             'left':left
-            });   
+            });        
         
+        fontNormalize();
         $('.OCR_box_single').fadeIn();
-        }    
+            
+    }        
 }
 
 //Hide OCR
@@ -449,56 +456,6 @@ function toggleOCR() {
     }
 }
 
-// read pages aloud
-function speakPagealoud(source) {
-     
-    //if playing, then stop
-    if ( $(".icon-speaker").hasClass('playing') ){
-        sayItstop();
-    }    
-
-    //if not playing, start
-    else{
-        var $current_layout = getPageInfo();
-
-        //solr query for text
-        var squery = 'http://141.217.172.152:8080/solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
-
-        //1up solr query and speak
-        if ($current_layout.mode == "1up") {        
-            $.ajax({          
-              url: squery,
-              dataType: 'jsonp',
-              jsonpCallback: 'callback',
-              success: function(result) {
-                var Singletext = result.response.docs[0].OCR_text;
-                var Speaktext = "Single Page - "+Singletext;
-                sayIt("page_text","null","null",Speaktext);        
-              }
-            });
-        }
-
-        //2up solr query and speak
-        if ($current_layout.mode == "2up") {        
-            $.ajax({          
-              url: squery,
-              dataType: 'jsonp',
-              jsonpCallback: 'callback',
-              success: function(result) {
-                var Ltext = result.response.docs[0].OCR_text;
-                var Rtext = result.response.docs[1].OCR_text;
-                var Speaktext = "Left page - "+Ltext+"- Right page - "+Rtext;
-                sayIt("page_text",Ltext,Rtext,Speaktext);        
-              }
-            });
-        }
-    }
-
-    //toggles color of icon and status
-    $(".icon-speaker").toggleClass("active_icon playing");  
-    
-}
-
 // increase / decrease font size ("delta" as "increase" or "decrease")
 // works for both OCR overlays and plain text display
 function fontResize(delta){ 
@@ -540,6 +497,137 @@ function fontResize(delta){
             }                
         });
     }
+}
+
+function fontNormalize(){
+    // alert('about to run!');
+    fontResize('increase');
+    fontResize('increase');
+}
+
+// read pages aloud
+function speakPagealoud(source) {
+     
+    //if playing, then stop
+    if ( $(".icon-speaker").hasClass('playing') ){
+        sayItstop();
+    }    
+
+    //if not playing, start
+    else{
+
+            //say loading
+            var playerDivId = "jplayer_box";
+            var say = function() {
+            var playerDiv = $("<div style='width: 0px; height: 0px;' id='" + playerDivId + "'></div>");
+            var bodyObject = $("body");
+            if (bodyObject.size()) {
+            bodyObject.append(playerDiv);
+            playerDiv.jPlayer({
+            ready: function () {          
+              $(this).jPlayer("setMedia", {"mp3": "inc/audio_loading.mp3"}).jPlayer("play");      
+            }
+            ,
+            ended: function (){              
+                $("#jplayer_box").remove();
+                speakText();              
+            }
+
+            });    
+
+            } else {
+                alert("No <body> node to attach to.");
+            }
+        };
+
+        say();
+
+        function speakText(){
+
+            var $current_layout = getPageInfo();
+
+            //solr query for text
+            var squery = 'http://141.217.172.152:8080/solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
+
+            //1up solr query and speak
+            if ($current_layout.mode == "1up") {        
+                $.ajax({          
+                  url: squery,
+                  dataType: 'jsonp',
+                  jsonpCallback: 'callback',
+                  success: function(result) {
+                    var Singletext = result.response.docs[0].OCR_text;
+                    var Speaktext = "Single Page - "+Singletext;
+                    sayIt("page_text","null","null",Speaktext);        
+                  }
+                });
+            }
+
+            //2up solr query and speak
+            if ($current_layout.mode == "2up") {        
+                $.ajax({          
+                  url: squery,
+                  dataType: 'jsonp',
+                  jsonpCallback: 'callback',
+                  success: function(result) {
+                    var Ltext = result.response.docs[0].OCR_text;
+                    var Rtext = result.response.docs[1].OCR_text;
+                    var Speaktext = "Left page - "+Ltext+"- Right page - "+Rtext;
+                    sayIt("page_text",Ltext,Rtext,Speaktext);        
+                  }
+                });
+            }
+        }
+    }
+
+    //toggles color of icon and status
+    $(".icon-speaker").toggleClass("active_icon playing");  
+    
+}
+
+//speak words
+function sayIt(type,Ltext,Rtext,Speaktext) {
+  var playerDivId = "jplayer_box";
+
+  var getTextToSpeechURL = function(text) {
+    return "http://tts-api.com/tts.mp3?q=" + encodeURIComponent(text);
+  };
+
+  var say = function(Ltext, Rtext, Speaktext) {
+    var playerDiv = $("<div style='width: 0px; height: 0px;' id='" + playerDivId + "'></div>");
+    var bodyObject = $("body");
+    if (bodyObject.size()) {
+      bodyObject.append(playerDiv);
+      playerDiv.jPlayer({
+        ready: function () {          
+          $(this).jPlayer("setMedia", {"mp3": getTextToSpeechURL(Speaktext)}).jPlayer("play");      
+        }
+        ,
+        ended: function (){
+          if (type=="page_text") {
+            $('#audio_load_alert').fadeOut();
+            br.right("speak_src"); //sends "speak_src" parameter to flipper, contidional runs "speakPagealoud"
+            speakPagealoud('autoflip');
+            $("#jplayer_box").remove(); 
+
+          }
+        }
+
+      });    
+
+    } else {
+      alert("No <body> node to attach to.");
+    }
+  };
+
+  say(Ltext,Rtext,Speaktext);
+}
+
+// function to stop speakaloud / autoflip
+function sayItstop () {
+  $("#jplayer_box").jPlayer("stop").remove();
+  $('#audio_load_alert').fadeOut();
+
 }
 
 // flip navigation arrows for 1up / 2up (remove in thumbs?)
@@ -865,8 +953,12 @@ function toolbarsMinimize(){
         }
 
         //extend plain text / HTML
-        if (br.plainTextStatus == true){
-            $("#html_concat").css('height','100%');            
+        if (br.plainTextStatus == true){            
+            $("#html_concat").css({
+                'height':'100%',
+                'margin-top':'0px'
+            });
+
         }
     }
 
@@ -883,6 +975,13 @@ function toolbarsMinimize(){
             if (br.plainTextStatus == true){
                 resizePlainText();
             }
+            //retract plain text / HTML
+            if (br.plainTextStatus == true){            
+                $("#html_concat").css({
+                    'height': ($(window).height() - $("#WSUtoolbar").height()),
+                    'margin-top': $("#WSUtoolbar").height()
+                });
+            }
         });
 
         $('#WSUtoolbar_minimize').animate({top:br.minimizerD},750, function(){
@@ -892,12 +991,16 @@ function toolbarsMinimize(){
         $('#WSUtoolbar_minimize').addClass('toolbar_exposed').removeClass('toolbar_hidden');
         $("#minimize_handle").removeClass('icon-chevron-down').addClass('icon-chevron-up');
 
+        //CONSIDER REMOVING////////////////////////////////////////////////////////////////////////////////////
         // if (when) nav arrows are on screen
         if (br.bigArrowStatus == true){
             if (br.mobileStatus != "true" && $current_layout.mode == "1up" || $current_layout.mode == "thumb"){
                 bigArrows('resize');               
             }            
-        }        
+        }
+        //CONSIDER REMOVING////////////////////////////////////////////////////////////////////////////////////
+
+                
     }
 }
 
@@ -905,13 +1008,16 @@ function plainText(){
 
     var $current_layout = getPageInfo();    
 
+    //turn on
     if (br.plainTextStatus == false){
 
         $("#mode_icons>li>i").removeClass("active_icon");
         $("#plain_text_icon").toggleClass("active_icon");
 
-        //opens OCR tools if opened
-        toggleOCR();
+        //hide OCR overlay button, reveal text-sizing
+        $(".toggleOCR").toggle();
+        $(".OCR_tools").toggle();
+        
 
         showLoading();        
 
@@ -936,9 +1042,11 @@ function plainText(){
         br.plainTextStatus = true;                
 
         //insert HTML and resize        
-        $('#BookReader').append("<div id='html_concat' class='absoluteCenter'></div>");        
+        $('#BookReader').append("<div id='html_concat' ></div>");        
         $('#html_concat').hide();            
-        $('#html_concat').height($(window).height() - 112);       
+        $('#html_concat').height($(window).height() - $("#WSUtoolbar").height());
+        $('#html_concat').css('margin-top',$("#WSUtoolbar").height());
+
 
         //resizes plain text if FTS is true
         if (br.fts_displayed == true){            
@@ -981,6 +1089,9 @@ function plainText(){
                 if(br.fts_displayed == true){
                     renderPlainTextHighlights();
                 }
+
+                //increase font size two steps
+                fontNormalize();
             }   
           });
         });        
@@ -998,7 +1109,11 @@ function plainText(){
     }
 
     //remove plainText
-    else {        
+    else { 
+
+        //hide OCR overlay button, reveal text-sizing
+        $(".toggleOCR").toggle();
+        $(".OCR_tools").toggle();       
 
         $("#plain_text_icon").toggleClass("active_icon");
         //indicate launched book mode
@@ -1428,22 +1543,19 @@ function itemInfo(){
     $.colorbox({html:itemMeta});
 }
 
-function showMoreTools(){
+function toggleMoreTools(){
+    
     $(".collapseRow").toggle();
+    $.toggle(function() {
+        $(this).css('height','50px');
+    }, function() {
+        $(this).height(200);
+    });
+
+    // $('#WSUtoolbar').height(50);
+    // $("#BRcontainer").css({ top:$("#WSUtoolbar").height() }); //this needs to change based on screen size we're in...
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////
 //Utilities
@@ -1555,35 +1667,36 @@ $(window).bind('resizeEnd', function() {
         resizePlainText();
     }
 
-    //fix hanging minimize arrow - remove element css
-    // $("#WSUtoolbar_minimize").removeAttr('style');
-      
+    //undo properties from small phone styling
+    if ($(window).width() > 768){
+        $("#WSUtoolbar").removeAttr('style');
+        $(".collapseRow").removeAttr('style');
+        // check toggle status
+        if ($(".collapseRow").is(":hidden")) {
+            $(".collapseRow").toggle();            
+        }
+    }    
 
 });
 
 //listens for rootpage change - very helpful function...
-$(window).bind('hashchange', function() {    
-    
+$(window).bind('hashchange', function() {
     //draws highlights for new page    
     if (br.imageHighlights == true){        
         renderImageHighlights();
     }
-
-    //REDO THIS, MESSY AFTER REORG/////////////////////////////
-    //redraws OCR
-    if (br.OCRstatus != false){
+    
+    //redraws OCR for 1up
+    if (br.OCRstatus != false && br.mode == 1){        
         singlepageOCR();        
     }
 
-    // Reinstates OCR after page flip                
-    if (br.OCRstatus == true) {                
+    //redraws OCR for 2up
+    if (br.OCRstatus == true && br.mode == 2) {        
         $('.OCR_box').remove();
         showOCR();
-    }
-    ///////////////////////////////////////////////////////////
+    }    
 });
-
-
 
 
 

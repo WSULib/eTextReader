@@ -2,6 +2,40 @@
 /*MEDIA QUERY TESTING*/
 /***************************/
 
+/*fixes for resizing medium and small*/
+@media screen and (max-width: 1160px) {    
+    #WSUtoolbar .icon {
+        margin-right:-8px;
+    }
+    #WSUtoolbar .tools{
+        height:35px;
+    }
+    #lib_logo{        
+        margin-left:5px;
+        margin-top:7px;
+        height:35px;
+    }
+    #fts_search {
+        margin-top:11px;
+        margin-left:20px;
+    }
+    #jump_form_div{
+        margin-top:6px;        
+        font-size:15px;
+    }
+    #BRpagenum{
+        font-size:15px;
+    }
+    #fts_input{
+        height:32px;
+        font-size:17px;
+    }
+    #fts_form button{
+        height:35px;
+        padding-top:6px;
+    }
+}
+
 /*Medium Size, catches iPad*/
 @media screen and (min-width: 768px) and (max-width: 1160px) {
     /*increase icon size*/
@@ -15,7 +49,7 @@
     }
 
     #first_row{
-        float:left;
+        float:center;
         margin:auto;
         clear:both;
         font-size:1.5em;
@@ -36,23 +70,20 @@
 
     #second_row div.right {
         float:left;
-    }
-
-    /*#cogIcon{
-        display:block;
-    }*/
+    }  
 }
 
-/*Small Size, catches phones*/
+/*Smallest Size, catches phones*/
 @media screen and (max-width: 767px) {
     /*increase icon size*/
     #WSUtoolbar {
         background-color:rgba(0,0,0,0);
-        height:200px;
+        height:50px;
     }
     
     #WSUtoolbar_minimize {
-        top:200px;        
+        /*top:200px;        */
+        display:none;
     }
 
     #first_row{
@@ -102,34 +133,22 @@
     }
 
     #cogIcon{
-        display:block;
+        display:inline;
+    }
+
+    .collapseRow{
+        display:none;
     }
 }
 
-/*fixes for resizing medium and small*/
-@media screen and (max-width: 1160px) {    
-    #WSUtoolbar .icon {
-        margin-right:-8px;
-    }
-    #WSUtoolbar .tools{
-        height:35px;
-    }
-    #lib_logo{        
-        margin-left:5px;
-        margin-top:11px;
-    }
-    #fts_search {
-        margin-top:11px;
-        margin-left:20px;
-    }
-    #jump_form_div{
-        margin-top:6px;        
-        font-size:15px;
-    }
-    #BRpagenum{
-        font-size:15px;
-    }
-}
+
+
+
+
+
+
+
+
 
 
 

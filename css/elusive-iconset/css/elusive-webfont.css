@@ -22,6 +22,8 @@ font-style: normal;©
   font-style: normal;
 }*/
 
+
+
 [data-icon]:before {
   font-family: 'Elusive-Icons';
   content: attr(data-icon);
@@ -96,7 +98,7 @@ ul.icons li .icon-large:before {
 }
 
 /* My modifications ------------------------------------------------------ */
-ul.the-icons li:hover i{
+.no-touch ul.the-icons li:hover i{
   color: #08b;
   transform: scale(1.4,1.4);
   -ms-transform: scale(1.4,1.4);

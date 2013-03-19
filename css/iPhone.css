@@ -1,0 +1,116 @@
+/*picks up retina displays, targeted for iphone*/
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 980px){
+    /*increase icon size*/
+    #WSUtoolbar {
+        background-color:rgba(0,0,0,0);
+        height:100px;
+    }
+    
+    #WSUtoolbar_minimize {
+        /*top:200px;        */
+        display:none;
+    }
+
+    #first_row{
+        /*float:left;*/
+        margin:auto;
+        clear:both;
+        font-size:3em;
+        width:100%;
+        background-color:rgba(255,250,221,.9);
+        height:125px;
+    }
+
+    #first_row_pivot{
+        float:left;
+        margin:auto;
+        margin-top:6px;
+        clear:both;        
+        width:100%;
+        background-color:rgba(255,250,221,.9);
+        height:125px;
+        /*display:none;*/
+    }
+
+    #second_row{
+        float:left;
+        margin:auto;
+        clear:both;
+        width:100%;
+        background-color:rgba(255,250,221,.9);
+        font-size:3em;
+        height:125px;
+        /*display:none;*/
+    }
+
+    #second_row_pivot{
+        float:left;
+        margin:auto;
+        margin-top:6px;
+        clear:both;
+        width:100%;
+        background-color:rgba(255,250,221,.9);        
+        height:125px;
+        /*display:none;*/
+    }
+    #second_row div.right {
+        float:left;
+    }
+
+    #cogIcon{
+        display:inline;
+    }
+
+    .collapseRow{
+        display:none;
+    }
+
+
+    #WSUtoolbar .icon {
+        margin-right:0px;
+        padding-left:10px;
+        padding-right:10px;
+        padding-top:10px;
+    }
+    #WSUtoolbar .tools{
+        height:80px;
+        margin-top:20px;
+    }
+    #lib_logo{        
+        margin-left:5px;
+        margin-top:15px;
+        height:60px;
+    }
+    #fts_search {
+        margin-top:44px;
+        margin-left:20px;
+    }
+    #fts_search input{        
+        font-size:40px;
+        height:50px;
+    }
+    #fts_form button{
+        height:50px;
+        font-size:40px;
+        /*margin-top:12px;*/
+    }
+    #jump_form_div{
+        margin-top:6px;        
+        font-size:30px;
+        /*padding-left:10px;
+        padding-right:10px;*/
+    }
+    #jump_form_div input{
+        margin-top:6px;        
+        font-size:30px;
+        height:40px;
+    }
+    #BRpagenum{
+        font-size:15px;
+    }
+    #fts_input{
+        height:32px;
+        font-size:17px;
+    }
+    
+}

@@ -20,7 +20,7 @@
 
     <!-- Load BR init and local functionality -->    
     <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
-    <script type="text/javascript" src="js/WSUlaunch.js"></script>    
+    <script type="text/javascript" src="js/WSU_launch.js"></script>    
     <script type="text/javascript" src="js/WSU_js.js"></script>
     <script type="text/javascript" src="js/fullscreen_API.js"></script>
 
@@ -29,7 +29,7 @@
 
     <!--jplayer -->
     <script type="text/javascript" src="inc/jPlayer/jquery.jplayer.min.js"></script>
-    <script type="text/javascript" src="js/jplayer.say.js"></script>   
+    
 
     <!--jquery highlight-->
     <script type="text/javascript" src="js/jquery.highlight.js"></script> 
@@ -44,8 +44,10 @@
     <!--NON-MOBILE ONLY-->
     <!--magnifier / tjpzoom -->    
     <script type="text/javascript" src="js/jquery.loupe.js"></script>
-    <!--jQuery Rotate -->
-    <script type="text/javascript" src="js/jQueryRotate.2.2.js"></script>
+    
+    <!-- Modernizr -->
+    <script type="text/javascript" src="js/modernizr.js"></script>
+
 </head>
 
 <body>
@@ -59,43 +61,42 @@
 
                 <div id="first_row">                    
                     <div class="logo tools left">
-                        <a href="/wsuls/eTextReader/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" height=32/></a>
+                        <a href="/wsuls/eTextReader/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>
                     </div>
-                        <div class="icon tools left">
-                            <ul class="the-icons">                        
-                                <li><i class="icon-step-backward" onclick='br.leftmost(); return false;'></i></li>
-                                <li><i class="icon-arrow-left" onclick='br.left(); return false;'></i></li>
-                                <li><i class="icon-arrow-right" onclick='br.right(); return false;'></i></li>                                                                        
-                                <li><i class="icon-step-forward" onclick='br.rightmost(); return false;'></i></li>                                            
-                            </ul>            
-                        </div>
 
-                         <div class="icon tools left" id="jump_to_form">
-                            <div id="jump_form_div">
-                                <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
-                                    <span class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
-                                </form>
-                            </div>
+                    <div class="icon tools left">
+                        <ul class="the-icons">                        
+                            <li><i class="icon-step-backward" onclick='br.leftmost(); return false;'></i></li>
+                            <li><i class="icon-arrow-left" onclick='br.left(); return false;'></i></li>
+                            <li><i class="icon-arrow-right" onclick='br.right(); return false;'></i></li>                                                                        
+                            <li><i class="icon-step-forward" onclick='br.rightmost(); return false;'></i></li>                                            
+                        </ul>            
+                    </div>
+
+                     <div class="icon tools left" id="jump_to_form">
+                        <div id="jump_form_div">
+                            <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
+                                <span class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
+                            </form>
                         </div>
-                        <div class="icon tools left" id="cogIcon">
-                            <ul class="the-icons">                        
-                                <li><i class="icon-cog" onclick='showMoreTools(); return false;'></i></li>
-                            </ul>
-                        </div>                
-                                                           
+                    </div>
+
+                    <div class="icon tools left" id="cogIcon">
+                        <ul class="the-icons">                        
+                            <li><i class="icon-cog" onclick='toggleMoreTools(); return false;'></i></li>
+                        </ul>
+                    </div>                                                          
                     
-                    <div id="first_row_pivot" class="collapseRow">
-                        
+                    <div id="first_row_pivot" class="collapseRow">                        
                         <div class="fts_form left first" id="fts_search">
                             <label>Full-text search:</label>                
                             <form id="fts_form" action='javascript:' onsubmit='getFTSResultsStatic(0)'>
                                 <input id='fts_input' class="fts_input_box input" type='text' size='20' />                    
-                                <button type="button" class="btn btn-append" onclick="getFTSResultsStatic(0); return false;">search</button> 
+                                <button id="fts_form_button" type="button" class="btn btn-append" onclick="getFTSResultsStatic(0); return false;">search</button> 
                             </form>                
                         </div>
                     </div>                    
-                    
-                </div>
+                </div> <!--closes first row-->
 
                 <div id="second_row" class="collapseRow">
                     <div class="icon tools left">
@@ -128,8 +129,7 @@
                             </ul>                                                     
                         </div>
                     </div>
-
-                </div>                                        
+                </div> <!--closes second row-->                                    
 
             </div> <!--closes tool row div -->             
 
