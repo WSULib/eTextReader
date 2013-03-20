@@ -1024,19 +1024,12 @@ function plainText(){
         //2up
         if ($current_layout.mode == '2up'){            
             // 2up
-            $("#BRtwopageview").hide();
-            $(".bigArrowHandle").hide();            
+            $("#BRtwopageview").hide();            
         }
         //1up
-        if ($current_layout.mode == '1up'){            
-            $("#BRpageview").hide();
-            $(".bigArrowHandle").hide();
-        }
-        //thumb
-        if ($current_layout.mode == 'thumb'){
-            alert("Not Available in Thumbnail mode.");
-            return;
-        }
+        if ($current_layout.mode == '1up' || 'thumb'){            
+            $("#BRpageview").hide();            
+        }       
 
         //after conditionals, if still proceeding, show loading message and set status to true
         br.plainTextStatus = true;                
@@ -1149,7 +1142,7 @@ function plainText(){
             $(".bigArrowHandle").fadeIn();
         }
         if ($current_layout.mode == 'thumb'){
-            console.log("Not sure how you created these conditions, but you shouldn't be able to close something that never existed...");
+            $("#BRpageview").fadeIn();            
         }
 
         removePlainTextHighlights();
@@ -1534,8 +1527,9 @@ function itemInfo(){
     //PUT THIS IN A TABLE
     itemMeta = document.createElement('div');    
     $(itemMeta).append("<h2>Title: "+br.bookMetaObj.titleInfo.title+"</h2>");
-    $(itemMeta).append("<p>Author: "+br.bookMetaObj.name.namePart[0]+"</p>");
-    $(itemMeta).append("<p>Physical Description: "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form+"</p>");
+    $(itemMeta).append("Author: "+br.bookMetaObj.name.namePart[0]+"</br>");
+    $(itemMeta).append("Publication Info: "+br.bookMetaObj.originInfo.place[1].placeTerm+", "+br.bookMetaObj.originInfo.publisher+", "+br.bookMetaObj.originInfo.dateIssued+"</br>");
+    $(itemMeta).append("Physical Description: "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form);
     // var coverURL = br.baseURL+'fedora/objects/'+br.PIDsafeID+':thumbs/datastreams/THUMB_1/content';
     // $(itemMeta).append("<img src='"+coverURL+"'/>");
 

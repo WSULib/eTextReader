@@ -18,7 +18,7 @@ body {
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
+    user-select: none;    
 }
 
 a { cursor: hand; cursor: pointer; }
@@ -545,8 +545,7 @@ input[type='password'], textarea
 /* Plain/Full text
 /****************************/
 /*Plain Text / HTML concat*/
-#html_concat{
-    width:80%;
+#html_concat{    
     height:85%;
     z-index:9;    
     overflow-y:scroll;
@@ -557,7 +556,9 @@ input[type='password'], textarea
 }
 
 .html_page{
-    border-top: 1px dotted
+    border-top: 1px dotted;
+    padding-left:40px;
+
 }
 
 .leaf_num{
@@ -653,7 +654,12 @@ textarea {
 }
 /* END KUBE CSS --------------------------------------------- */
 
-
+/***************************/
+/* INFO LIGHTBOX
+/****************************/
+#colorbox{
+    font-size:130%;
+}
 
 
 
