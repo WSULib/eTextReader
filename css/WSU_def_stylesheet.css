@@ -520,6 +520,21 @@ input[type='password'], textarea
     background-size:40px 40px;
 }
 
+/*item info lightbox*/
+#itemMeta{
+    min-width:200px;
+    height:400px;
+}
+
+#itemMeta_top{
+    width:100%;
+    text-align:center;    
+}
+
+#itemMeta_bottom{
+    width:100%;    
+}
+
 /***************************/
 /* Positioning
 /****************************/

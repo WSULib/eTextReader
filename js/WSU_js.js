@@ -1,3 +1,4 @@
+
 //////////////////////////////////////////////////////////////////////////////////////
 //Other Functions
 
@@ -8,7 +9,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
-    var solr_search_term = search_term.replace(/['’‘]/g,"*");
+    var solr_search_term = search_term.replace(/['â€™â€˜]/g,"*");
 
     //blank search conditional
     if (search_term == ""){
@@ -146,7 +147,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
                 $('.fts_nav').append('<a class="fts_page_nav fts_previous" onclick="getFTSResultsStatic('+prev+'); return false;">Previous 10 pages</a>');
             }
 
-            //prepend fts_page_nav class to top
+            //prependÂ fts_page_nav class to top
             $('#fts_top_nav').insertAfter('#fts_terms','</br>');            
             // $('.fts_nav').append('</br></br>');            
             
@@ -422,13 +423,14 @@ function toggleOCR() {
     //plain text conditional
     if (br.plainTextStatus == true){
         if (br.plainOCRstatus == true){
+            $("#second_row").css('padding-left','72px');
             $('.OCR_tools').fadeOut();
             $('.toggleOCR').css("border", "none");
             br.plainOCRstatus = false;            
         }
         else{
-            $('.OCR_tools').fadeIn();
-            // $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");
+            $("#second_row").css('padding-left','0px');            
+            $('.OCR_tools').fadeIn();            
             $('.toggleOCR').addClass("active_icon");            
             br.plainOCRstatus = true;
         }
@@ -440,14 +442,15 @@ function toggleOCR() {
         if (br.OCRstatus == false){
             showOCR();
             // show OCR controls
-            $('.OCR_tools').fadeIn();
-            // $('.toggleOCR').addClass("rounded_edge_highlight").css("border","1px solid rgba(247,227,0,.8)");        
+            $("#second_row").css('padding-left','0px');
+            $('.OCR_tools').fadeIn();            
             $('.toggleOCR').addClass("active_icon");
             return;
         }    
         if (br.OCRstatus == true){
             hideOCR();
             // hide OCR tools
+            $("#second_row").css('padding-left','72px');
             $('.OCR_tools').fadeOut();
             // $('.toggleOCR').css("border", "none");
             $('.toggleOCR').removeClass("active_icon");
@@ -1521,20 +1524,53 @@ function hideLoading(){
 }
 
 //item info and export tools
-function itemInfo(){    
-    
-    //write metadata to HTML block
-    //PUT THIS IN A TABLE
-    itemMeta = document.createElement('div');    
-    $(itemMeta).append("<h2>Title: "+br.bookMetaObj.titleInfo.title+"</h2>");
-    $(itemMeta).append("Author: "+br.bookMetaObj.name.namePart[0]+"</br>");
-    $(itemMeta).append("Publication Info: "+br.bookMetaObj.originInfo.place[1].placeTerm+", "+br.bookMetaObj.originInfo.publisher+", "+br.bookMetaObj.originInfo.dateIssued+"</br>");
-    $(itemMeta).append("Physical Description: "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form);
-    // var coverURL = br.baseURL+'fedora/objects/'+br.PIDsafeID+':thumbs/datastreams/THUMB_1/content';
-    // $(itemMeta).append("<img src='"+coverURL+"'/>");
+function itemInfo(){
 
-    //create box with item HTML block
+    //conditional for no information
+    if (br.bookMetaObj == false){
+        var itemMeta = document.createElement('div');
+        itemMeta.setAttribute('id','itemMeta');
+        $(itemMeta).append("<h4>Metadata for this book is unavailable.</h4>");
+        itemMeta.setAttribute('style','max-height:50px;');
+        $("#itemMeta").css('min-height','');
+
+    }
+    
+    else{
+        //write metadata to HTML block  
+        var itemMeta = document.createElement('div');
+        itemMeta.setAttribute('id','itemMeta');
+
+        //cover image
+        var coverURL = br.baseURL+'fedora/objects/'+br.PIDsafeID+':thumbs/datastreams/THUMB_1/content';
+        $(itemMeta).append("<div id='itemMeta_top'><img src='"+coverURL+"'/></div>");    
+
+        //metadata
+        $(itemMeta).append("<h2><strong>Title:</strong> "+br.bookMetaObj.titleInfo.title+"</h2>");
+        $(itemMeta).append("<span class='info_span'><strong>Author:</strong> "+br.bookMetaObj.name.namePart[0]+"</br>");
+        $(itemMeta).append("<strong>Publication Info:</strong> "+br.bookMetaObj.originInfo.place[1].placeTerm+", "+br.bookMetaObj.originInfo.publisher+", "+br.bookMetaObj.originInfo.dateIssued+"</br>");
+        $(itemMeta).append("<strong>Physical Description:</strong> "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form)+"</span>";
+
+        //citation link
+        var OCLCnum = br.bookMetaObj.recordInfo.recordIdentifier.split('ocn')[1];
+        var OCLCbase = "http://wild.worldcat.org/oclc/[OCLCNUM]?page=citation";
+        var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
+        $(itemMeta).append("<p>Cite This: <a href='"+OCLCurl+"' target='_blank'>"+"[link text]"+"</a></p>");   
+
+        //persistent link
+        for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
+            if (br.bookMetaObj.identifier[i].startsWith('b')){
+                var BIBnum = br.bookMetaObj.identifier[i];
+            }
+        }
+        var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
+        var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
+        $(itemMeta).append("<p>Persistent Link: <a href='"+BIBurl+"' target='_blank'>"+"[link text]"+"</a></p>");        
+    }
+
+    //create box with item HTML block        
     $.colorbox({html:itemMeta});
+
 }
 
 function toggleMoreTools(){
@@ -1618,6 +1654,14 @@ function getURLParam(name) {
     return decodeURI(
         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
     );        
+}
+
+//startsWith function for strings
+if (typeof String.prototype.startsWith != 'function') {
+  // see below for better implementation!
+  String.prototype.startsWith = function (str){
+    return this.indexOf(str) == 0;
+  };
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

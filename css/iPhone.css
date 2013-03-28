@@ -112,5 +112,14 @@
         height:32px;
         font-size:17px;
     }
+
+    /*fts*/
+    #fts_icons_list li i{
+        font-size:2em;
+    }
+
+    #fts_box_text_static{
+        width:90%;
+    }
     
 }

@@ -58,7 +58,7 @@
         height:50px;
     }
 
-    #second_row{
+    #second_row{        
         float:left;
         margin:auto;
         clear:both;
@@ -66,6 +66,11 @@
         background-color:rgba(255,250,221,.9);
         font-size:1.5em;
         height:50px;
+    }
+
+    /*doesn't work, overwritten by default CSS */
+    #second_row_leftmost{
+        margin-left:82px;
     }
 
     #second_row div.right {
