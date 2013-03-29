@@ -144,6 +144,10 @@
     .collapseRow{
         display:none;
     }
+
+    #fts_box_text_static{
+        width:100%;
+    }
 }
 
 

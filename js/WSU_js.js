@@ -188,8 +188,9 @@ function displayFTSResultsStatic(row_start, search_term){
 
     //draw and position search results
     var fts_handle_static = $('#fts_box_text_static');                                        
-    fts_handle_static.position({my: "left top", at: "left bottom", offset: "0 0", of: '#WSUtoolbar'});      
-    $('#fts_box_text_static').height($('#BRcontainer').height() - 15);      
+    fts_handle_static.position({my: "left top", at: "left bottom", offset: "0 0", of: '#WSUtoolbar'});    
+    // $('#fts_box_text_static').height($('#BRcontainer').height() - 15);
+    $('#fts_box_text_static').height($(window).height() - $("#WSUtoolbar").height());      
 
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
@@ -1040,7 +1041,7 @@ function plainText(){
         //insert HTML and resize        
         $('#BookReader').append("<div id='html_concat' ></div>");        
         $('#html_concat').hide();            
-        // $('#html_concat').height(($(window).height() - $("#WSUtoolbar").height()) );        
+        $('#html_concat').height(($(window).height() - $("#WSUtoolbar").height()) );        
         $('#html_concat').css('margin-top',$("#WSUtoolbar").height());
 
 
@@ -1576,15 +1577,19 @@ function itemInfo(){
 
 function toggleMoreTools(){
     
-    $(".collapseRow").toggle();
-    $.toggle(function() {
-        $(this).css('height','50px');
-    }, function() {
-        $(this).height(200);
-    });
+    //toggle rows
+    $(".collapseRow").toggle();    
 
-    // $('#WSUtoolbar').height(50);
-    // $("#BRcontainer").css({ top:$("#WSUtoolbar").height() }); //this needs to change based on screen size we're in...
+    //toggle height
+    if (!($('#cogIcon').hasClass('extended'))) {
+        $('#WSUtoolbar').height(200);
+    }
+    if ($('#cogIcon').hasClass('extended')) {
+        $('#WSUtoolbar').height(50);
+    }
+
+    //toggle class
+    $('#cogIcon').toggleClass('extended');    
 
 }
 
@@ -1714,6 +1719,7 @@ $(window).bind('resizeEnd', function() {
         if ($(".collapseRow").is(":hidden")) {
             $(".collapseRow").toggle();            
         }
+        $("#cogIcon").removeClass('extended');
     }    
 
 });
@@ -1735,6 +1741,16 @@ $(window).bind('hashchange', function() {
         $('.OCR_box').remove();
         showOCR();
     }    
+});
+
+//binds Escape to overlay destructions
+$(document).keyup(function(e){
+    if(e.keyCode === 27 && br.loupe_status == true){
+        magLoupe();
+    }
+    if(e.keyCode === 27 && br.OCRstatus == true){
+        toggleOCR();
+    }
 });
 
 
