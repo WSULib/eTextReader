@@ -167,15 +167,13 @@ function postLaunch() {
     //ipad
     if (isMobile.any() == "iPad"){                
         // $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'your stylesheet url') );
-    }
-    
+    }    
 
     //Modernizr
     if (Modernizr.touch == true){
         //remove functions that do not work with touch
         $(".icon-screenshot, .icon-resize-full").remove();        
     }
-
 
     // // DIAGNOSTIC //////////////////////////////////////////////////////////////
     // //retina / high resolution check

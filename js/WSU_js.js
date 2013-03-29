@@ -9,7 +9,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     // var search_term = form.fts.value;
     var search_term = $('#fts_input').val();
-    var solr_search_term = search_term.replace(/['â€™â€˜]/g,"*");
+    var solr_search_term = search_term.replace(/['’‘]/g,"*");
 
     //blank search conditional
     if (search_term == ""){
@@ -1561,6 +1561,7 @@ function itemInfo(){
         for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
             if (br.bookMetaObj.identifier[i].startsWith('b')){
                 var BIBnum = br.bookMetaObj.identifier[i];
+                BIBnum = BIBnum.substring(0, BIBnum.length - 1);
             }
         }
         var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"

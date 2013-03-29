@@ -52,10 +52,10 @@
         float:center;
         margin:auto;
         clear:both;
-        /*font-size:1.5em;*/
+        font-size:1.5em;
         width:100%;
         background-color:rgba(255,250,221,.9);
-        /*height:50px;*/
+        height:50px;
     }
 
     #second_row{        
@@ -64,8 +64,8 @@
         clear:both;
         width:100%;
         background-color:rgba(255,250,221,.9);
-        /*font-size:1.5em;*/
-        /*height:50px;*/
+        font-size:1.5em;
+        height:50px;
     }
 
     /*doesn't work, overwritten by default CSS */
