@@ -114,11 +114,11 @@ function postLaunch() {
     // $("#WSUtoolbar_minimize").show();
 
     //OCR prep    
-    $(".OCR_tools").hide();
+    // $(".OCR_tools").hide();
 
-    //create large navigation arrows - 2 second bold to show user they are there
-    bigArrows();
-    bigArrowsPulse();
+    // //create large navigation arrows - 2 second bold to show user they are there
+    // bigArrows();
+    // bigArrowsPulse();
 
     //populate leaf location
     $('#leaf_count').html(br.numLeafs);    
@@ -164,7 +164,7 @@ function postLaunch() {
         $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'css/iPhone.css') );
     }
 
-    //iphone
+    //ipad
     if (isMobile.any() == "iPad"){                
         // $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'your stylesheet url') );
     }
@@ -179,7 +179,7 @@ function postLaunch() {
 
     // // DIAGNOSTIC //////////////////////////////////////////////////////////////
     // //retina / high resolution check
-    // var retina = window.devicePixelRatio > 1;
+    // var retina = window.devicePixelRatio > 2;
     // if (retina) {
     // alert('you on a retina!');
     // }

@@ -16,7 +16,7 @@
     <!--[if lte IE 7]><script src="css/elusive-iconset/lte-ie7.js"></script><![endif]-->    
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/orig_stylesheet.css"/>
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_def_stylesheet.css"/>
-    <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_layout.css"/>
+    <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_layout_v2.css"/>
 
     <!-- Load BR init and local functionality -->    
     <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
@@ -120,8 +120,8 @@
                         <div class="icon tools right second">
                             <ul class="the-icons">
                                 <li><i class="toggleOCR" onclick='toggleOCR(); return false;' style="font-size:1.6em;">text overlay</i></li>                
-                                <li><i style="font-size:2.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("increase"); return false;'></i></li>                    
-                                <li><i style="font-size:1.5em;" class="OCR_tools icon-fontsize" onclick='fontResize("decrease"); return false;'></i></li>
+                                <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;'></i></li>
+                                <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;'></i></li>
                                 <li><i class="icon-speaker" onclick='speakPagealoud();' title="Click to Speak Aloud"></i></li>                         
                                 <li><i class="icon-screenshot" onclick='magLoupe();' title="Click to use magnifying loupe"></i></li>
                                 <li><i class="icon-resize-full" onclick='goFullScreen();' title="Click to use magnifying loupe"></i></li>
