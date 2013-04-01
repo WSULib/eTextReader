@@ -1,3 +1,7 @@
+<?php
+include "../auth_gate/ebook_auth.php";
+?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html>
@@ -150,4 +154,17 @@
 
     </div> <!--closes bookreader_wrapper-->
 </body>
+
+<script type="text/javascript">
+    preLaunch();
+    <?php 
+    if ($auth_status == "allow"){
+        echo "alert('Authorization Status: ".$auth_status.".  This will continue loading the functions for the eTextReader.');";
+    }
+    else{
+        echo "alert('You do not have access, no more functions will load.')";
+    }
+    ?>
+</script>
+
 </html>

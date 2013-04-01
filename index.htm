@@ -13,7 +13,7 @@
 
 		function drawThumbs(){
 			for (var i = 0; i < book_PIDS.length; ++i){			
-				$("#item_thumbs").append("<div class='fifth'><a href='bookreader.htm?ItemID="+book_PIDS[i]+"#page/1/mode/2up'><img class='shadow' src='http://fedora.lib.wayne.edu:8080/fedora/objects/"+book_PIDS[i].split(':')[1]+":thumbs/datastreams/THUMB_1/content'/></a><div class='row container'><div class='thumb_text'>"+book_PIDS[i]+"</div></div></div>")
+				$("#item_thumbs").append("<div class='fifth'><a href='eTextReader.php?ItemID="+book_PIDS[i]+"#page/1/mode/2up'><img class='shadow' src='http://fedora.lib.wayne.edu:8080/fedora/objects/"+book_PIDS[i].split(':')[1]+":thumbs/datastreams/THUMB_1/content'/></a><div class='row container'><div class='thumb_text'>"+book_PIDS[i]+"</div></div></div>")
 			}
 			$("#item_thumbs").fadeIn();			
 		}
