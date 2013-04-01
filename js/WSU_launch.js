@@ -1,3 +1,39 @@
+//set some globals
+//this is setting global "ItemID" still used by Solr
+var ItemID = getURLParam('ItemID');        
+var mobileRequest = getURLParam('m');        
+var PIDsafe = ItemID.replace(/_/g,"");
+
+//pull object structure
+$(document).ready(function() {            
+    var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=STRUCT_META&datatype=xml';                       
+
+    //returns json
+    $(document).ready(function(){
+      $.ajax({
+        type: "GET",
+        url: metaquery,
+        dataType: "json",
+        success: pull_meta
+      });
+    });
+
+    //baseURL and solr_baseURL could be pulled or set in a config file, or DB
+    function pull_meta(response){   
+        console.log(response)
+        var pheight = response.dimensions.pheight;
+        var pwidth = response.dimensions.pwidth;
+        var leafs = response.dimensions.leafs;                
+        var PIDsafeID = response.PIDsafe;
+        var item_ID = response.item_ID;
+        var collectionID = response.collection;
+        var baseURL = "http://fedora.lib.wayne.edu:8080/";
+        var solr_baseURL = "http://localhost:8080/solr4/bookreader/";                
+        //sets things in motion to launchBookReader()
+        launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
+    }
+});
+
 //////////////////////////////////////////////////////////////////////////////////////
 function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL, mobileRequest){    
 
@@ -108,24 +144,14 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 
 //////////////////////////////////////////////////////////////////////////////////////
 //Postlaunch operations
-function postLaunch() {    
-
-    //show minimize arrow, looks nicer post launch
-    // $("#WSUtoolbar_minimize").show();
-
-    //OCR prep    
-    // $(".OCR_tools").hide();
-
-    // //create large navigation arrows - 2 second bold to show user they are there
-    // bigArrows();
-    // bigArrowsPulse();
+function postLaunch() {
 
     //populate leaf location
     $('#leaf_count').html(br.numLeafs);    
 
     //retrieve book metadata and set to br.bookMetaObj, set title of browser page
     $(document).ready(function() {
-            // currently pulling from ramsey collection objects only
+            
             var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=xml';
             // console.log(metaquery);            
 
