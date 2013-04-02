@@ -162,7 +162,7 @@ else{
         </div>
 
         <!--full-text search infrastructure-->
-        <!-- <div id="fts_box_text_static" class="shadow"></div>         -->
+        <div id="fts_box_text_static" class="shadow"></div>        
 
     </div> <!--closes bookreader_wrapper-->
 </body>

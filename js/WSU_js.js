@@ -25,10 +25,10 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     }
 
     // Create hidden Full-Text Search static box 
-    if (br.fts_displayed == false){
-        $fts_static = $('<div id="fts_box_text_static" class="shadow"></div>');
-        $('body').append($fts_static);
-    }
+    // if (br.fts_displayed == false){
+    //     $fts_static = $('<div id="fts_box_text_static" class="shadow"></div>');
+    //     $('body').append($fts_static);
+    // }
 
     //clear previous results            
     $("#fts_box_text_static").html('<p id="fts_terms"></p>');    
@@ -167,9 +167,10 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             $(".fts_set:last-child").html(new_str);                        
             
             //if FTS displayed already, fts_wrapper here...
-            if (br.fts_displayed == true){
-                resizeFTSWrapper();
-            }
+            // if (br.fts_displayed == true){
+            //     resizeFTSWrapper();
+            // }
+            resizeFTSWrapper();
         }
         
       }
@@ -185,10 +186,12 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 function displayFTSResultsStatic(row_start, search_term){
 
     //draw and position search results
-    var fts_handle_static = $('#fts_box_text_static');                                        
-    fts_handle_static.position({my: "left top", at: "left bottom", offset: "0 0", of: '#WSUtoolbar'});    
-    // $('#fts_box_text_static').height($('#BRcontainer').height() - 15);
+    var fts_handle_static = $('#fts_box_text_static');
+
+    //REWORK THE POSITIONING OF THE FTS BOX/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////                                        
+    // fts_handle_static.position({my: "left top", at: "left bottom", offset: "0 0", of: '#WSUtoolbar'});    
     $('#fts_box_text_static').height($(window).height() - $("#WSUtoolbar").height());      
+    //REWORK THE POSITIONING OF THE FTS BOX/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
@@ -198,6 +201,9 @@ function displayFTSResultsStatic(row_start, search_term){
     //display if not already drawn, and resize fts_wrapper when animation complete
     if (br.fts_displayed == false){    
         fts_handle_static.fadeIn(function(){resizeFTSWrapper();});
+    }
+    else{        
+        resizeFTSWrapper();
     }
     
     //highlight string(s) on image    
@@ -221,17 +227,15 @@ function displayFTSResultsStatic(row_start, search_term){
 
 function resizeFTSWrapper(){
         $("#fts_box_text_static").ready(function(){
-            $("#fts_results_wrapper").height(                 
-                //last integer equals total margin height of #fts_bottom_nav
-                $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 75)
-            );
+            var newHeight = $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 85);            
+            $("#fts_results_wrapper").height(newHeight);
         });        
 }
 
 //Hide FTS results Static
 function hideFTSResultsStatic(){
     $('#fts_box_text_static').fadeOut("normal", function() {
-        $(this).remove();
+        $(this).empty();
     });
     if (br.plainTextStatus == true) {
         $('#html_concat').css('margin','auto');
@@ -1581,9 +1585,11 @@ function toggleMoreTools(){
     //toggle height
     if (!($('#cogIcon').hasClass('extended'))) {
         $('#WSUtoolbar').height(200);
+        $("#fts_box_text_static").css('margin-top','200px');
     }
     if ($('#cogIcon').hasClass('extended')) {
         $('#WSUtoolbar').height(50);
+        $("#fts_box_text_static").css('margin-top','50px');
     }
 
     //toggle class
@@ -1698,9 +1704,9 @@ $(window).bind('resizeEnd', function() {
         showOCR(); //rename to redrawOCR (and create that function)                        
     }
 
-    if (br.fts_displayed == true && br.mobileStatus != "true") {
-        var row_start = br.fts_results_row;
-        getFTSResultsStatic(row_start);        
+    if (br.fts_displayed == true && br.mobileStatus != "true") {     
+        $('#fts_box_text_static').height($(window).height() - $("#WSUtoolbar").height()); 
+        resizeFTSWrapper();        
     }    
     
     //this is a little buggy, you can see background images reappear while window dragging
@@ -1712,11 +1718,18 @@ $(window).bind('resizeEnd', function() {
     if ($(window).width() > 768){
         $("#WSUtoolbar").removeAttr('style');
         $(".collapseRow").removeAttr('style');
+        
         // check toggle status
         if ($(".collapseRow").is(":hidden")) {
             $(".collapseRow").toggle();            
         }
         $("#cogIcon").removeClass('extended');
+
+        //FTS
+        if ( br.fts_displayed = true ){
+            $("#fts_box_text_static").removeAttr('style');
+            $("#fts_box_text_static").fadeIn();
+        }
     }    
 
 });

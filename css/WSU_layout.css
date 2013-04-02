@@ -75,6 +75,20 @@
 
     #second_row div.right {
         float:left;
+    }
+    /* FTS STATIC */
+    #fts_box_text_static {
+        display:none;
+        position:absolute;
+        width:290px;
+        background-color:rgba(255,250,221,.9);
+        border: 1px solid rgba(71,86,73,.8);
+        text-align:left;
+        z-index: 10;
+        padding:0px 10px;    
+        overflow:hidden;        
+        margin-top:100px;
+        height:100%;
     }  
 }
 
@@ -145,9 +159,21 @@
         display:none;
     }
 
-    #fts_box_text_static{
-        width:95%;
-    }
+    /* FTS STATIC */
+    #fts_box_text_static {
+        display:none;
+        position:absolute;
+        width:100%;
+        background-color:rgba(255,250,221,.9);
+        border: 1px solid rgba(71,86,73,.8);
+        text-align:left;
+        z-index: 10;
+        padding:0px 10px;    
+        overflow:hidden;                
+        margin-top:50px; /*with menu down*/       
+        height:100%;
+        font-size:1.5em;
+    } 
 }
 
 
