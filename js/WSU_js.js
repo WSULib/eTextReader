@@ -1706,7 +1706,8 @@ $(window).bind('resizeEnd', function() {
 
     if (br.fts_displayed == true && br.mobileStatus != "true") {     
         $('#fts_box_text_static').height($(window).height() - $("#WSUtoolbar").height()); 
-        resizeFTSWrapper();        
+        resizeFTSWrapper();
+        alert('br.fts_displayed must have been true...');        
     }    
     
     //this is a little buggy, you can see background images reappear while window dragging
@@ -1726,7 +1727,7 @@ $(window).bind('resizeEnd', function() {
         $("#cogIcon").removeClass('extended');
 
         //FTS
-        if ( br.fts_displayed = true ){
+        if ( br.fts_displayed == true ){
             $("#fts_box_text_static").removeAttr('style');
             $("#fts_box_text_static").fadeIn();
         }
