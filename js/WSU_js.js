@@ -24,16 +24,14 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
         accordFTSResultsStatic();
     }
 
-    //Create hidden Full-Text Search static box
+    // Create hidden Full-Text Search static box 
     if (br.fts_displayed == false){
         $fts_static = $('<div id="fts_box_text_static" class="shadow"></div>');
         $('body').append($fts_static);
     }
 
     //clear previous results            
-    $("#fts_box_text_static").html('<p id="fts_terms"></p>');
-
-    
+    $("#fts_box_text_static").html('<p id="fts_terms"></p>');    
     
     //conditional for plain text (follows acquisition of search term)                    
     if (br.plainTextStatus == true){
@@ -1676,8 +1674,8 @@ if (typeof String.prototype.startsWith != 'function') {
 //hooked into: switchMode(), zoom1up(), zoom2up(),
 function stateChange(){    
     if (br.mobileStatus != "true"){
-        // bigArrows('state_change');            
-        // bigArrowsPulse();
+        bigArrows('state_change');            
+        bigArrowsPulse();
     }
 }
 

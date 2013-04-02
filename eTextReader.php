@@ -159,7 +159,10 @@ else{
         <!-- Containing and target DIV for bookreader construction-->
         <div id="BookReader">        
             <p>This book reader requires JavaScript to be enabled. Please check that your browser or device supports JavaScript and that it is enabled.</p>           
-        </div>        
+        </div>
+
+        <!--full-text search infrastructure-->
+        <!-- <div id="fts_box_text_static" class="shadow"></div>         -->
 
     </div> <!--closes bookreader_wrapper-->
 </body>
