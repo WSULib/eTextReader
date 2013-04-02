@@ -1676,8 +1676,8 @@ if (typeof String.prototype.startsWith != 'function') {
 //hooked into: switchMode(), zoom1up(), zoom2up(),
 function stateChange(){    
     if (br.mobileStatus != "true"){
-        bigArrows('state_change');            
-        bigArrowsPulse();
+        // bigArrows('state_change');            
+        // bigArrowsPulse();
     }
 }
 
@@ -1699,13 +1699,12 @@ $(window).bind('resizeEnd', function() {
     if (br.OCRstatus == true) {
         showOCR(); //rename to redrawOCR (and create that function)                        
     }
-    if (br.fts_displayed == true) {
+
+    if (br.fts_displayed == true && br.mobileStatus != "true") {
         var row_start = br.fts_results_row;
         getFTSResultsStatic(row_start);        
-    }
-    if (br.bigArrowStatus == true && br.mobileStatus != "true") {        
-        bigArrows('resize'); 
-    }
+    }    
+    
     //this is a little buggy, you can see background images reappear while window dragging
     if (br.plainTextStatus == true){
         resizePlainText();
