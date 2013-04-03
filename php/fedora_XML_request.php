@@ -5,7 +5,7 @@
 $PIDsafe = $_GET['PIDsafe'];
 $datastream_request = $_GET['datastream'];
 $data_type = $_GET['datatype'];
-$request_URL = "http://localhost/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
+$request_URL = "http://fedora.lib.wayne.edu/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
 
 
 // XML

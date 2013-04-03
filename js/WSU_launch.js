@@ -29,7 +29,7 @@ function preLaunch() {
             var item_ID = response.item_ID;
             var collectionID = response.collection;
             var baseURL = "http://fedora.lib.wayne.edu/";
-            var solr_baseURL = "http://localhost/solr4/bookreader/";                
+            var solr_baseURL = "http://fedora.lib.wayne.edu/solr4/bookreader/";                
             //sets things in motion to launchBookReader()
             launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
         }
@@ -235,23 +235,6 @@ function postLaunch() {
     }
 
 } //closes postLaunch()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
