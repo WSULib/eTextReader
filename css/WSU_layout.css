@@ -163,14 +163,15 @@
     #fts_box_text_static {
         display:none;
         position:absolute;
-        width:100%;
+        width:95%;
         background-color:rgba(255,250,221,.9);
         border: 1px solid rgba(71,86,73,.8);
         text-align:left;
         z-index: 10;
         padding:0px 10px;    
         overflow:hidden;                
-        margin-top:50px; /*with menu down*/       
+        margin-top:50px; /*with menu down*/
+        margin-right:5px;
         height:90%;
         font-size:1.5em;
     } 
