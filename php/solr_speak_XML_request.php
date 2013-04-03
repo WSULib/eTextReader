@@ -8,8 +8,6 @@ $row_start = urlencode($_GET['row_start']);
 $solr_baseURL = $_GET['solr_baseURL'];
 $data_type = $_GET['datatype'];
 
-// $baseURL = 'http://141.217.97.167:8080/solr/bookreader/';
-
 
 //need $search_term, $ItemID (not PID, but indexed ID), $row_start
 $request_URL = "select/?q=OCR_text:$search_term&fq=ItemID:$ItemID&sort=page_num%20asc&start=$row_start&rows=10&indent=on&hl=true&hl.fl=OCR_text&hl.snippets=1000&hl.fragmenter=gap&hl.fragsize=70&wt=json";

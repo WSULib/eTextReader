@@ -13,7 +13,7 @@
 
 		function drawThumbs(){
 			for (var i = 0; i < book_PIDS.length; ++i){			
-				$("#item_thumbs").append("<div class='fifth'><a href='eTextReader.php?ItemID="+book_PIDS[i]+"#page/1/mode/2up'><img class='shadow' src='http://fedora.lib.wayne.edu:8080/fedora/objects/"+book_PIDS[i].split(':')[1]+":thumbs/datastreams/THUMB_1/content'/></a><div class='row container'><div class='thumb_text'>"+book_PIDS[i]+"</div></div></div>")
+				$("#item_thumbs").append("<div class='fifth'><a href='eTextReader.php?ItemID="+book_PIDS[i]+"#page/1/mode/2up'><img class='shadow' src='http://fedora.lib.wayne.edu/fedora/objects/"+book_PIDS[i].split(':')[1]+":thumbs/datastreams/THUMB_1/content'/></a><div class='row container'><div class='thumb_text'>"+book_PIDS[i]+"</div></div></div>")
 			}
 			$("#item_thumbs").fadeIn();			
 		}
@@ -26,7 +26,7 @@
 	        dataObject.data_type = "html";
 
 	        // dataObject.data_type = "json";
-	        var baseURL = "http://localhost:8080/fedora/risearch?"; //this needs to be "localhost" when running in parallel, this is passed to a PHP script
+	        var baseURL = "http://localhost/fedora/risearch?"; //this needs to be "localhost" when running in parallel, this is passed to a PHP script
 	        var queryOptions = "type=tuples&lang=itql&format=json&dt=on&stream=on&query=";
 	        var baseQuery = "select $subject from <#ri> where $subject <fedora-rels-ext:isMemberOfCollection> <fedora:collection:MIM>";
 	        dataObject.encodedQueryURL = baseURL + queryOptions + encodeURIComponent(baseQuery);        

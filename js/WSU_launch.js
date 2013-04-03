@@ -28,8 +28,8 @@ function preLaunch() {
             var PIDsafeID = response.PIDsafe;
             var item_ID = response.item_ID;
             var collectionID = response.collection;
-            var baseURL = "http://fedora.lib.wayne.edu:8080/";
-            var solr_baseURL = "http://localhost:8080/solr4/bookreader/";                
+            var baseURL = "http://fedora.lib.wayne.edu/";
+            var solr_baseURL = "http://localhost/solr4/bookreader/";                
             //sets things in motion to launchBookReader()
             launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
         }

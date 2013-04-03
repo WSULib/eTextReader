@@ -74,7 +74,7 @@ else{
 
                 <div id="first_row">                    
                     <div class="logo tools left">
-                        <a href="/wsuls/eTextReader/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>
+                        <a href="./" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>
                     </div>
 
                     <div class="icon tools left">
