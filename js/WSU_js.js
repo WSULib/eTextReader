@@ -1021,8 +1021,13 @@ function plainText(){
         $("#plain_text_icon").toggleClass("active_icon");
 
         //hide OCR overlay button, reveal text-sizing
-        $(".toggleOCR").toggle();
-        $(".OCR_tools").toggle();
+        if (br.OCRstatus == true){
+            $(".toggleOCR").toggle();
+        }
+        else{
+            $(".toggleOCR").toggle();
+            $(".OCR_tools").toggle();
+        }
         
 
         showLoading();        
@@ -1111,8 +1116,13 @@ function plainText(){
     else { 
 
         //hide OCR overlay button, reveal text-sizing
-        $(".toggleOCR").toggle();
-        $(".OCR_tools").toggle();       
+        if (br.OCRstatus == true){
+            $(".toggleOCR").toggle();
+        }
+        else{
+            $(".toggleOCR").toggle();
+            $(".OCR_tools").toggle();
+        }      
 
         $("#plain_text_icon").toggleClass("active_icon");
         //indicate launched book mode
@@ -1548,10 +1558,54 @@ function itemInfo(){
         var coverURL = br.baseURL+'fedora/objects/'+br.PIDsafeID+':thumbs/datastreams/THUMB_1/content';
         $(itemMeta).append("<div id='itemMeta_top'><img src='"+coverURL+"'/></div>");    
 
-        //metadata
-        $(itemMeta).append("<h2><strong>Title:</strong> "+br.bookMetaObj.titleInfo.title+"</h2>");
-        $(itemMeta).append("<span class='info_span'><strong>Author:</strong> "+br.bookMetaObj.name.namePart[0]+"</br>");
+        //METADATA
+        //Book Title - usually [0] of titleInfo
+        if (br.bookMetaObj.titleInfo.length != undefined){
+            var mainTitle = br.bookMetaObj.titleInfo[0].title;
+        }
+        else {
+            var mainTitle = br.bookMetaObj.titleInfo.title;
+        }
+        $(itemMeta).append("<h2><strong>Title:</strong> "+mainTitle+"</h2>");
+
+        //author
+        var bookAuthors = [];        
+        //multiple authors        
+        if (br.bookMetaObj.name.length != undefined ){
+            for(var i = 0; i < br.bookMetaObj.name.length; i++){                
+                //if includes date in namePart
+                if (toType(br.bookMetaObj.name[i].namePart) === "array"){                    
+                    bookAuthors.push(br.bookMetaObj.name[i].namePart[0]);
+                }
+                //just a name
+                else {                    
+                    bookAuthors.push(br.bookMetaObj.name[i].namePart);                    
+                }
+            }
+        }
+
+        //one author
+        else {
+            //if includes date in namePart
+            if (toType(br.bookMetaObj.name.namePart) === "array"){                
+                bookAuthors.push(br.bookMetaObj.name.namePart[0]);
+            }
+            //just a name
+            else {
+                bookAuthors.push(br.bookMetaObj.name.namePart);
+            }
+            
+        }
+        console.log(bookAuthors);
+        //iterate through all authors
+        for(var i = 0; i < bookAuthors.length; i++){
+            $(itemMeta).append("<span class='info_span'><strong>Author:</strong> "+bookAuthors[i]+"</br>");
+        }
+
+        //publisher
         $(itemMeta).append("<strong>Publication Info:</strong> "+br.bookMetaObj.originInfo.place[1].placeTerm+", "+br.bookMetaObj.originInfo.publisher+", "+br.bookMetaObj.originInfo.dateIssued+"</br>");
+
+        //properties
         $(itemMeta).append("<strong>Physical Description:</strong> "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form)+"</span>";
 
         //citation link
@@ -1560,7 +1614,7 @@ function itemInfo(){
         var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
         $(itemMeta).append("<p>Cite This: <a href='"+OCLCurl+"' target='_blank'>"+"[link text]"+"</a></p>");   
 
-        //persistent link
+        //persistent links
         for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
             if (br.bookMetaObj.identifier[i].startsWith('b')){
                 var BIBnum = br.bookMetaObj.identifier[i];
@@ -1672,6 +1726,11 @@ if (typeof String.prototype.startsWith != 'function') {
   String.prototype.startsWith = function (str){
     return this.indexOf(str) == 0;
   };
+}
+
+//funciton to return variable type
+var toType = function(obj) {
+  return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////

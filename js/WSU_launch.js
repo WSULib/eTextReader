@@ -170,7 +170,15 @@ function postLaunch() {
 
             function pull_meta(response){   
                 br.bookMetaObj = response;
-                $("#doc_title").html(br.bookMetaObj.titleInfo.title);
+                //Book Title - usually [0] of titleInfo
+                if (br.bookMetaObj.titleInfo.length != undefined){
+                    var mainTitle = br.bookMetaObj.titleInfo[0].title;
+                }
+                else {
+                    var mainTitle = br.bookMetaObj.titleInfo.title;
+                }
+                br.bookMetaObj.mainTitle = mainTitle; //pushes to global bookOjbect, might use later
+                $("#doc_title").html(mainTitle);
 
             }
 
