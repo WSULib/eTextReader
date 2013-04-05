@@ -128,7 +128,7 @@ a { cursor: hand; cursor: pointer; }
     overflow:hidden;
     /*overflow-y:scroll;*/
     margin-top:35px;
-    height:90%;
+    height:100%;
 }
 
 #fts_results_wrapper {
