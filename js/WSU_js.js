@@ -1617,7 +1617,7 @@ function itemInfo(){
                 BIBnum = BIBnum.substring(0, BIBnum.length - 1);
                 var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
                 var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
-                $(itemMeta).append("<p>Persistent Link: <a href='"+BIBurl+"' target='_blank'>"+"[link text]"+"</a></p>");        
+                $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
             }
             else{
                 //citation link                
@@ -1625,7 +1625,7 @@ function itemInfo(){
                 // var OCLCnum = br.bookMetaObj.recordInfo.recordIdentifier.split('ocn')[1];
                 var OCLCbase = "http://wild.worldcat.org/oclc/[OCLCNUM]?page=citation";
                 var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
-                $(itemMeta).append("<p>Cite This: <a href='"+OCLCurl+"' target='_blank'>"+"[link text]"+"</a></p>");   
+                $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
             }
         }
             

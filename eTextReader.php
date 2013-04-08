@@ -18,11 +18,11 @@ else{
     <title id="doc_title">[Unknown Title]</title>   
    
     <!--jquery load, 1.4 works best -->
-    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>    
+    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>       
     <script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>
-    <script type="text/javascript" src="js/dragscrollable.js"></script>    
-    <!-- <script type="text/javascript" src="js/jquery.ui.ipad.js"></script> -->
-    <script type="text/javascript" src="js/jquery.bt.min.js"></script>    
+    <!--<script type="text/javascript" src="js/dragscrollable.js"></script> -->
+    <script type="text/javascript" src="js/jquery.ui.ipad.js"></script>
+    <script type="text/javascript" src="js/jquery.bt.min.js"></script>
 
     <!-- Main BookReader CSS -->    
     <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive-iconset/css/elusive-webfont.css"/>
@@ -61,6 +61,10 @@ else{
     <!-- Modernizr -->
     <script type="text/javascript" src="js/modernizr.js"></script>
 
+    <!-- Bootstrap Tooltips-->
+    <link rel="stylesheet" type="text/css" href="inc/bootstrap_tooltips/css/bootstrap.css"/>
+    <script type="text/javascript" src="inc/bootstrap_tooltips/js/bootstrap.js"></script>
+
 </head>
 
 <body>
@@ -74,7 +78,7 @@ else{
 
                 <div id="first_row">                    
                     <div class="logo tools left">
-                        <a href="./" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>
+                        <a href="http://www.lib.wayne.edu/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>
                     </div>
 
                     <div class="icon tools left">
@@ -120,7 +124,7 @@ else{
                         </ul>                        
                     </div>                 
                     
-                    <div class="icon tools right second">                                
+                    <div rel="tooltip" class="icon tools right second" title="Layout Tools">                                                 
                         <ul id="mode_icons" class="the-icons">                        
                             <li><i id="1up_icon" class="icon-file" onclick="launch1up(); return false;"></i></li>
                             <li><i id="2up_icon" class="icon-book" onclick="launch2up(); return false;"></i></li>

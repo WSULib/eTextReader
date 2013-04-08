@@ -28,7 +28,7 @@ function preLaunch() {
             var PIDsafeID = response.PIDsafe;
             var item_ID = response.item_ID;
             var collectionID = response.collection;
-            var baseURL = "http://141.217.172.153/";
+            var baseURL = "http://141.217.172.153/"; //this cannot be localhost, as it codes the src for <img> tags on the client side
             var solr_baseURL = "http://localhost/solr4/bookreader/";                
             //sets things in motion to launchBookReader()
             launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
@@ -199,12 +199,7 @@ function postLaunch() {
     if (isMobile.any() == "iPhone"){
         br.switchMode(1); //launches in 1up mode if iphone
         $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'css/iPhone.css') );
-    }
-
-    //ipad
-    if (isMobile.any() == "iPad"){                
-        // $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'your stylesheet url') );
-    }    
+    }     
 
     //Modernizr
     if (Modernizr.touch == true){

@@ -33,7 +33,6 @@ if ($data_type == 'namespace2json'){
 	//transform into json
 	$json = json_encode(simplexml_load_string($replaced2));
 	echo $json;
-
 	return;
 }
 

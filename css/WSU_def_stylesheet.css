@@ -209,7 +209,7 @@ a { cursor: hand; cursor: pointer; }
 .image_highlight {
     /*background-color: #FFFF88;*/
     background-color: yellow;
-    z-index: 30000;
+    z-index: 11;
     position:absolute;
     opacity: .6;
     padding:2px;
@@ -223,7 +223,7 @@ a { cursor: hand; cursor: pointer; }
     position:absolute;
     height:90%;
     width:90%;
-    z-index:20001;
+    z-index:11;
     /*background-color:rgba(243,249,148,.9);*/
     background-color:rgba(252,244,214,.9);
     display:none;
@@ -239,7 +239,7 @@ a { cursor: hand; cursor: pointer; }
     margin-top:5%;    
     width:45%;
     height:90%;
-    z-index:20001;
+    z-index:11;
     background-color:rgba(252,244,214,.9);
     display:none;
     overflow-y:scroll;
@@ -456,7 +456,7 @@ input[type='password'], textarea
     position:absolute;
 }
 /*Arrows*/
-.bigArrowBoxHoriz {
+/*.bigArrowBoxHoriz {
     position:fixed;
     width:30px;
     background-color:rgba(0,0,0,1);
@@ -465,28 +465,27 @@ input[type='password'], textarea
     cursor: hand; cursor: pointer;
 }
 
-.bigArrowBoxVert{
-    /*position:absolute;    */
+.bigArrowBoxVert{    
     height:30px;
-    width:200px; /*will change*/
+    width:200px;
     background-color:rgba(0,0,0,1);    
     z-index:10;
     cursor: hand; cursor: pointer;
     text-align:center;
-}
+}*/
 
 /*Safari and iPad fix */
-.bigArrowBoxVert img { 
+/*.bigArrowBoxVert img { 
     left:50%;
     margin-left:-17px;
 }
 
 .bigArrowHandle{
     opacity:0.06;   
-}
+}*/
 
     /* Arrow rounding */
-    #lBigArrow{
+    /*#lBigArrow{
         -moz-border-radius:10px 0px 0px 10px;
         -webkit-border-radius:10px 0px 0px 10px;
         border-radius:10px 0px 0px 10px;
@@ -508,7 +507,7 @@ input[type='password'], textarea
         -moz-border-radius:0px 0px 10px 10px;
         -webkit-border-radius:0px 0px 10px 10px;
         border-radius:0px 0px 10px 10px;
-    }
+    }*/
 
 #loading_animation{
     position:absolute;
