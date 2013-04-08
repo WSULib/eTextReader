@@ -1608,22 +1608,28 @@ function itemInfo(){
         //properties
         $(itemMeta).append("<strong>Physical Description:</strong> "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form)+"</span>";
 
-        //citation link
-        var OCLCnum = br.bookMetaObj.recordInfo.recordIdentifier.split('ocn')[1];
-        var OCLCbase = "http://wild.worldcat.org/oclc/[OCLCNUM]?page=citation";
-        var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
-        $(itemMeta).append("<p>Cite This: <a href='"+OCLCurl+"' target='_blank'>"+"[link text]"+"</a></p>");   
+        
 
-        //persistent links
+        //citation & persistent links
         for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
             if (br.bookMetaObj.identifier[i].startsWith('b')){
                 var BIBnum = br.bookMetaObj.identifier[i];
                 BIBnum = BIBnum.substring(0, BIBnum.length - 1);
+                var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
+                var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
+                $(itemMeta).append("<p>Persistent Link: <a href='"+BIBurl+"' target='_blank'>"+"[link text]"+"</a></p>");        
+            }
+            else{
+                //citation link                
+                var OCLCnum = br.bookMetaObj.identifier[i];
+                // var OCLCnum = br.bookMetaObj.recordInfo.recordIdentifier.split('ocn')[1];
+                var OCLCbase = "http://wild.worldcat.org/oclc/[OCLCNUM]?page=citation";
+                var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
+                $(itemMeta).append("<p>Cite This: <a href='"+OCLCurl+"' target='_blank'>"+"[link text]"+"</a></p>");   
             }
         }
-        var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
-        var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
-        $(itemMeta).append("<p>Persistent Link: <a href='"+BIBurl+"' target='_blank'>"+"[link text]"+"</a></p>");        
+            
+        
     }
 
     //create box with item HTML block        

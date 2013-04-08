@@ -28,8 +28,8 @@ function preLaunch() {
             var PIDsafeID = response.PIDsafe;
             var item_ID = response.item_ID;
             var collectionID = response.collection;
-            var baseURL = "http://fedora.lib.wayne.edu/";
-            var solr_baseURL = "http://fedora.lib.wayne.edu/solr4/bookreader/";                
+            var baseURL = "http://141.217.172.153/";
+            var solr_baseURL = "http://localhost/solr4/bookreader/";                
             //sets things in motion to launchBookReader()
             launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
         }
@@ -154,7 +154,7 @@ function postLaunch() {
     //retrieve book metadata and set to br.bookMetaObj, set title of browser page
     $(document).ready(function() {
             
-            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=xml';
+            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=namespace2json';
             // console.log(metaquery);            
 
             //returns json
@@ -168,7 +168,8 @@ function postLaunch() {
               });
             });
 
-            function pull_meta(response){   
+            function pull_meta(response){
+                console.log(response);   
                 br.bookMetaObj = response;
                 //Book Title - usually [0] of titleInfo
                 if (br.bookMetaObj.titleInfo.length != undefined){
