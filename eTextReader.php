@@ -81,8 +81,8 @@ if ($auth_status == "deny"){
                     <div id="navTip" class="icon tools left">                                                
                         <ul class="the-icons">                        
                             <li><i class="icon-step-backward tooltip" onclick='br.leftmost(); return false;' data-ot="Beginning of Text"></i></li>
-                            <li><i class="icon-arrow-left" onclick='br.left(); return false;' data-ot="Previous Page"></i></li>
-                            <li><i class="icon-arrow-right" onclick='br.right(); return false;' data-ot="Next Page"></i></li>                                                                        
+                            <li><i id="previousArrow" class="icon-arrow-left" onclick='br.left(); return false;' data-ot="Previous Page"></i></li>
+                            <li><i id="nextArrow" class="icon-arrow-right" onclick='br.right(); return false;' data-ot="Next Page"></i></li>                                                                        
                             <li><i class="icon-step-forward" onclick='br.rightmost(); return false;' data-ot="End of Text"></i></li>                                            
                         </ul>            
                     </div>                   
@@ -125,15 +125,14 @@ if ($auth_status == "deny"){
                         <ul id="mode_icons" class="the-icons">                        
                             <li><i id="1up_icon" class="icon-file" onclick="launch1up(); return false;" data-ot="One Page Mode"></i></li>
                             <li><i id="2up_icon" class="icon-book" onclick="launch2up(); return false;" data-ot="Two Page Mode"></i></li>
-                            <li><i id="thumbs_icon" class="icon-th" onclick="launchThumbs(); return false;" data-ot="Thumbnail Mode"></i></li>                                                                        
-                            <li><i id="plain_text_icon" class="icon-align-justify" onclick='plainText();' data-ot="Plain Text / HTML Mode"></i></li>                        
+                            <li><i id="thumbs_icon" class="icon-th" onclick="launchThumbs(); return false;" data-ot="Thumbnail Mode"></i></li>
+                            <li><i id="plain_text_icon" class="icon-align-left" onclick='plainText();' data-ot="Plain Text / HTML Mode"></i></li>
                         </ul>                    
                     </div>             
 
                     <div id="second_row_pivot" >
                         <div class="icon tools right second">
-                            <ul class="the-icons">
-                                <!--<li><i class="toggleOCR" onclick='toggleOCR(); return false;' style="font-size:1.6em; font-style:normal">text overlay</i></li>-->
+                            <ul class="the-icons">                                
                                 <li><i class="toggleOCR icon-file-alt" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
                                 <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>

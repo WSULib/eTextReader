@@ -156,7 +156,14 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 function postLaunch() {
 
     //populate leaf location
-    $('#leaf_count').html(br.numLeafs);    
+    $('#leaf_count').html(br.numLeafs);  
+
+    //flip arrows up/down if necessary
+    $(document).ready(function() {
+        if (br.mode == 1){
+            arrowsFlip('1up');
+        }
+    });
 
     //retrieve book metadata and set to br.bookMetaObj, set title of browser page
     $(document).ready(function() {

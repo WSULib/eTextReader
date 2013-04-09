@@ -637,18 +637,14 @@ function sayItstop () {
 }
 
 // flip navigation arrows for 1up / 2up (remove in thumbs?)
-function arrowsFlip (new_mode) {
-    if (new_mode == '1up'){
-        $('#front_nav').removeClass().addClass('tool_icon arrow_upmost rollover');
-        $('#previous_nav').removeClass().addClass('tool_icon arrow_up rollover');
-        $('#next_nav').removeClass().addClass('tool_icon arrow_down rollover');
-        $('#back_nav').removeClass().addClass('tool_icon  arrow_downmost rollover');
+function arrowsFlip (new_mode) {    
+    if (new_mode == '1up'){        
+        $('#previousArrow').removeClass('icon-arrow-left').addClass('icon-arrow-up');
+        $('#nextArrow').removeClass('icon-arrow-right').addClass('icon-arrow-down');        
     }
-    if (new_mode == '2up'){
-        $('#front_nav').removeClass().addClass('tool_icon arrow_leftmost rollover');
-        $('#previous_nav').removeClass().addClass('tool_icon arrow_left rollover');
-        $('#next_nav').removeClass().addClass('tool_icon arrow_right rollover');
-        $('#back_nav').removeClass().addClass('tool_icon  arrow_rightmost rollover');    
+    if (new_mode == '2up'){        
+        $('#previousArrow').removeClass('icon-arrow-up').addClass('icon-arrow-left');
+        $('#nextArrow').removeClass('icon-arrow-down').addClass('icon-arrow-right');
     }
     
 }
@@ -781,148 +777,6 @@ function goFullScreen(){
         }
     );
 }
-
-// //draw up-down nav arrows
-// function drawArrowsVert(page_mode) {
-//     //get book dimensions
-//     var bookwidth = $('#BRpageview').width();
-//     var windowheight = $(window).height();    
-
-//     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     // navigation arrows for thumbnail mode currently does not work
-//     // tied to line 1334 from WSU_bookreader.js
-//     // need to determine 1st image on screen, but getCurrentIndex and hashing the URL don't provide reliable numbers.
-//     // get it from the DOM?
-//     if (page_mode == "thumbs"){        
-//         var dArrow = "<div id='dBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.jumpToIndex("+'"thumb_button"'+"); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_down.png' width=35/></div>";
-//         var uArrow = "<div id='uBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.jumpToIndex("+'"thumb_button"'+"); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_up.png' width=35/></div>";           
-//     }
-//     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////            
-
-//     else{
-//         // creates arrow background boxes
-//         var dArrow = "<div id='dBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.right(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_down.png' width=35/></div>";
-//         var uArrow = "<div id='uBigArrow' align='center' class='bigArrowBoxVert bigArrowHandle' onclick='br.left(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_up.png' width=35/></div>";
-//     }
-
-//     $('#overlays').append(dArrow);
-//     $('#overlays').append(uArrow);
-
-//     // conditional for width of page; if wider, make buttons 90% of window
-//     if (bookwidth < $(window).width()) {
-//         $('.bigArrowBoxVert').width(bookwidth * .95);
-//         // $('#dBigArrow').offset({ top: windowheight - 85, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
-//         $('#dBigArrow').offset({ top: windowheight - 33, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
-//         $('#uBigArrow').offset({ top: 38, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
-//     }
-
-//     else { //if boxes will not fit next to pages        
-//         $('.bigArrowBoxVert').width( $(window).width() * .95);
-//         $('#dBigArrow').offset({ top: windowheight - 85, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
-//         $('#uBigArrow').offset({ top: 45, left: $(window).width() / 2 - $('.bigArrowBoxVert').width() / 2});
-//     }
-// }
-
-// function drawArrowsHoriz() {    
-//     //get book dimensions
-//     var bookwidth = $('#BRtwopageview').width();
-//     var bookheight = $('#BRtwopageview').height();                        
-
-//     // creates arrow background boxes
-//     var rArrow = "<div id='rBigArrow' class='bigArrowBoxHoriz bigArrowHandle' onclick='br.right(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_right.png' width=35/></div>";
-//     var lArrow = "<div id='lBigArrow' class='bigArrowBoxHoriz bigArrowHandle' onclick='br.left(); return false;'><img class='absoluteCenter' src='images/icons/big_arrow_left.png' width=35/></div>";       
-//     $('#overlays').append(rArrow);
-//     $('#overlays').append(lArrow);    
-
-//     //sets size at 90% of height and offsets from page edges
-//     if (bookwidth + 120 < $(window).width()) {
-//         $('.bigArrowBoxHoriz').height($('.BRleafEdgeR').height() * .9);
-//         $('#rBigArrow').position({my: "left center", at: "right center", offset: "10 0", of: '.BRleafEdgeR'});
-//         $('#lBigArrow').position({my: "right center", at: "left center", offset: "-10 0", of: '.BRleafEdgeL'});
-//     }
-
-//     else { //if boxes will not fit next to pages        
-//         //determine button height (specifically for portrait monitors)        
-//         if (bookheight > $(window).height() - 100){
-//             var button_height = $(window).height() - 100;    
-//         }
-//         else {
-//             var button_height = bookheight * .95;
-//         }               
-
-//         $('.bigArrowBoxHoriz').height(button_height);        
-//         $('#rBigArrow').offset({ top: $(window).height() / 2 - button_height / 2, left: $(window).width() - 50});
-//         $('#lBigArrow').offset({ top: $(window).height() / 2 - button_height / 2, left: 10});
-//     }
-// }
-
-// // easy page flip arrows
-// function bigArrows(state){
-
-//     //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
-//     return;
-//     //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
-
-//     var $current_layout = getPageInfo();
-//     if (br.bigArrowStatus == false || state == "resize" || state == "state_change"){
-
-//         //sets status
-//         br.bigArrowStatus = true;
-
-//         // in the case of resizing, removes previous
-//         if (state == "resize" || state == "state_change"){
-//             $('.bigArrowHandle').remove();            
-//         }
-
-//         // run draw1upArrows, draw2upArrows, or drawThumbsArrows here...
-//         if ($current_layout.mode == "1up"){
-//             drawArrowsVert();
-//         }
-//         if ($current_layout.mode == "2up"){
-//             drawArrowsHoriz();
-//         }
-//         if ($current_layout.mode == "thumb"){ //removes arrows for now from thumbnail mode
-//             // drawArrowsVert('thumbs');
-//             br.bigArrowStatus = false;
-//             $('.bigArrowHandle').remove();
-//             return
-//         }               
-
-//         //hover functions for big arrow buttons
-//         $(".bigArrowHandle").hover(
-//             function(){
-//                 clearTimeout(minimalArrowTimeout);                            
-//                 $(this).stop(true, false).animate({opacity: 0.35}, 300);
-//             }, 
-//             function() {                
-//                 $(this).stop(true, false).animate({opacity: .1}, 300);
-//                 minimalArrowTimeout = setTimeout(function (){
-//                     $(".bigArrowHandle").stop(true, false).animate({opacity: 0}, 300);
-//                 },2000)                
-//             }
-//             );       
-
-//         return
-//     }
-
-//     // removes arrows in toggling (likely remove)
-//     if (br.bigArrowStatus == true){
-//         br.bigArrowStatus = false;
-//         $('.bigArrowHandle').remove();
-//         return
-//     }
-// }
-
-// function bigArrowsPulse(){
-//     //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
-//     return;
-//     //CONSIDERING REMOVING ALTOGETHER, SKIP RENDERING FOR NOW
-    
-//     $(".bigArrowHandle").stop(true, false).animate({opacity: .35}, 500);
-//     minimalArrowTimeout = setTimeout(function (){
-//         $(".bigArrowHandle").stop(true, false).animate({opacity: 0}, 2000);
-//     },2500) 
-// }
 
 function toolbarsMinimize(){   
 
@@ -1249,7 +1103,12 @@ $.fn.scrollTo = function( target, options, callback ){
   });
 }
 
-function renderImageHighlights(){    
+function renderImageHighlights(){
+
+    //prevents highlighting when OCR is down
+    if (br.OCRstatus == true){
+        return;
+    }    
 
     $current_layout = getPageInfo();
     if ($current_layout.mode == undefined){        

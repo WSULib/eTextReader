@@ -37,7 +37,7 @@
 }
 
 /*Medium Size, catches iPad*/
-@media screen and (min-width: 768px) and (max-width: 1160px) {
+@media screen and (min-width: 806px) and (max-width: 1160px) {
     /*increase icon size*/
     #WSUtoolbar {
         background-color:rgba(0,0,0,0);
@@ -93,7 +93,7 @@
 }
 
 /*Smallest Size, catches phones*/
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 805px) {
     /*increase icon size*/
     #WSUtoolbar {
         background-color:rgba(0,0,0,0);
