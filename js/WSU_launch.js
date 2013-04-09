@@ -6,7 +6,14 @@ var PIDsafe = ItemID.replace(/_/g,"");
 
 //pull object structure
 function preLaunch() {
-    $(document).ready(function() {            
+    $(document).ready(function() {
+
+        //default to 2up mode if mode fragment is missing
+        var docURL = document.URL;
+        if (docURL.indexOf("#") === -1){
+            window.location.hash = '#page/1/mode/2up';
+        }
+
         var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=STRUCT_META&datatype=xml';                       
 
         //returns json

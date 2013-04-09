@@ -1637,6 +1637,16 @@ function itemInfo(){
 
 }
 
+function help_eTextReader(){
+    var helpBox = document.createElement('div');
+    helpBox.setAttribute('id','helpBox');
+    $(helpBox).append("<div id='helpBox_content'></div>");
+    $(helpBox).load("inc/views/helpBox.htm", function(){
+        //create box with item HTML block        
+        $.colorbox({html:helpBox});    
+    });
+}
+
 function toggleMoreTools(){
     
     //toggle rows
@@ -1745,8 +1755,8 @@ var toType = function(obj) {
 //hooked into: switchMode(), zoom1up(), zoom2up(),
 function stateChange(){    
     if (br.mobileStatus != "true"){
-        bigArrows('state_change');            
-        bigArrowsPulse();
+        // bigArrows('state_change');            
+        // bigArrowsPulse();
     }
 }
 
