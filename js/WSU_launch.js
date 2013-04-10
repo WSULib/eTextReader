@@ -165,6 +165,11 @@ function postLaunch() {
         }
     });
 
+    //remove overlay option if in thumbs
+    if (br.mode === 3){
+        $(".toggleOCR").hide();
+    }
+
     //retrieve book metadata and set to br.bookMetaObj, set title of browser page
     $(document).ready(function() {
             

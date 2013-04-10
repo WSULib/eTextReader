@@ -63,8 +63,10 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
       url: squery,
       // dataType: 'jsonp',
       // jsonpCallback: 'callback',
-      dataType: 'json',      
+      dataType: 'json',            
       success: function(result) {
+        alert('here we go!');
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
         // console.log(result);
 
         var cURL = window.location.href;         
@@ -97,6 +99,11 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             else {
                 $('#fts_counts').append('Displaying pages '+result.response.docs[0].page_num+' - '+result.response.docs[results_pages - 1].page_num);    
             }
+
+            //size fts_box_text_static appropriately and move it down (inside wrapper will still resize)
+            $("#fts_box_text_static").height( $(window).height() - $("#WSUtoolbar").height() - 20 );
+            $("#fts_box_text_static").css( "margin-top", $("#WSUtoolbar").height() );
+            
 
             //create results wrapper
             $("#fts_box_text_static").append("<div id='fts_results_wrapper'></div>");            
@@ -164,34 +171,29 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             // delete last comma
             var temp_str = $(".fts_set:last-child").html();
             var new_str = temp_str.substring(0, temp_str.length - 2);
-            $(".fts_set:last-child").html(new_str);                        
-            
-            //if FTS displayed already, fts_wrapper here...
-            // if (br.fts_displayed == true){
-            //     resizeFTSWrapper();
-            // }
+            $(".fts_set:last-child").html(new_str);
+          
             resizeFTSWrapper();
+            
         }
-        
-      }
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+      } //closes success function
+      
     });    
    
-    br.fts_results_row = row_start;
-    //set search-term global variable
+    //set variables
+    br.fts_results_row = row_start;    
     br.search_term = search_term;
+
+    //render results
     displayFTSResultsStatic(row_start, search_term);
 }
 
 //Display FTS results Static
-function displayFTSResultsStatic(row_start, search_term){
+function displayFTSResultsStatic(row_start, search_term, resize){
 
     //draw and position search results
     var fts_handle_static = $('#fts_box_text_static');
-
-    //REWORK THE POSITIONING OF THE FTS BOX/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////                                        
-    // fts_handle_static.position({my: "left top", at: "left bottom", offset: "0 0", of: '#WSUtoolbar'});    
-    $('#fts_box_text_static').height($(window).height() - $("#WSUtoolbar").height());      
-    //REWORK THE POSITIONING OF THE FTS BOX/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
@@ -199,10 +201,15 @@ function displayFTSResultsStatic(row_start, search_term){
     $('#fts_icons_list').append('<li><i class="icon-remove" onclick="hideFTSResultsStatic(); return false;"></i></li><li><i id="fts_accordian" class="icon-chevron-left" onclick="accordFTSResultsStatic(); return false;"></i></li>'); 
 
     //display if not already drawn, and resize fts_wrapper when animation complete
-    if (br.fts_displayed == false){    
-        fts_handle_static.fadeIn(function(){resizeFTSWrapper();});
+    if (br.fts_displayed === false){    
+        fts_handle_static.fadeIn(function(){
+            resizeFTSWrapper();
+        });
     }
-    else{        
+    else{
+        //size fts_box_text_static appropriately and move it down (inside wrapper will still resize)
+        $("#fts_box_text_static").height( $(window).height() - $("#WSUtoolbar").height() -20 );
+        $("#fts_box_text_static").css( "margin-top", $("#WSUtoolbar").height() );        
         resizeFTSWrapper();
     }
     
@@ -227,8 +234,10 @@ function displayFTSResultsStatic(row_start, search_term){
 
 function resizeFTSWrapper(){
         $("#fts_box_text_static").ready(function(){
-            var newHeight = $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 85);            
-            $("#fts_results_wrapper").height(newHeight);
+            var newHeight = $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 85);
+            // var newHeight = $("#fts_box_text_static").height() - 105;
+            // alert(newHeight);
+            $("#fts_results_wrapper").height(newHeight);            
         });        
 }
 
@@ -876,10 +885,14 @@ function plainText(){
 
         //hide OCR overlay button, reveal text-sizing
         if (br.OCRstatus == true){
-            $(".toggleOCR").toggle();
+            if (br.mode !== 3){
+                $(".toggleOCR").toggle();
+            }
         }
         else{
-            $(".toggleOCR").toggle();
+            if (br.mode !== 3){
+                $(".toggleOCR").toggle();
+            }
             $(".OCR_tools").toggle();
         }
         
@@ -971,10 +984,14 @@ function plainText(){
 
         //hide OCR overlay button, reveal text-sizing
         if (br.OCRstatus == true){
-            $(".toggleOCR").toggle();
+            if (br.mode !== 3){
+                $(".toggleOCR").toggle();
+            }
         }
         else{
-            $(".toggleOCR").toggle();
+            if (br.mode !== 3){
+                $(".toggleOCR").toggle();
+            }
             $(".OCR_tools").toggle();
         }      
 
@@ -1022,7 +1039,7 @@ function plainText(){
 }
 
 function resizePlainText(trigger){
-    
+
     //height
     if (br.plainTextStatus == true){
         $("#html_concat").css({
@@ -1603,8 +1620,12 @@ var toType = function(obj) {
 //hooked into: switchMode(), zoom1up(), zoom2up(),
 function stateChange(){    
     if (br.mobileStatus != "true"){
-        // bigArrows('state_change');            
-        // bigArrowsPulse();
+        if (br.mode === 3){
+            $(".toggleOCR").hide();
+        }
+        if (br.mode !== 3){
+            $(".toggleOCR").show();
+        }
     }
 }
 
@@ -1627,22 +1648,16 @@ $(window).bind('resizeEnd', function() {
         showOCR(); //rename to redrawOCR (and create that function)                        
     }
 
-    if (br.fts_displayed == true && br.mobileStatus != "true") {     
-        $('#fts_box_text_static').height($(window).height() - $("#WSUtoolbar").height()); 
+    if (br.fts_displayed == true && br.mobileStatus != "true") {                    
+        $("#fts_box_text_static").height( $(window).height() - $("#WSUtoolbar").height() - 20 );            
+        $("#fts_box_text_static").css( "margin-top", $("#WSUtoolbar").height() );        
         resizeFTSWrapper();
-        // alert('br.fts_displayed must have been true...');        
     }    
     
     //this is a little buggy, you can see background images reappear while window dragging
     if (br.plainTextStatus == true){
         resizePlainText();
     }
-    // if (br.plainTextStatus == true){
-    //     $("#html_concat").css({
-    //         'height': ($(window).height() - $("#WSUtoolbar").height()),
-    //         'margin-top': $("#WSUtoolbar").height()
-    //     });
-    // }
 
     //undo properties from small phone styling
     if ($(window).width() > 768){
@@ -1657,7 +1672,7 @@ $(window).bind('resizeEnd', function() {
 
         //FTS
         if ( br.fts_displayed == true ){
-            $("#fts_box_text_static").removeAttr('style');
+            // $("#fts_box_text_static").removeAttr('style');
             $("#fts_box_text_static").fadeIn();
         }
     }    
