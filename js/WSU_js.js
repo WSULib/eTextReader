@@ -1022,29 +1022,15 @@ function plainText(){
 }
 
 function resizePlainText(trigger){
-    var $current_layout = getPageInfo();
-
-    //hide text
-    $("#html_concat").hide();
-
-    showLoading();            
-
-    //2up
-    if ($current_layout.mode == '2up'){            
-        // 2up
-        $("#BRtwopageview").hide();
-        $(".bigArrowHandle").hide();            
+    
+    //height
+    if (br.plainTextStatus == true){
+        $("#html_concat").css({
+            'height': ($(window).height() - $("#WSUtoolbar").height()),
+            'margin-top': $("#WSUtoolbar").height()
+        });
     }
-    //1up
-    if ($current_layout.mode == '1up'){            
-        $("#BRpageview").hide();
-        $(".bigArrowHandle").hide();
-    }
-
-    //resize to new window dimensions
-    $('#html_concat').height($(window).height() - 112)
-
-    //resizes plain text if FTS is true
+    //width
     if (br.fts_displayed == true){            
         $('#html_concat').css('margin-left','325px');
         $('#html_concat').width($(window).width() - 365)            
@@ -1052,10 +1038,6 @@ function resizePlainText(trigger){
     else{
         $('#html_concat').width($(window).width() - 40)
     }
-
-    //finally, show again
-    $("#html_concat").fadeIn();
-    hideLoading();
 
 }
 
@@ -1514,12 +1496,19 @@ function toggleMoreTools(){
     //toggle height
     if (!($('#cogIcon').hasClass('extended'))) {
         $('#WSUtoolbar').height(200);
-        $("#fts_box_text_static").css('margin-top','200px');
+        $("#fts_box_text_static").css('margin-top','200px');        
     }
     if ($('#cogIcon').hasClass('extended')) {
         $('#WSUtoolbar').height(50);
-        $("#fts_box_text_static").css('margin-top','50px');
+        $("#fts_box_text_static").css('margin-top','50px');        
     }
+
+    if (br.plainTextStatus == true){
+        $("#html_concat").css({
+            'height': ($(window).height() - $("#WSUtoolbar").height()),
+            'margin-top': $("#WSUtoolbar").height()
+        });
+    }    
 
     //toggle class
     $('#cogIcon').toggleClass('extended');    
@@ -1648,6 +1637,12 @@ $(window).bind('resizeEnd', function() {
     if (br.plainTextStatus == true){
         resizePlainText();
     }
+    // if (br.plainTextStatus == true){
+    //     $("#html_concat").css({
+    //         'height': ($(window).height() - $("#WSUtoolbar").height()),
+    //         'margin-top': $("#WSUtoolbar").height()
+    //     });
+    // }
 
     //undo properties from small phone styling
     if ($(window).width() > 768){
