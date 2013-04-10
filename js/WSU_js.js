@@ -65,7 +65,6 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
       // jsonpCallback: 'callback',
       dataType: 'json',            
       success: function(result) {
-        alert('here we go!');
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
         // console.log(result);
 
