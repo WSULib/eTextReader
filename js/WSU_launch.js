@@ -35,7 +35,7 @@ function preLaunch() {
             var PIDsafeID = response.PIDsafe;
             var item_ID = response.item_ID;
             var collectionID = response.collection;
-            var baseURL = "http://141.217.172.153/"; //this cannot be localhost, as it codes the src for <img> tags on the client side
+            var baseURL = "http://141.217.172.153/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.  Also used for cross-origin-JSONP Solr requests.
             var solr_baseURL = "http://localhost/solr4/bookreader/";                
             //sets things in motion to launchBookReader()
             launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);

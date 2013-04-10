@@ -562,7 +562,7 @@ function speakPagealoud(source) {
             var $current_layout = getPageInfo();
 
             //solr query for text
-            var squery = 'http://fedora.lib.wayne.edu/solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
+            var squery = br.baseURL+'solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
 
             //1up solr query and speak
             if ($current_layout.mode == "1up") {        
