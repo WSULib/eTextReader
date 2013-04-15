@@ -1495,12 +1495,25 @@ function itemInfo(){
 }
 
 function help_eTextReader(){
+
+    //determine initial width of box
+    if ( $(window).width() > 1300 ){
+        helpWidth = "50%";
+    }
+    else {
+        helpWidth = "90%";
+    }
+
     var helpBox = document.createElement('div');
     helpBox.setAttribute('id','helpBox');
     $(helpBox).append("<div id='helpBox_content'></div>");
     $(helpBox).load("inc/views/helpBox.htm", function(){
         //create box with item HTML block        
-        $.colorbox({html:helpBox});    
+        $.colorbox({
+            html:helpBox,
+            maxWidth:helpWidth,
+            // initialHeight:"800"
+        });    
     });
 }
 

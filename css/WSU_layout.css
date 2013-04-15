@@ -89,6 +89,16 @@
         overflow:hidden;        
         margin-top:100px;
         height:90%;
+    }
+
+    /*Help Box*/
+    #help_table {        
+        float:center;
+        margin:auto;
+    }
+
+    #help_table .right {
+        text-align:right;
     }  
 }
 

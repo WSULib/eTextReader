@@ -678,11 +678,18 @@ textarea {
 }
 
 /***************************/
-/* TOOLTIPS
+/* TOOLTIPS / HELP
 /****************************/
 
+#help_table {
+    /*width:100%;*/
+    float:center;
+    margin:auto;
+}
 
-
+#help_table .right {
+    text-align:right;
+}
 
 
 
