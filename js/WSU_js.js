@@ -1512,9 +1512,13 @@ function help_eTextReader(){
         $.colorbox({
             html:helpBox,
             maxWidth:helpWidth,
-            // initialHeight:"800"
+            onComplete: function(){
+                //alternate table colors
+                $("#help_table tr:even").css("background-color","rgba(160,160,160,.25)");
+            }
         });    
-    });
+    });   
+    
 }
 
 function toggleMoreTools(){

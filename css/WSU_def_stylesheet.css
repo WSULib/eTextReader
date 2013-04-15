@@ -687,9 +687,9 @@ textarea {
     margin:auto;
 }
 
-#help_table .right {
-    text-align:right;
-}
+.help_tool_images {
+    text-align: right;
+} 
 
 
 

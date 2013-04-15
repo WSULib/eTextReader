@@ -184,7 +184,18 @@
         margin-right:5px;
         height:90%;
         font-size:1.5em;
-    } 
+    }
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+        text-align:left;
+        margin-bottom:10px;
+    }
+
+    #help_table .help_tool_images {
+        text-align: left;
+    }   
 }
 
 
