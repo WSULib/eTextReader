@@ -13,7 +13,7 @@ if ($auth_status == "deny"){
 
 <html>
 <head>
-    <title id="doc_title">[Unknown Title]</title>   
+    <title id="doc_title">WSU eTextReader</title>   
    
     <!--jquery load, 1.4 works best -->
     <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>       
