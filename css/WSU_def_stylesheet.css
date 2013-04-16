@@ -422,6 +422,10 @@ input[type='password'], textarea
     display:none;
 }
 
+#BRpagenum {
+    text-align:center;
+}
+
 
 /***************************/
 /* Tools

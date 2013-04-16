@@ -5,8 +5,8 @@ var mobileRequest = getURLParam('m');
 var PIDsafe = ItemID.replace(/_/g,"");
 
 //pull object structure
-function preLaunch() {
-    $(document).ready(function() {
+function preLaunch(img_rewrite) {
+    $(document).ready(function() {        
 
         //default to 2up mode if mode fragment is missing
         var docURL = document.URL;
@@ -35,7 +35,16 @@ function preLaunch() {
             var PIDsafeID = response.PIDsafe;
             var item_ID = response.item_ID;
             var collectionID = response.collection;
-            var baseURL = "http://silo.lib.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.  Also used for cross-origin-JSONP Solr requests.
+            if (img_rewrite == "true"){
+                //proxied image access
+                var baseURL = "http://silo.lib.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
+            }
+            else {
+                //WSU IP ranges image access
+                var baseURL = "http://silo.lib.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
+            }
+            
+
             var solr_baseURL = "http://localhost/solr4/bookreader/";                
             //sets things in motion to launchBookReader()
             launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);

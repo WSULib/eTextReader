@@ -2,9 +2,8 @@
 //checks authentication status
 include "php/ebook_auth.php";
 
-if ($auth_status == "deny"){
-    // echo $curPageURL();
-    header( "Location: http://proxy.lib.wayne.edu/login?url=".curPageURL()."#page/1/mode/2up") ;
+if ($auth_status == "deny"){    
+    header( "Location: http://proxy.lib.wayne.edu/login?url=".curPageURL()."#page/1/mode/2up");    
 }
 
 ?>
@@ -169,7 +168,8 @@ if ($auth_status == "deny"){
 </body>
 
 <script type="text/javascript">
-    preLaunch();    
+    // preLaunch();
+    preLaunch(<?php echo "'$img_rewrite'"; ?>);
 </script>
 
 </html>
