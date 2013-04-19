@@ -56,7 +56,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     //construct URL for Solr query
     var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(solr_search_term) + "&ItemID=" + br.ItemID + "&row_start=" + row_start + "&datatype=json";
-    console.log(squery);
+    //console.log(squery);
 
     //solr query
     $.ajax({          
@@ -1453,7 +1453,7 @@ function itemInfo(){
             }
             
         }
-        console.log(bookAuthors);
+        //console.log(bookAuthors);
         //iterate through all authors
         for(var i = 0; i < bookAuthors.length; i++){
             $(itemMeta).append("<span class='info_span'><strong>Author:</strong> "+bookAuthors[i]+"</br>");

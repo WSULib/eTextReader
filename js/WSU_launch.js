@@ -28,7 +28,7 @@ function preLaunch(img_rewrite) {
 
         //baseURL and solr_baseURL could be pulled or set in a config file, or DB
         function pull_meta(response){   
-            console.log(response)
+            //console.log(response)
             var pheight = response.dimensions.pheight;
             var pwidth = response.dimensions.pwidth;
             var leafs = response.dimensions.leafs;                
@@ -197,7 +197,7 @@ function postLaunch() {
             });
 
             function pull_meta(response){
-                console.log(response);   
+                //console.log(response);   
                 br.bookMetaObj = response;
                 //Book Title - usually [0] of titleInfo
                 if (br.bookMetaObj.titleInfo.length != undefined){
