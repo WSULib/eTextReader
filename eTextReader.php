@@ -89,7 +89,7 @@ if ($auth_status == "deny"){
                     <div class="icon tools left" id="jump_to_form">
                         <div id="jump_form_div" data-ot="Jump to Page">
                             <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
-                                <span class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
+                                <span id="jump_to_span" class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
                             </form>
                         </div>
                     </div>
@@ -104,8 +104,9 @@ if ($auth_status == "deny"){
                         <div class="fts_form left first" id="fts_search" data-ot="Search this Text">
                             <label>Full-text search:</label>                
                             <form id="fts_form" action='javascript:' onsubmit='getFTSResultsStatic(0)'>
-                                <input id='fts_input' class="fts_input_box input" type='text' size='20' />                    
-                                <button id="fts_form_button" type="button" class="btn btn-append" onclick="getFTSResultsStatic(0); return false;">search</button> 
+                                <input id='fts_input' class="fts_input_box" type='text' size='20' />                                
+                                <!-- <button id="fts_form_button" type="button" class="btn btn-append" onclick="getFTSResultsStatic(0); return false;">search</button>  -->
+                                <button id="fts_form_button" type="button" onclick="getFTSResultsStatic(0); return false;">search</button>                                 
                             </form>                
                         </div>
                     </div>                    

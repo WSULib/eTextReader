@@ -674,6 +674,15 @@ textarea {
 }
 /* END KUBE CSS --------------------------------------------- */
 
+#fts_form_button {
+    font-size:1.2em;
+}
+
+#jump_to_span {
+    padding-left:3px;
+    padding-right:3px;
+}
+
 /***************************/
 /* INFO LIGHTBOX
 /****************************/
