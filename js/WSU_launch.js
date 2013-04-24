@@ -232,7 +232,14 @@ function postLaunch() {
     //Modernizr
     if (Modernizr.touch == true){
         //remove functions that do not work with touch
-        $(".icon-screenshot, .icon-resize-full").remove();        
+        $(".icon-screenshot, .icon-resize-full").remove();   
+        //remove hover tooltips
+        $("#WSUtoolbar [data-ot]").removeAttr("data-ot");
+        $("#WSUtoolbar_minimize [data-ot]").removeAttr("data-ot");
+    }
+    //not touch
+    else {        
+        $("head").append('<script src="inc/opentip/opentip-native-excanvas.min.js"></script><link href="inc/opentip/opentip.css" rel="stylesheet" type="text/css" />');
     }
 
     // // DIAGNOSTIC //////////////////////////////////////////////////////////////

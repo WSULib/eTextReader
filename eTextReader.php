@@ -58,8 +58,8 @@ if ($auth_status == "deny"){
     <script type="text/javascript" src="js/modernizr.js"></script>
 
     <!--Opentip-->
-    <script src="inc/opentip/opentip-native-excanvas.min.js"></script>
-    <link href="inc/opentip/opentip.css" rel="stylesheet" type="text/css" />
+    <!--<script src="inc/opentip/opentip-native-excanvas.min.js"></script>
+    <link href="inc/opentip/opentip.css" rel="stylesheet" type="text/css" />-->
 
 </head>
 
