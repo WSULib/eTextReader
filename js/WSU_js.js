@@ -731,7 +731,6 @@ function launchThumbs (){
 
 
 //magnifying loupe toggle on page
-//add click/destroy
 function magLoupe(){
     //determine layout and select appropriate class
     var $current_layout = getPageInfo();
@@ -742,15 +741,18 @@ function magLoupe(){
         var mag_select = '.BRnoselect';
     }    
 
-    if (br.loupe_status == false){
-        br.loupe_status = true;
+    if (br.loupe_status == false){        
         $(mag_select).loupe({
             width: 225, // width of magnifier
             height: 175, // height of magnifier
             loupe: 'loupe' // css class for magnifier
         });
         $(mag_select).data('loupe', true);
+
+        //sets status after 250 milliseconds, allows loupe to be created before click would have detroyed it
+        setTimeout(function() {br.loupe_status = true;}, 250);        
     }
+
     else {
         br.loupe_status = false;
         $(mag_select).data('loupe', false);
@@ -761,8 +763,9 @@ function magLoupe(){
                 $(loupers[i-1]).remove();
             }    
         }        
-    }
-}
+    }    
+    
+}   
 
 // fullscreen mode
 function fullScreen(callback){
@@ -1724,6 +1727,12 @@ $(document).keyup(function(e){
     }
 });
 
+//listens for mouse click anywhere, destroy magLoupe if present
+$(document).click(function(e) {     
+    if (br.loupe_status == true){        
+        magLoupe();        
+    }    
+});
 
 
 

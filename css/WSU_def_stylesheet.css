@@ -539,6 +539,14 @@ input[type='password'], textarea
     width:100%;    
 }
 
+/*helpbox*/
+#help_table tr > td{
+    margin-bottom:5px;
+    height:50px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
 /***************************/
 /* Positioning
 /****************************/
