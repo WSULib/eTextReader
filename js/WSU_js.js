@@ -205,7 +205,7 @@ function displayFTSResultsStatic(row_start, search_term, resize){
     //create buttons for closing and pop-out
     fts_handle_static.prepend("<div class='icon tools right' id='fts_static_tools'></div>");
     $('#fts_static_tools').append('<ul class="the-icons" id="fts_icons_list"><li><span style="font-size:1.5em; font-weight:bold;">Full-Text Search Results</span></li></ul>');
-    $('#fts_icons_list').append('<li><i class="icon-remove" onclick="hideFTSResultsStatic(); return false;"></i></li><li><i id="fts_accordian" class="icon-chevron-left" onclick="accordFTSResultsStatic(); return false;"></i></li>'); 
+    $('#fts_icons_list').append('<li><i class="icon-remove mobHandle" onclick="hideFTSResultsStatic(); return false;"></i></li><li><i id="fts_accordian" class="mobHandle icon-chevron-left" onclick="accordFTSResultsStatic(); return false;"></i></li>'); 
 
     //display if not already drawn, and resize fts_wrapper when animation complete
     if (br.fts_displayed === false){    
