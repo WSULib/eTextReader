@@ -1715,6 +1715,14 @@ $(window).bind('hashchange', function() {
         $('.OCR_box').remove();
         showOCR();
     }    
+
+    //changes active mode if coming from thumbs
+    if (br.lastReadingMode === 3){
+        //highlight icon
+        $("#mode_icons>li>i").removeClass("active_icon");
+        $("#"+br.mode+"up_icon").toggleClass('active_icon');
+    }
+
 });
 
 //binds Escape to overlay destructions
