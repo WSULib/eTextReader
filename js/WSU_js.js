@@ -60,13 +60,16 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     //solr query
     $.ajax({          
-      url: squery,
-      // dataType: 'jsonp',
-      // jsonpCallback: 'callback',
+      url: squery,      
       dataType: 'json',            
-      success: function(result) {
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
+      success: FTSsearchSuccess,
+      error: FTSsearchError
+    });
+
+    function FTSsearchSuccess(result) {      
         // console.log(result);
+        //stop loading animation
+        hideLoading();                
 
         var cURL = window.location.href;         
         var Parent = document.getElementById('fts_box_text_static');
@@ -174,11 +177,16 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
           
             resizeFTSWrapper();
             
-        }
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+            
+        }      
       } //closes success function
-      
-    });    
+
+      function FTSsearchError(){
+        alert('There was a problem with the full-text searching.');
+        //stop loading animation
+        hideLoading();
+      }      
+       
    
     //set variables
     br.fts_results_row = row_start;    
@@ -221,10 +229,7 @@ function displayFTSResultsStatic(row_start, search_term, resize){
     }
     if (br.plainTextStatus == true){
         renderPlainTextHighlights(search_term);
-    }
-
-    //stop loading animation
-    hideLoading();
+    }    
 
     //set variables
     br.fts_displayed = true;    
@@ -935,11 +940,16 @@ function plainText(){
         // console.log(html_concat);            
             
         $(document).ready(function(){
-          $.ajax({
-            type: "GET",
-            url: html_concat,
-            dataType: "html",
-            success: function(response){            
+            $.ajax({
+                type: "GET",
+                url: html_concat,
+                dataType: "html",
+                success: plainTextSuccess,
+                error: plainTextError
+            });
+
+
+            function plainTextSuccess(response){            
                 $('#html_concat').html(response);
                 //remove justified css from font tags (remove if too slow)
                 var font_tags = $('#html_concat p');        
@@ -965,20 +975,25 @@ function plainText(){
 
                 //increase font size two steps
                 fontNormalize();
-            }   
-          });
-        });        
+
+                //remove loading and set BR mode        
+                hideLoading();
+                // return;
+            }
+
+            function plainTextError(){
+                //remove loading and set BR mode        
+                hideLoading();
+            }
+
+            });        
 
         // if FTS true, show highlights
         if (br.fts_displayed == true){                 
-            renderPlainTextHighlights(); //Doesn't work, same Ajax / Load problem.....
+            renderPlainTextHighlights();
         }
-
-        $('#html_concat').fadeIn();
-
-        //remove loading and set BR mode        
-        hideLoading();
-        return;
+        
+        $('#html_concat').fadeIn();        
     }
 
     //remove plainText

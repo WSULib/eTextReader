@@ -433,7 +433,9 @@ BookReader.prototype.setupKeyListeners = function() {
 // drawLeafs()
 //______________________________________________________________________________
 BookReader.prototype.drawLeafs = function() {
-    showLoading();
+    //Loading is not terribly meaningful here, these functions are rewriting <img> tags.  
+    // showLoading();
+
     if (1 == this.mode) {
         this.drawLeafsOnePage();
     } else if (3 == this.mode) {
@@ -441,7 +443,8 @@ BookReader.prototype.drawLeafs = function() {
     } else {
         this.drawLeafsTwoPage();
     }
-    hideLoading();
+
+    // hideLoading();
 }
 
 // bindGestures(jElement)
