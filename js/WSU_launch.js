@@ -271,7 +271,22 @@ function postLaunch() {
     if (br.mode == 3){
         $("#mode_icons>li>i").removeClass("active_icon");
         $("#thumbs_icon").toggleClass('active_icon');
-    }
+    }    
+
+    // stats    
+    dataObject = {};
+    dataObject.PID = PIDsafe;
+    $(document).ready(function(){
+      $.ajax({
+        type: "POST",
+        url: "php/stats.php",
+        data: dataObject,
+        dataType: "html",
+        success: function(response){
+            console.log(response);
+        }        
+      });
+    });
 
 } //closes postLaunch()
 
