@@ -759,9 +759,10 @@ BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
                 });
 
                 // *WSU MODIFICATION* /////////////////////////////////////////////////////////////
-                if (this.lastReadingMode == this.mode){
-                    this.lastReadingMode = "2";
-                }
+                if (this.lastReadingMode === this.mode){
+                    this.lastReadingMode = 2;
+                }               
+
                 var page_link = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+(leaf+1)+"/mode/"+this.lastReadingMode+"up";
                 $(link).attr('href', page_link);
                 ///////////////////////////////////////////////////////////////////////////////////

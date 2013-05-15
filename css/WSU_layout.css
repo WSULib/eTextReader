@@ -100,6 +100,10 @@
     #help_table .right {
         text-align:right;
     }  
+
+    #fts_static_tools ul.the-icons li i.mobHandle{
+        font-size:2.5em;
+    }
 }
 
 /*Smallest Size, catches phones*/
