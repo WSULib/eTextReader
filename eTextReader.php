@@ -77,12 +77,19 @@ if ($auth_status == "deny"){
                         <a href="http://www.lib.wayne.edu/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>
                     </div>
 
-                    <div id="navTip" class="icon tools left">                                                
+                    <div class="icon tools left">                                                
                         <ul class="the-icons">                        
                             <li><i class="icon-step-backward tooltip" onclick='br.leftmost(); return false;' data-ot="Beginning of Text"></i></li>
                             <li><i id="previousArrow" class="icon-arrow-left" onclick='br.left(); return false;' data-ot="Previous Page"></i></li>
                             <li><i id="nextArrow" class="icon-arrow-right" onclick='br.right(); return false;' data-ot="Next Page"></i></li>                                                                        
                             <li><i class="icon-step-forward" onclick='br.rightmost(); return false;' data-ot="End of Text"></i></li>                                            
+                        </ul>            
+                    </div>                    
+
+                    <div class="icon tools left">                                                
+                        <ul class="the-icons">                        
+                            <li><i id="text_nav_icon" class="icon-indent-left tooltip" onclick='textNav(); return false;' data-ot="Text Structure"></i></li>
+                            <!-- <li><i class="icon-list tooltip" onclick='textNav(); return false;' data-ot="Text Structure"></i></li>                             -->
                         </ul>            
                     </div>                   
 
@@ -163,7 +170,9 @@ if ($auth_status == "deny"){
         </div>
 
         <!--full-text search infrastructure-->
-        <div id="fts_box_text_static" class="shadow"></div>        
+        <div id="fts_box_text_static" class="shadow"></div>
+        <!--text-navigation infrastructure-->
+        <div id="text_nav" class="shadow"></div>         
 
     </div> <!--closes bookreader_wrapper-->
 </body>

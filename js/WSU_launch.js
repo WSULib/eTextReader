@@ -152,6 +152,7 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
     br.baseURL = baseURL;
     br.solr_baseURL = solr_baseURL;
     br.mobileRequest = mobileRequest;
+    br.textNav = false;
 
     //populate leaf location
     $('#leaf_count').html(leafs.toString());
@@ -179,6 +180,27 @@ function postLaunch() {
         $(".toggleOCR").hide();
     }
 
+    
+    //look for TOC datastream
+    $(document).ready(function() {
+
+        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";    
+        console.log(tocURL);
+
+        $.ajax({          
+          url: tocURL,      
+          dataType: 'json',            
+          success: tocSuccess          
+        });
+
+        function tocSuccess(response){
+            console.log(response);                
+            if (response === false){                                
+                $(".icon-indent-left").animate({'color':'rgb(158,158,158)'},0);
+            }            
+        }
+    });
+
     //retrieve book metadata and set to br.bookMetaObj, set title of browser page
     $(document).ready(function() {
             
@@ -196,18 +218,26 @@ function postLaunch() {
               });
             });
 
-            function pull_meta(response){
-                //console.log(response);   
-                br.bookMetaObj = response;
-                //Book Title - usually [0] of titleInfo
-                if (br.bookMetaObj.titleInfo.length != undefined){
-                    var mainTitle = br.bookMetaObj.titleInfo[0].title;
+            function pull_meta(response){                
+                //no MODS
+                if (response === false){
+                    br.bookMetaObj = response;
+                    $(".icon-info-sign").animate({'color':'rgb(158,158,158)'},0);                                        
+                    return;
                 }
-                else {
-                    var mainTitle = br.bookMetaObj.titleInfo.title;
+                //MODS present
+                else {   
+                    br.bookMetaObj = response;
+                    //Book Title - usually [0] of titleInfo
+                    if (br.bookMetaObj.titleInfo.length != undefined){
+                        var mainTitle = br.bookMetaObj.titleInfo[0].title;
+                    }
+                    else {
+                        var mainTitle = br.bookMetaObj.titleInfo.title;
+                    }
+                    br.bookMetaObj.mainTitle = mainTitle; //pushes to global bookOjbect, might use later
+                    $("#doc_title").html(mainTitle);
                 }
-                br.bookMetaObj.mainTitle = mainTitle; //pushes to global bookOjbect, might use later
-                $("#doc_title").html(mainTitle);
 
             }
 

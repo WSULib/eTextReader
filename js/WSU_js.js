@@ -125,7 +125,8 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
                     // console.log(snippets[snippet_keys[i]].OCR_text[j]);
                     var OCR_snippet = snippets[snippet_keys[i]].OCR_text[j];
 
-                    var snippet_text = '<a href="#" onclick="br.jumpToIndex('+(result.response.docs[i].page_num - 1)+');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
+                    // var snippet_text = '<a href="#" onclick="br.jumpToIndex('+(result.response.docs[i].page_num - 1)+');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
+                    var snippet_text = '<a href="#" onclick="br.jumpToPage(\''+(result.response.docs[i].page_num - 1)+'\');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
                     $('#fts_results_wrapper').append('<div class="fts_result" id="fts_result_'+class_counter+'"></div>');                
                     $("#fts_result_"+class_counter).html(snippet_text);
                     if (class_counter % 2 === 0){
@@ -239,8 +240,6 @@ function displayFTSResultsStatic(row_start, search_term, resize){
 function resizeFTSWrapper(){
         $("#fts_box_text_static").ready(function(){
             var newHeight = $("#fts_box_text_static").height() - ($("#fts_static_tools").height() + $("#fts_terms").height() + $("#fts_top_nav").height() + $("#fts_bottom_nav").height() + 85);
-            // var newHeight = $("#fts_box_text_static").height() - 105;
-            // alert(newHeight);
             $("#fts_results_wrapper").height(newHeight);            
         });        
 }
@@ -284,7 +283,9 @@ function accordFTSResultsStatic() {
     }
     //expand
     if (fts_accord == "collapsed") {
-        $('#fts_box_text_static').animate({width:300},500,function(){
+        $('#fts_box_text_static').animate({
+            width:300
+        },500,function(){
             $('#fts_box_text_static').children().show();
             $('#fts_static_tools span').show();
         });        
@@ -294,6 +295,120 @@ function accordFTSResultsStatic() {
         return
     }
 }
+
+//Text Navigation
+function textNav(){    
+    if (br.textNav === false) {
+
+        br.textNav = true;
+
+        //look for TOC datastream    
+        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";    
+
+        $.ajax({          
+          url: tocURL,      
+          dataType: 'json',            
+          success: tocSuccess,
+          error: tocError
+        });
+
+        function tocSuccess(response){
+            console.log(response);        
+            if (response === false){                
+                // add lightbox error
+                var itemTOC = document.createElement('div');
+                itemTOC.setAttribute('id','itemTOC');
+                var JTPstring = "<form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'><span>or Jump to Page: </span><input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/></form>";
+                $(itemTOC).append('<h4>"Jump to Section" is unavailable.</h4><div><p>Consider using <a href="#" onclick="launchThumbs(); return false;">Thumbnail Mode <i id="thumbs_icon" class="icon-th"/></a> as an alternative.</p></div>');
+                itemTOC.setAttribute('style','max-height:50px;');
+                $("#itemTOC").css('min-height','');
+                //create box with item HTML block        
+                $.colorbox({html:itemTOC});
+                return;
+            }
+            else{            
+                populateTextNav(response);
+            }
+        }
+        function tocError(response){
+            console.log(response);
+        }
+
+        //populate
+        function populateTextNav(response){
+            console.log(response);
+            var text_nav = $('#text_nav'); 
+
+            //create buttons for closing and pop-out
+            text_nav.prepend("<div class='icon tools right' id='text_nav_static_tools'></div>");
+            $('#text_nav_static_tools').append('<ul class="the-icons" id="text_nav_icons_list"><li><span style="font-size:1.5em; font-weight:bold;">Jump to Section</span></li></ul>');
+            $('#text_nav_icons_list').append('<li><i class="icon-remove mobHandle" onclick="hideTextNav(); return false;"></i>');
+            
+            //iterate through "sections"        
+            text_nav.append("<ul id='nav_sections'></ul>");
+            //front / cover
+            $("#nav_sections").append("<li><a href='#' onclick='br.leftmost();'><strong>Front Cover</strong></a></li></br>");
+            //sections
+            for (var i = 0; i < response.section.length; i++) {
+
+                //check for section heading                
+                if (typeof response.section[i].orig_page.length === 'undefined'){
+                    //print section heading
+                    $("#nav_sections").append("<li class='section'><a href='#' onclick='br.jumpToPage(\""+response.section[i].image_page+"\");'><strong>"+response.section[i].name+"</strong></a></li>");
+                    //get sub-sections
+                    for (var j = 0; response.section[i].section.length > j; j++){
+                        $("#nav_sections").append("<li class='sub_section'><a href='#' onclick='br.jumpToPage(\""+response.section[i].section[j].image_page+"\");'>"+response.section[i].section[j].name+"<span class='right'>"+response.section[i].section[j].orig_page+"</span></a></li>");
+                    }                   
+                }
+
+                else{
+                    //append section w/ page
+                    $("#nav_sections").append("<li class='section'><a href='#' onclick='br.jumpToPage(\""+response.section[i].image_page+"\");'>"+response.section[i].name+"<span class='right'>"+response.section[i].orig_page+"</span></a></li>");
+                }
+            }
+            //End / Back Cover
+            $("#nav_sections").append("</br><li><a href='#' onclick='br.rightmost();'><strong>Back Cover</strong></a></li>");                
+
+
+            //resize
+            text_nav.height( $(window).height() - $("#WSUtoolbar").height() -20 );
+            text_nav.css( "margin-top", $("#WSUtoolbar").height() ); 
+
+
+            text_nav.fadeIn(function(){
+                resizeTextNav();
+            });
+        }
+    }
+
+    else if (br.textNav === true) {        
+        hideTextNav();        
+    }    
+
+}
+
+function resizeTextNav(){
+        $("#text_nav").ready(function(){
+            var newHeight = $("#text_nav").height() - ($("#text_struct").height() + 50);                       
+            $("#nav_sections").height(newHeight);            
+        });
+
+
+}
+
+//Hide FTS results Static
+function hideTextNav(){
+    $('#text_nav').fadeOut("normal", function() {
+        $(this).empty();
+    });
+    if (br.plainTextStatus == true) {
+        $('#html_concat').css('margin','auto');
+        $('#html_concat').width($(window).width() - 40)
+    }
+    //set status
+    br.textNav = false;
+}
+
 
 // OCR overlays
 function showOCR(adjust) {
@@ -310,12 +425,12 @@ function showOCR(adjust) {
         //2up mode --> ajax call for OCR html
         if (mode == "2up"){                           
 
-            // convert ItemID to PIDsafe
-            var PIDsafe = br.ItemID.replace(/_/g,"");
+            // // convert ItemID to PIDsafe
+            // var PIDsafe = br.ItemID.replace(/_/g,"");
 
             //page URL's
-            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(rootpage).toString();
-            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(secondarypage).toString();            
+            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':HTML&datastream=HTML_'+(rootpage).toString();
+            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':HTML&datastream=HTML_'+(secondarypage).toString();            
             
             $(document).ready(function(){
                 $.ajax({
@@ -394,10 +509,10 @@ function singlepageOCR() {
     var left = parseInt($(root_div).css('left')) + left_offset;
 
     // convert ItemID to PIDsafe
-    var PIDsafe = br.ItemID.replace(/_/g,"");
+    // var PIDsafe = br.ItemID.replace(/_/g,"");
 
     //page URL
-    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+':HTML&datastream=HTML_'+(rootpage).toString();
+    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':HTML&datastream=HTML_'+(rootpage).toString();
 
     //insert results
     $(document).ready(function(){
@@ -1418,7 +1533,7 @@ function itemInfo(){
     if (br.bookMetaObj == false){
         var itemMeta = document.createElement('div');
         itemMeta.setAttribute('id','itemMeta');
-        $(itemMeta).append("<h4>Metadata for this book is unavailable.</h4>");
+        $(itemMeta).append("<h4>Metadata for this text is unavailable.</h4>");
         itemMeta.setAttribute('style','max-height:50px;');
         $("#itemMeta").css('min-height','');
 
@@ -1686,7 +1801,13 @@ $(window).bind('resizeEnd', function() {
         $("#fts_box_text_static").height( $(window).height() - $("#WSUtoolbar").height() - 20 );            
         $("#fts_box_text_static").css( "margin-top", $("#WSUtoolbar").height() );        
         resizeFTSWrapper();
-    }    
+    }
+
+    if (br.textNav == true){
+        $("#text_nav").height( $(window).height() - $("#WSUtoolbar").height() -20 );
+        $("#text_nav").css( "margin-top", $("#WSUtoolbar").height() );
+        resizeTextNav();
+    }  
     
     //this is a little buggy, you can see background images reappear while window dragging
     if (br.plainTextStatus == true){

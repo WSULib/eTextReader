@@ -5,11 +5,21 @@
 $PIDsafe = $_GET['PIDsafe'];
 $datastream_request = $_GET['datastream'];
 $data_type = $_GET['datatype'];
-$request_URL = "http://localhost/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
+$request_URL = "http://silo.lib.wayne.edu/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
 
 
 // XML
 if ($data_type == 'xml'){
+	// returns XML object - this might be more appropriate for content metadata	
+
+	$xml_simple = simplexml_load_file($request_URL);	
+	$json_simple = json_encode($xml_simple);	
+	echo $json_simple;
+	return;
+}
+
+// XML to JSON
+if ($data_type == 'xml2json'){
 	// returns XML object - this might be more appropriate for content metadata	
 
 	$xml_simple = simplexml_load_file($request_URL);	

@@ -77,10 +77,10 @@
         float:left;
     }
     /* FTS STATIC */
-    #fts_box_text_static {
+    #fts_box_text_static, #text_nav {
         display:none;
         position:absolute;
-        width:290px;
+        /*width:290px;*/
         background-color:rgba(255,250,221,.9);
         border: 1px solid rgba(71,86,73,.8);
         text-align:left;
@@ -101,7 +101,7 @@
         text-align:right;
     }  
 
-    #fts_static_tools ul.the-icons li i.mobHandle{
+    #fts_static_tools ul.the-icons li i.mobHandle, #text_nav ul.the-icons li i.mobHandle{
         font-size:2.5em;
     }
 }
@@ -174,7 +174,7 @@
     }
 
     /* FTS STATIC */
-    #fts_box_text_static {
+    #fts_box_text_static, #text_nav {
         display:none;
         position:absolute;
         width:95%;
