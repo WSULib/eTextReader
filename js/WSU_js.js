@@ -319,7 +319,7 @@ function textNav(){
                 var itemTOC = document.createElement('div');
                 itemTOC.setAttribute('id','itemTOC');
                 var JTPstring = "<form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'><span>or Jump to Page: </span><input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/></form>";
-                $(itemTOC).append('<h4>"Jump to Section" is unavailable.</h4><div><p>Consider using <a href="#" onclick="launchThumbs(); return false;">Thumbnail Mode <i id="thumbs_icon" class="icon-th"/></a> as an alternative.</p></div>');
+                $(itemTOC).append('<h4>"Jump to Section" for this text is unavailable.</h4><div><p>Consider using <a href="#" onclick="launchThumbs(); return false;">Thumbnail Mode <i id="thumbs_icon" class="icon-th"/></a> as an alternative.</p></div>');
                 itemTOC.setAttribute('style','max-height:50px;');
                 $("#itemTOC").css('min-height','');
                 //create box with item HTML block        
