@@ -1662,11 +1662,11 @@ function toggleMoreTools(){
     //toggle height
     if (!($('#cogIcon').hasClass('extended'))) {
         $('#WSUtoolbar').height(200);
-        $("#fts_box_text_static").css('margin-top','200px');        
+        $("#fts_box_text_static, #text_nav").css('margin-top','200px');        
     }
     if ($('#cogIcon').hasClass('extended')) {
         $('#WSUtoolbar').height(50);
-        $("#fts_box_text_static").css('margin-top','50px');        
+        $("#fts_box_text_static, #text_nav").css('margin-top','50px');        
     }
 
     if (br.plainTextStatus == true){
@@ -1827,8 +1827,17 @@ $(window).bind('resizeEnd', function() {
 
         //FTS
         if ( br.fts_displayed == true ){
-            // $("#fts_box_text_static").removeAttr('style');
+            $("#fts_box_text_static").height( $(window).height() - $("#WSUtoolbar").height() - 20 );            
+            $("#fts_box_text_static").css( "margin-top", $("#WSUtoolbar").height() );        
+            resizeFTSWrapper();            
             $("#fts_box_text_static").fadeIn();
+        }
+        //text_nav
+        if (br.textNav == true){
+            $("#text_nav").height( $(window).height() - $("#WSUtoolbar").height() -20 );
+            $("#text_nav").css( "margin-top", $("#WSUtoolbar").height() );
+            resizeTextNav();
+            // $("#text_nav").fadeIn();
         }
     }    
 
