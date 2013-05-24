@@ -11,9 +11,9 @@ if ($auth_status == "deny"){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html>
-<head>
-    <title id="doc_title">WSU eTextReader</title>   
-   
+<head>    
+    <title id="doc_title">WSU eTextReader</title>
+
     <!--jquery load, 1.4 works best -->
     <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>       
     <script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>

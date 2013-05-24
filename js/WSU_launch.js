@@ -179,7 +179,6 @@ function postLaunch() {
     if (br.mode === 3){
         $(".toggleOCR").hide();
     }
-
     
     //look for TOC datastream
     $(document).ready(function() {
@@ -246,32 +245,8 @@ function postLaunch() {
             }
         });
     
-    //Device Detection -----------------------------------------------
+    //Device Detection -----------------------------------------------    
     
-    //mobile conditionals
-    if (isMobile.any() != null || br.mobileRequest == "true"){
-        br.mobileStatus = "true";                        
-    }
-
-    //iphone
-    if (isMobile.any() == "iPhone"){
-        br.switchMode(1); //launches in 1up mode if iphone
-        $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'css/iPhone.css') );
-    }     
-
-    //Modernizr
-    if (Modernizr.touch == true){
-        //remove functions that do not work with touch
-        $(".icon-screenshot, .icon-resize-full").remove();   
-        //remove hover tooltips
-        $("#WSUtoolbar [data-ot]").removeAttr("data-ot");
-        $("#WSUtoolbar_minimize [data-ot]").removeAttr("data-ot");
-    }
-    //not touch
-    else {        
-        $("head").append('<script src="inc/opentip/opentip-native-excanvas.min.js"></script><link href="inc/opentip/opentip.css" rel="stylesheet" type="text/css" />');
-    }
-
     // // DIAGNOSTIC //////////////////////////////////////////////////////////////
     // //retina / high resolution check
     // var retina = window.devicePixelRatio > 2;
@@ -288,6 +263,32 @@ function postLaunch() {
     // //your mobile device
     // alert(isMobile.any());
     // // DIAGNOSTIC //////////////////////////////////////////////////////////////
+
+    //mobile conditionals
+    if (isMobile.any() != null || br.mobileRequest == "true"){
+        br.mobileStatus = "true";                        
+    }
+
+    //iphone
+    if (isMobile.any() == "iPhone"){
+        br.switchMode(1); //launches in 1up mode if iphone        
+        // set pixel density        
+        $('head').append('<meta name="viewport" content="initial-scale=.50"/>');        
+        br.mobileDevice = 'small_screen';
+    }        
+
+    //Modernizr
+    if (Modernizr.touch == true){
+        //remove functions that do not work with touch
+        $(".icon-screenshot, .icon-resize-full").remove();   
+        //remove hover tooltips
+        $("#WSUtoolbar [data-ot]").removeAttr("data-ot");
+        $("#WSUtoolbar_minimize [data-ot]").removeAttr("data-ot");
+    }
+    //not touch, append tooltip functionality
+    else {        
+        $("head").append('<script src="inc/opentip/opentip-native-excanvas.min.js"></script><link href="inc/opentip/opentip.css" rel="stylesheet" type="text/css" />');
+    }
 
     //indicate launched book mode
     if (br.mode == 1){
@@ -317,6 +318,15 @@ function postLaunch() {
         }        
       });
     });
+
+    //resize container for small(ish) screens
+    if ($(window).width() < 1160){        
+        $(document).ready(function(){
+            $("#BRcontainer").css({ 
+                top:$("#WSUtoolbar").height()                
+            });    
+        });
+    };
 
 } //closes postLaunch()
 

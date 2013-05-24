@@ -126,7 +126,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
                     var OCR_snippet = snippets[snippet_keys[i]].OCR_text[j];
 
                     // var snippet_text = '<a href="#" onclick="br.jumpToIndex('+(result.response.docs[i].page_num - 1)+');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
-                    var snippet_text = '<a href="#" onclick="br.jumpToPage(\''+(result.response.docs[i].page_num - 1)+'\');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
+                    var snippet_text = '<a href="#" onclick="mobileNavPanelDestroy(\'FTS\'); br.jumpToPage(\''+(result.response.docs[i].page_num - 1)+'\');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
                     $('#fts_results_wrapper').append('<div class="fts_result" id="fts_result_'+class_counter+'"></div>');                
                     $("#fts_result_"+class_counter).html(snippet_text);
                     if (class_counter % 2 === 0){
@@ -199,6 +199,11 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
 //Display FTS results Static
 function displayFTSResultsStatic(row_start, search_term, resize){
+
+    //if mobile, small screen, drop cog and make full screen
+    if (br.mobileDevice == "small_screen" && ($('#cogIcon').hasClass('extended'))) {        
+        toggleMoreTools();
+    }
 
     //draw and position search results
     var fts_handle_static = $('#fts_box_text_static');
@@ -354,16 +359,16 @@ function textNav(){
                 //check for section heading                
                 if (typeof response.section[i].orig_page.length === 'undefined'){
                     //print section heading
-                    $("#nav_sections").append("<li class='section'><a href='#' onclick='br.jumpToPage(\""+response.section[i].image_page+"\");'><strong>"+response.section[i].name+"</strong></a></li>");
+                    $("#nav_sections").append("<li class='section'><a href='#' onclick='mobileNavPanelDestroy(\"text_nav\"); br.jumpToPage(\""+response.section[i].image_page+"\");'><strong>"+response.section[i].name+"</strong></a></li>");
                     //get sub-sections
                     for (var j = 0; response.section[i].section.length > j; j++){
-                        $("#nav_sections").append("<li class='sub_section'><a href='#' onclick='br.jumpToPage(\""+response.section[i].section[j].image_page+"\");'>"+response.section[i].section[j].name+"<span class='right'>"+response.section[i].section[j].orig_page+"</span></a></li>");
+                        $("#nav_sections").append("<li class='sub_section'><a href='#' onclick='mobileNavPanelDestroy(\"text_nav\"); br.jumpToPage(\""+response.section[i].section[j].image_page+"\");'>"+response.section[i].section[j].name+"<span class='right'>"+response.section[i].section[j].orig_page+"</span></a></li>");
                     }                   
                 }
 
                 else{
                     //append section w/ page
-                    $("#nav_sections").append("<li class='section'><a href='#' onclick='br.jumpToPage(\""+response.section[i].image_page+"\");'>"+response.section[i].name+"<span class='right'>"+response.section[i].orig_page+"</span></a></li>");
+                    $("#nav_sections").append("<li class='section'><a href='#' onclick='mobileNavPanelDestroy(\"text_nav\"); br.jumpToPage(\""+response.section[i].image_page+"\");'>"+response.section[i].name+"<span class='right'>"+response.section[i].orig_page+"</span></a></li>");
                 }
             }
             //End / Back Cover
@@ -935,13 +940,13 @@ function toolbarsMinimize(){
         $('#WSUtoolbar_minimize').addClass('toolbar_hidden').removeClass('toolbar_exposed');
         $("#minimize_handle").removeClass('icon-chevron-up').addClass('icon-chevron-down');
         
-        // if (when) nav arrows are on screen - 1up
-        if (br.bigArrowStatus == true){
-            if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
-                $('#dBigArrow').offset({ top: $(window).height() - 50});                
-                $('#uBigArrow').offset({ top: 10}); 
-            }            
-        }
+        // // if (when) nav arrows are on screen - 1up
+        // if (br.bigArrowStatus == true){
+        //     if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
+        //         $('#dBigArrow').offset({ top: $(window).height() - 50});                
+        //         $('#uBigArrow').offset({ top: 10}); 
+        //     }            
+        // }
 
         //extend plain text / HTML
         if (br.plainTextStatus == true){            
@@ -981,17 +986,7 @@ function toolbarsMinimize(){
 
         $('#WSUtoolbar_minimize').addClass('toolbar_exposed').removeClass('toolbar_hidden');
         $("#minimize_handle").removeClass('icon-chevron-down').addClass('icon-chevron-up');
-
-        //CONSIDER REMOVING////////////////////////////////////////////////////////////////////////////////////
-        // if (when) nav arrows are on screen
-        if (br.bigArrowStatus == true){
-            if (br.mobileStatus != "true" && $current_layout.mode == "1up" || $current_layout.mode == "thumb"){
-                bigArrows('resize');               
-            }            
-        }
-        //CONSIDER REMOVING////////////////////////////////////////////////////////////////////////////////////
-
-                
+                       
     }
 }
 
@@ -1679,6 +1674,17 @@ function toggleMoreTools(){
     //toggle class
     $('#cogIcon').toggleClass('extended');    
 
+}
+
+function mobileNavPanelDestroy(type){    
+    if (type === "FTS" && br.mobileStatus == "true" && br.mobileDevice == 'small_screen'){
+    // if (type === "FTS" && $(window).width() < 768){        
+        hideFTSResultsStatic();
+    }
+    if (type === "text_nav" && br.mobileStatus == "true" && br.mobileDevice == 'small_screen'){
+    // if (type === "text_nav" && $(window).width() < 768){
+        hideTextNav();        
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
