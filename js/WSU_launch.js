@@ -34,8 +34,8 @@ function preLaunch(img_rewrite) {
             var leafs = response.dimensions.leafs;                
             var PIDsafeID = response.PIDsafe;
             var item_ID = response.item_ID;
-            var collectionID = response.collection;
-            if (img_rewrite == "true"){
+            var collectionID = response.collection;            
+            if (img_rewrite === "true"){
                 //proxied image access
                 var baseURL = "http://silo.lib.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
             }
