@@ -184,7 +184,7 @@ function postLaunch() {
     $(document).ready(function() {
 
         var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";    
-        console.log(tocURL);
+        // console.log(tocURL);
 
         $.ajax({          
           url: tocURL,      
@@ -193,7 +193,7 @@ function postLaunch() {
         });
 
         function tocSuccess(response){
-            console.log(response);                
+            // console.log(response);                
             if (response === false){                                
                 $(".icon-indent-left").animate({'color':'rgb(158,158,158)'},0);
             }            
@@ -314,7 +314,7 @@ function postLaunch() {
         data: dataObject,
         dataType: "html",
         success: function(response){
-            console.log(response);
+            // console.log(response);
         }        
       });
     });
