@@ -308,16 +308,9 @@ function textNav(){
         br.textNav = true;
 
         //look for TOC datastream    
-        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";    
+        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";
 
-        $.ajax({          
-          url: tocURL,      
-          dataType: 'json',            
-          success: tocSuccess,
-          error: tocError
-        });
-
-        function tocSuccess(response){
+	function tocSuccess(response){
             console.log(response);        
             if (response === false){                
                 // add lightbox error
@@ -337,7 +330,16 @@ function textNav(){
         }
         function tocError(response){
             console.log(response);
-        }
+        }    
+
+        $.ajax({          
+          url: tocURL,      
+          dataType: 'json',            
+          success: tocSuccess,
+          error: tocError
+        });
+
+        
 
         //populate
         function populateTextNav(response){
@@ -686,7 +688,7 @@ function speakPagealoud(source) {
             var $current_layout = getPageInfo();
 
             //solr query for text
-            var squery = br.baseURL+'solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
+            var squery = 'http://localhost/solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
 
             //1up solr query and speak
             if ($current_layout.mode == "1up") {        
