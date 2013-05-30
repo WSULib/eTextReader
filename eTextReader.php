@@ -88,7 +88,7 @@ if ($auth_status == "deny"){
 
                     <div class="icon tools left">                                                
                         <ul class="the-icons">                        
-                            <li><i id="text_nav_icon" class="icon-indent-left tooltip" onclick='textNav(); return false;' data-ot="Text Structure"></i></li>
+                            <li><i id="text_nav_icon" class="icon-indent-left tooltip" onclick='textNav(); return false;' data-ot="Jump to Section"></i></li>
                             <!-- <li><i class="icon-list tooltip" onclick='textNav(); return false;' data-ot="Text Structure"></i></li>                             -->
                         </ul>            
                     </div>                   
