@@ -1,0 +1,4 @@
+#git ignore for php dir
+
+stats.php
+ebook_auth*.*
