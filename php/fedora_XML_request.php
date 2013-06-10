@@ -1,11 +1,13 @@
 <?php
 
+//get local URL
+$repo_baseURL = $_SERVER['SERVER_NAME'];
 
 //get variables create URL
 $PIDsafe = $_GET['PIDsafe'];
 $datastream_request = $_GET['datastream'];
 $data_type = $_GET['datatype'];
-$request_URL = "http://silo.lib.wayne.edu/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
+$request_URL = "http://$repo_baseURL/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
 
 
 // XML
