@@ -1,14 +1,12 @@
 <?php
 
-//get local URL
-$repo_baseURL = $_SERVER['SERVER_NAME'];
+include "../config/config.php";
 
 //get variables create URL
 $PIDsafe = $_GET['PIDsafe'];
 $datastream_request = $_GET['datastream'];
 $data_type = $_GET['datatype'];
 $request_URL = "http://$repo_baseURL/fedora/objects/$PIDsafe/datastreams/$datastream_request/content";
-
 
 // XML
 if ($data_type == 'xml'){

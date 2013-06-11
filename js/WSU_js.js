@@ -274,6 +274,9 @@ function accordFTSResultsStatic() {
 
     //collapse
     if (fts_accord == "expanded" ){
+        //set return width
+        br.ftsWidth = $('#fts_box_text_static').width();
+
         var accord_box = $('#fts_box_text_static');
         accord_box.css({
             'overflow':'hidden',
@@ -289,7 +292,7 @@ function accordFTSResultsStatic() {
     //expand
     if (fts_accord == "collapsed") {
         $('#fts_box_text_static').animate({
-            width:300
+            width:br.ftsWidth
         },500,function(){
             $('#fts_box_text_static').children().show();
             $('#fts_static_tools span').show();

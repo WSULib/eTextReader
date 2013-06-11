@@ -84,6 +84,7 @@ function BookReader() {
     this.FedoraPID = null;
     this.lastReadingMode = null;
     this.bookMetaObj = null;
+    this.ftsWidth = null;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
