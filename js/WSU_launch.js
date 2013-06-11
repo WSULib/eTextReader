@@ -328,6 +328,17 @@ function postLaunch() {
         });
     };
 
+    //check for iframe, minimize toolbars if true
+    if ( window.self === window.top ) {
+    } else {
+        $("#css_layout").remove();
+        $("head").append('<link href="css/WSU_embedded.css" rel="stylesheet" type="text/css" />');
+        toolbarsMinimize();
+
+        //speed up animations of toolbars
+        // br.toolbarAnimate = 100;
+    }
+
 } //closes postLaunch()
 
 

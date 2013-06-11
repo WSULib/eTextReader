@@ -928,9 +928,9 @@ function toolbarsMinimize(){
         //get current distance from top, will return to this
         br.minimizerD = $("#WSUtoolbar_minimize").css('top');
 
-        $('#WSUtoolbar').slideUp(750);
+        $('#WSUtoolbar').slideUp(400);
         $('#WSUtoolbar_minimize').animate({top:'0px'},{
-            duration: 750,
+            duration: 400,
             complete: function(){            
                 $("#BRcontainer").css({top:'0px'});
                 if ($current_layout.mode == "1up"){
@@ -944,14 +944,6 @@ function toolbarsMinimize(){
         });
         $('#WSUtoolbar_minimize').addClass('toolbar_hidden').removeClass('toolbar_exposed');
         $("#minimize_handle").removeClass('icon-chevron-up').addClass('icon-chevron-down');
-        
-        // // if (when) nav arrows are on screen - 1up
-        // if (br.bigArrowStatus == true){
-        //     if ($current_layout.mode == "1up" || $current_layout.mode == "thumb"){
-        //         $('#dBigArrow').offset({ top: $(window).height() - 50});                
-        //         $('#uBigArrow').offset({ top: 10}); 
-        //     }            
-        // }
 
         //extend plain text / HTML
         if (br.plainTextStatus == true){            
@@ -964,7 +956,7 @@ function toolbarsMinimize(){
     }
 
     else {
-        $('#WSUtoolbar').slideDown(750, function(){            
+        $('#WSUtoolbar').slideDown(400, function(){            
             $("#BRcontainer").css({ top:$("#WSUtoolbar").height() }); //this needs to change based on screen size we're in...
             if ($current_layout.mode == "1up"){
                 br.prepareOnePageView();                    
@@ -985,7 +977,7 @@ function toolbarsMinimize(){
             }
         });
 
-        $('#WSUtoolbar_minimize').animate({top:br.minimizerD},750, function(){
+        $('#WSUtoolbar_minimize').animate({top:br.minimizerD},400, function(){
             $(this).removeAttr('style');
         });        
 

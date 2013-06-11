@@ -26,7 +26,7 @@ if ($auth_status == "deny"){
     <!--[if lte IE 7]><script src="css/elusive-iconset/lte-ie7.js"></script><![endif]-->    
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/orig_stylesheet.css"/>
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_def_stylesheet.css"/>
-    <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_layout.css"/>
+    <link id="css_layout" rel="stylesheet" type="text/css" href="css/WSU_layout.css"/>
 
     <!-- Load BR init and local functionality -->    
     <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
