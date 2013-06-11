@@ -336,7 +336,7 @@ function postLaunch() {
         toolbarsMinimize();
 
         //speed up animations of toolbars
-        // br.toolbarAnimate = 100;
+        br.toolbarAnimate = 10;
     }
 
 } //closes postLaunch()

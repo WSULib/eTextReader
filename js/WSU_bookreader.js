@@ -85,7 +85,7 @@ function BookReader() {
     this.lastReadingMode = null;
     this.bookMetaObj = null;
     this.ftsWidth = null;
-    this.toolbarAnimate = 750;
+    this.toolbarAnimate = 400;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////

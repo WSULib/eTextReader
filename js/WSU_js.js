@@ -928,9 +928,9 @@ function toolbarsMinimize(){
         //get current distance from top, will return to this
         br.minimizerD = $("#WSUtoolbar_minimize").css('top');
 
-        $('#WSUtoolbar').slideUp(400);
+        $('#WSUtoolbar').slideUp(br.toolbarAnimate);
         $('#WSUtoolbar_minimize').animate({top:'0px'},{
-            duration: 400,
+            duration: br.toolbarAnimate,
             complete: function(){            
                 $("#BRcontainer").css({top:'0px'});
                 if ($current_layout.mode == "1up"){
@@ -956,7 +956,7 @@ function toolbarsMinimize(){
     }
 
     else {
-        $('#WSUtoolbar').slideDown(400, function(){            
+        $('#WSUtoolbar').slideDown(br.toolbarAnimate, function(){            
             $("#BRcontainer").css({ top:$("#WSUtoolbar").height() }); //this needs to change based on screen size we're in...
             if ($current_layout.mode == "1up"){
                 br.prepareOnePageView();                    
@@ -977,7 +977,7 @@ function toolbarsMinimize(){
             }
         });
 
-        $('#WSUtoolbar_minimize').animate({top:br.minimizerD},400, function(){
+        $('#WSUtoolbar_minimize').animate({top:br.minimizerD},br.toolbarAnimate, function(){
             $(this).removeAttr('style');
         });        
 
