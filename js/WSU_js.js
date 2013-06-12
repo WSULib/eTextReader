@@ -314,7 +314,7 @@ function textNav(){
         var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";
 
 	function tocSuccess(response){
-            console.log(response);        
+            // console.log(response);        
             if (response === false){                
                 // add lightbox error
                 var itemTOC = document.createElement('div');
@@ -346,7 +346,7 @@ function textNav(){
 
         //populate
         function populateTextNav(response){
-            console.log(response);
+            // console.log(response);
             var text_nav = $('#text_nav'); 
 
             //create buttons for closing and pop-out
