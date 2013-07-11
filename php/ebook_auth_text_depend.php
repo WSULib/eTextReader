@@ -1,5 +1,6 @@
 <?php
 //Utility to check if client IP matches requirements for a particular ebook
+INCLUDE "sensitive.php";
 
 //expecting ebook PID as GET parameter
 $clientIP = $_SERVER['REMOTE_ADDR']; 
