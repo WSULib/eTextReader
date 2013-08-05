@@ -330,10 +330,14 @@ function postLaunch() {
 
     //check for iframe, minimize toolbars if true
     if ( window.self === window.top ) {
-    } else {
+    } else {                
         $("#css_layout").remove();
         $("head").append('<link href="css/WSU_embedded.css" rel="stylesheet" type="text/css" />');
-        toolbarsMinimize();
+
+        //create and update link 
+        $(".logo.tools.left").prepend('<a id="embedPopOut" target="_blank" href="'+br.baseURL+'/eTextReader/eTextReader.php?ItemID=wayne:'+br.PIDsafeID+'#page/1/mode/2up">Open in New Window</a>');
+        // $("#popOutLink").show();        
+        // toolbarsMinimize();
 
         //speed up animations of toolbars
         br.toolbarAnimate = 10;

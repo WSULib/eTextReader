@@ -74,7 +74,8 @@ if ($auth_status == "deny"){
 
                 <div id="first_row">                    
                     <div class="logo tools left">
-                        <a href="http://www.lib.wayne.edu/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>
+                        <a id="popOutLink" style="display:none;" href="#">Open in New Window</a>
+                        <a href="http://www.lib.wayne.edu/" style="text-decoration:none;"><img id="lib_logo" src="./images/icons/library_system_w_v2.png" /></a>                        
                     </div>
 
                     <div class="icon tools left">                                                
