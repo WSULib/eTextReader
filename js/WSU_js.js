@@ -112,21 +112,17 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             
             // get all highlights from page set (snippets)
             var snippets = result.highlighting;            
-            var snippet_keys = Object.keys(snippets);
-            // console.log(snippets);
-            // console.log(snippet_keys);
+            var snippet_keys = Object.keys(snippets);            
 
             //iterate through documents with matches
             for (var i = 0; i < snippet_keys.length; i++) {
 
-                // iterate through OCR_text.Array for each snippet, grabbing the page number from the Object Key
-                // example navigation --> console.log(snippets[snippet_keys[i]].OCR_text[0]);
+                // iterate through OCR_text.Array for each snippet, grabbing the page number from the Object Key                
                 for (var j = 0; j < snippets[snippet_keys[i]].OCR_text.length; j++) {
                     // console.log(snippets[snippet_keys[i]].OCR_text[j]);
                     var OCR_snippet = snippets[snippet_keys[i]].OCR_text[j];
-
                     // var snippet_text = '<a href="#" onclick="br.jumpToIndex('+(result.response.docs[i].page_num - 1)+');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
-                    var snippet_text = '<a href="#" onclick="mobileNavPanelDestroy(\'FTS\'); br.jumpToPage(\''+(result.response.docs[i].page_num - 1)+'\');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
+                    var snippet_text = '<a href="#" onclick="mobileNavPanelDestroy(\'FTS\'); br.jumpToPage(\''+(result.response.docs[i].page_num)+'\');">page: <b>' + result.response.docs[i].page_num + '</a></b><br>"...' + OCR_snippet + '..."<br><br>';
                     $('#fts_results_wrapper').append('<div class="fts_result" id="fts_result_'+class_counter+'"></div>');                
                     $("#fts_result_"+class_counter).html(snippet_text);
                     if (class_counter % 2 === 0){
@@ -650,7 +646,7 @@ function fontNormalize(){
 }
 
 // read pages aloud
-function speakPagealoud(source) {
+function speakPageAloud(source) {
      
     //if playing, then stop
     if ( $(".icon-speaker").hasClass('playing') ){
@@ -659,68 +655,56 @@ function speakPagealoud(source) {
 
     //if not playing, start
     else{
-
             //say loading
             var playerDivId = "jplayer_box";
             var say = function() {
-            var playerDiv = $("<div style='width: 0px; height: 0px;' id='" + playerDivId + "'></div>");
-            var bodyObject = $("body");
-            if (bodyObject.size()) {
-            bodyObject.append(playerDiv);
-            playerDiv.jPlayer({
-            ready: function () {          
-              $(this).jPlayer("setMedia", {"mp3": "inc/audio_loading.mp3"}).jPlayer("play");      
-            }
-            ,
-            ended: function (){              
-                $("#jplayer_box").remove();
-                speakText();              
-            }
-
-            });    
-
-            } else {
-                alert("No <body> node to attach to.");
-            }
-        };
-
+                var playerDiv = $("<div style='width: 0px; height: 0px;' id='" + playerDivId + "'></div>");
+                var bodyObject = $("body");
+                if (bodyObject.size()) {
+                bodyObject.append(playerDiv);
+                playerDiv.jPlayer({
+                ready: function () {          
+                  $(this).jPlayer("setMedia", {"mp3": "inc/audio_loading.mp3"}).jPlayer("play");      
+                }
+                ,
+                ended: function (){              
+                    $("#jplayer_box").remove();
+                    speakText();              
+                }
+                });    
+                } else {
+                    alert("No <body> node to attach to.");
+                }
+            };
         say();
-
         function speakText(){
-
             var $current_layout = getPageInfo();
-
             //solr query for text
-            var squery = 'http://localhost/solr4/bookreader/select/?q=page_num:['+$current_layout.rootpage+' TO '+$current_layout.secondarypage+' ]&fq=ItemID:'+br.ItemID+'&wt=json&json.wrf=callback';        
-
-            //1up solr query and speak
-            if ($current_layout.mode == "1up") {        
-                $.ajax({          
-                  url: squery,
-                  dataType: 'jsonp',
-                  jsonpCallback: 'callback',
-                  success: function(result) {
+            var squery = 'http://localhost/solr4/bookreader/select/?q=page_num:%5b'+$current_layout.rootpage+'%20TO%20'+$current_layout.secondarypage+'%5d&fq=ItemID:'+br.ItemID+'&wt=json';
+            // console.log(squery);
+            //1up or 2up mode, using PHP tunnel
+            var data = new Object();
+            data.squery = squery;
+            $.ajax({          
+              url: "php/solr_speak_XML_request.php?squery="+squery,
+              dataType: 'json',
+              data:data,
+              // jsonpCallback: 'callback',
+              success: function(result) {
+                console.log(result);
+                if ($current_layout.mode == "1up") { 
                     var Singletext = result.response.docs[0].OCR_text;
                     var Speaktext = "Single Page - "+Singletext;
-                    sayIt("page_text","null","null",Speaktext);        
-                  }
-                });
-            }
-
-            //2up solr query and speak
-            if ($current_layout.mode == "2up") {        
-                $.ajax({          
-                  url: squery,
-                  dataType: 'jsonp',
-                  jsonpCallback: 'callback',
-                  success: function(result) {
+                    sayIt("page_text","null","null",Speaktext);
+                }
+                if ($current_layout.mode == "2up") {
                     var Ltext = result.response.docs[0].OCR_text;
                     var Rtext = result.response.docs[1].OCR_text;
                     var Speaktext = "Left page - "+Ltext+"- Right page - "+Rtext;
                     sayIt("page_text",Ltext,Rtext,Speaktext);        
-                  }
-                });
-            }
+                }       
+              }
+            });
         }
     }
 
@@ -750,8 +734,8 @@ function sayIt(type,Ltext,Rtext,Speaktext) {
         ended: function (){
           if (type=="page_text") {
             $('#audio_load_alert').fadeOut();
-            br.right("speak_src"); //sends "speak_src" parameter to flipper, contidional runs "speakPagealoud"
-            speakPagealoud('autoflip');
+            br.right("speak_src"); //sends "speak_src" parameter to flipper, contidional runs "speakPageAloud"
+            speakPageAloud('autoflip');
             $("#jplayer_box").remove(); 
 
           }
