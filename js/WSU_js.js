@@ -691,7 +691,7 @@ function speakPageAloud(source) {
               data:data,
               // jsonpCallback: 'callback',
               success: function(result) {
-                console.log(result);
+                // console.log(result);
                 if ($current_layout.mode == "1up") { 
                     var Singletext = result.response.docs[0].OCR_text;
                     var Speaktext = "Single Page - "+Singletext;
