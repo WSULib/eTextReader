@@ -14,8 +14,9 @@ if ($auth_status == "deny"){
 <head>    
     <title id="doc_title">WSU eTextReader</title>
 
-    <!--jquery load, 1.4 works best -->
-    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>       
+    <!--jquery 1.4 load, 1.4 required -->
+    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>    
+    
     <script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="js/dragscrollable.js"></script>
     <!--<script type="text/javascript" src="js/jquery.ui.ipad.js"></script>-->
@@ -178,8 +179,7 @@ if ($auth_status == "deny"){
     </div> <!--closes bookreader_wrapper-->
 </body>
 
-<script type="text/javascript">
-    // preLaunch();
+<script type="text/javascript">    
     preLaunch(<?php echo "'$img_rewrite'"; ?>);
 </script>
 

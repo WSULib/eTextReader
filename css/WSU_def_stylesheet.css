@@ -414,11 +414,16 @@ a { cursor: hand; cursor: pointer; }
     border-radius:4px; /* regular */
 }
 
+#WSUtoolbar ul.the-icons a{
+    text-decoration:none;
+    color:black;
+}
+
 #WSUtoolbar ul.the-icons li i{
     /*margin-top:-8px;    */
     font-size:2em;
     padding:0px;
-    cursor: pointer;
+    cursor: pointer;    
 }
 
 #WSUtoolbar_minimize ul.the-icons li i{
