@@ -82,7 +82,7 @@ function BookReader() {
     this.PIDsafeID = null;
     this.collectionID = null;
     this.FedoraPID = null;
-    this.lastReadingMode = null;
+    this.lastReadingMode = '';
     this.bookMetaObj = null;
     this.ftsWidth = null;
     this.toolbarAnimate = 400;
@@ -761,9 +761,10 @@ BookReader.prototype.drawLeafsThumbnail = function( seekIndex ) {
                 });
 
                 // *WSU MODIFICATION* /////////////////////////////////////////////////////////////
-                if (this.lastReadingMode === this.mode){
-                    this.lastReadingMode = 2;
-                }               
+                //default to 2up mode if loaded on thumbs
+                if (this.lastReadingMode === ""){
+                    this.lastReadingMode = "2";    
+                }                
 
                 var page_link = window.location.protocol + "//" + window.location.host+window.location.pathname+window.location.search+"#page/"+(leaf+1)+"/mode/"+this.lastReadingMode+"up";
                 $(link).attr('href', page_link);
