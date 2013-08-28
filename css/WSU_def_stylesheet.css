@@ -120,7 +120,8 @@ a { cursor: hand; cursor: pointer; }
     display:none;
     position:absolute;
     /*width:290px;*/
-    background-color:rgba(255,250,221,.9);
+    /*background-color:rgba(255,250,221,.9);*/
+    background-color:rgba(248,248,248,.9);
     border: 1px solid rgba(71,86,73,.8);
     text-align:left;
     z-index: 10;
@@ -358,7 +359,8 @@ a { cursor: hand; cursor: pointer; }
     height:35px;    
     color:#1D1D1D;
     z-index:11;    
-    background-color:rgba(255,250,221,.9);
+    /*background-color:rgba(255,250,221,.9);*/
+    background-color:rgba(248,248,248,.9);
     min-width:500px;
 }
 
@@ -405,7 +407,7 @@ a { cursor: hand; cursor: pointer; }
 
 #WSUtoolbar .icon {
     /*background-color:rgba(100,94,76,.3);*/
-    background-color:rgba(71,86,73,.3);
+    /*background-color:rgba(71,86,73,.3);*/
     padding:2px;
     margin-left:10px;
     margin-right:10px;
@@ -444,7 +446,8 @@ a { cursor: hand; cursor: pointer; }
 }
 
 #WSUtoolbar_minimize {
-    background-color:rgba(255,250,221,.9);
+    /*background-color:rgba(255,250,221,.9);*/
+    background-color:rgba(248,248,248,.9);
     position: absolute;
     right: 19px;
     /*width: 20px;*/
