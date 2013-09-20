@@ -57,7 +57,7 @@
         clear:both;
         font-size:1.5em;
         width:100%;
-        background-color:rgba(255,250,221,.9);
+        background-color:rgba(248,248,248,.9);
         height:50px;
     }
 
@@ -66,7 +66,7 @@
         margin:auto;
         clear:both;
         width:100%;
-        background-color:rgba(255,250,221,.9);
+        background-color:rgba(248,248,248,.9);
         font-size:1.5em;
         height:50px;
     }
@@ -84,7 +84,7 @@
         display:none;
         position:absolute;
         /*width:290px;*/
-        background-color:rgba(255,250,221,.9);
+        background-color:rgba(248,248,248,.9);
         border: 1px solid rgba(71,86,73,.8);
         text-align:left;
         z-index: 10;
@@ -128,7 +128,7 @@
         clear:both;
         font-size:1.5em;
         width:100%;
-        background-color:rgba(255,250,221,.9);
+        background-color:rgba(248,248,248,.9);
         height:50px;
     }
 
@@ -138,7 +138,7 @@
         margin-top:6px;
         clear:both;        
         width:100%;
-        background-color:rgba(255,250,221,.9);
+        background-color:rgba(248,248,248,.9);
         height:50px;
         /*display:none;*/
     }
@@ -148,7 +148,7 @@
         margin:auto;
         clear:both;
         width:100%;
-        background-color:rgba(255,250,221,.9);
+        background-color:rgba(248,248,248,.9);
         font-size:1.5em;
         height:50px;
         /*display:none;*/
@@ -160,7 +160,7 @@
         margin-top:6px;
         clear:both;
         width:100%;
-        background-color:rgba(255,250,221,.9);        
+        background-color:rgba(248,248,248,.9);        
         height:50px;
         /*display:none;*/
     }
@@ -181,7 +181,7 @@
         display:none;
         position:absolute;
         width:95%;
-        background-color:rgba(255,250,221,.9);
+        background-color:rgba(248,248,248,.9);
         border: 1px solid rgba(71,86,73,.8);
         text-align:left;
         z-index: 10;
@@ -203,6 +203,10 @@
     #help_table .help_tool_images {
         text-align: left;
     }   
+
+    #jump_form_div{
+        /*display:none;*/
+    }
 }
 
 

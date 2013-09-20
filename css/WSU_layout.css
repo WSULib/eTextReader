@@ -203,6 +203,10 @@
     #help_table .help_tool_images {
         text-align: left;
     }   
+
+    #jump_form_div{
+        /*display:none;*/
+    }
 }
 
 

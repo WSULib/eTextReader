@@ -95,13 +95,7 @@ if ($auth_status == "deny"){
                         </ul>            
                     </div>                   
 
-                    <div class="icon tools left" id="jump_to_form">
-                        <div id="jump_form_div" data-ot="Jump to Page">
-                            <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
-                                <span id="jump_to_span" class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
-                            </form>
-                        </div>
-                    </div>
+                    <!--jump_to_form here-->
 
                     <div class="icon tools left" id="cogIcon">
                         <ul class="the-icons">                        
@@ -120,8 +114,10 @@ if ($auth_status == "deny"){
                         </div>
                     </div>                    
                 </div> <!--closes first row-->
-
                 <div id="second_row" class="collapseRow">
+                    
+                    
+
                     <div class="icon tools left" id="second_row_leftmost">
                         <ul class="the-icons">       
                             <li><i class="icon-zoom-out" onclick='br.zoom(-1); return false;' title="Zoom out" data-ot="Zoom Out"></i></li>
@@ -140,6 +136,13 @@ if ($auth_status == "deny"){
                     </div>             
 
                     <div id="second_row_pivot" >
+                        <div class="icon tools left" id="jump_to_form">
+                            <div id="jump_form_div" data-ot="Jump to Page">
+                                <form action='javascript:' onsubmit='br.jumpToPage(this.elements[0].value)'>
+                                    <span id="jump_to_span" class='label'>Page<input id='BRpagenum' type='text' size='3' onfocus='br.autoStop();'/>of <span id="leaf_count"></span></span>
+                                </form>
+                            </div>
+                        </div>
                         <div class="icon tools right second">
                             <ul class="the-icons">                                
                                 <li><i class="toggleOCR icon-file-alt" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
