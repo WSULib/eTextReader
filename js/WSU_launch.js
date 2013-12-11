@@ -139,6 +139,7 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 
     br.getEmbedCode = function(frameWidth, frameHeight, viewParams) {
         return "Embed code not yet supported.";
+        // <iframe src="http://silo.lib.wayne.edu/eTextReader/eTextReader.php?ItemID={{APIParams.PID}}#page/1/mode/2up" width="575px" height="500px" frameborder="0" ></iframe>
     }
 
     // Let's go!

@@ -13,54 +13,39 @@ if ($auth_status == "deny"){
 <html>
 <head>    
     <title id="doc_title">WSU eTextReader</title>
-
     <!--jquery 1.4 load, 1.4 required -->
     <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>    
-    
     <script type="text/javascript" src="js/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="js/dragscrollable.js"></script>
     <!--<script type="text/javascript" src="js/jquery.ui.ipad.js"></script>-->
     <script type="text/javascript" src="js/jquery.bt.min.js"></script>
-
     <!-- Main BookReader CSS -->    
     <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive-iconset/css/elusive-webfont.css"/>
     <!--[if lte IE 7]><script src="css/elusive-iconset/lte-ie7.js"></script><![endif]-->    
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/orig_stylesheet.css"/>
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_def_stylesheet.css"/>
     <link id="css_layout" rel="stylesheet" type="text/css" href="css/WSU_layout.css"/>
-
     <!-- Load BR init and local functionality -->    
     <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
     <script type="text/javascript" src="js/WSU_js.js"></script>
     <script type="text/javascript" src="js/WSU_launch.js"></script>        
     <script type="text/javascript" src="js/fullscreen_API.js"></script>
-
     <!--URL hash detector / used to detect page changing-->
     <script type="text/javascript" src="js/hashchange.js"></script>
-
     <!--jplayer -->
     <script type="text/javascript" src="inc/jPlayer/jquery.jplayer.min.js"></script>    
-
     <!--jquery highlight-->
-    <script type="text/javascript" src="js/jquery.highlight.js"></script> 
-
+    <script type="text/javascript" src="js/jquery.highlight.js"></script>
     <!--colorbox for metadata information-->
     <script src="js/jquery.colorbox-min.js"></script>
     <link rel="stylesheet" type="text/css" href="inc/colorbox/itemMetadata/colorbox.css"/>
-
     <!--mobile detection script-->
     <script src="js/detectMobile.js"></script>
-
     <!--NON-MOBILE ONLY-->
     <!--magnifier / tjpzoom -->    
-    <script type="text/javascript" src="js/jquery.loupe.js"></script>
-    
+    <script type="text/javascript" src="js/jquery.loupe.js"></script>    
     <!-- Modernizr -->
-    <script type="text/javascript" src="js/modernizr.js"></script>
-
-    <!--Opentip-->
-    <!--<script src="inc/opentip/opentip-native-excanvas.min.js"></script>
-    <link href="inc/opentip/opentip.css" rel="stylesheet" type="text/css" />-->
+    <script type="text/javascript" src="js/modernizr.js"></script>    
 
 </head>
 
@@ -69,7 +54,7 @@ if ($auth_status == "deny"){
 
         <div id="overlays"></div>
 
-        <div id="WSUtoolbar" class="shadow">
+        <div id="WSUtoolbar" >
 
             <div class="tool_row">
 
