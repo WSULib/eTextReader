@@ -207,7 +207,7 @@ a { cursor: hand; cursor: pointer; }
     display:none;
     position:absolute;
     /*width:290px;*/
-    background-color:rgba(255,250,221,.9);
+    background-color:rgba(248,248,248,1);
     border: 1px solid rgba(71,86,73,.8);
     text-align:left;
     z-index: 10;
