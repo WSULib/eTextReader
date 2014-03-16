@@ -112,7 +112,8 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
             
             // get all highlights from page set (snippets)
             var snippets = result.highlighting;            
-            var snippet_keys = Object.keys(snippets);            
+            var snippet_keys = Object.keys(snippets);     
+            // console.log(snippet_keys);       
 
             //iterate through documents with matches
             for (var i = 0; i < snippet_keys.length; i++) {
