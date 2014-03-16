@@ -777,8 +777,21 @@ textarea {
     text-align: right;
 } 
 
-
-
+/***************************/
+/* Text Aanlysis
+/****************************/
+#text_analysis{    
+    height:100%;
+    z-index:9;
+    width:100%;    
+    overflow-y:scroll;
+    overflow:auto;    
+    position:absolute;
+    background-color:white;
+    padding-right:20px;    
+    padding-left:20px;
+    background-color: rgba(248,248,248,1);
+}
 
 
 
