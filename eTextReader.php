@@ -130,6 +130,8 @@ if ($auth_status == "deny"){
                         </div>
                         <div class="icon tools right second">
                             <ul class="the-icons">                                
+                                <!--<li><i class="icon-hand-left" onclick='launchTextAnalysis(); return false;' data-ot="Text Analysis"></i></li>-->
+                                <!-- <li><i class="icon-hand-left" onclick='toggleTextAnalysis(); return false;' data-ot="Text Analysis"></i></li> -->
                                 <li><i class="toggleOCR icon-file-alt" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
                                 <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>
