@@ -37,11 +37,11 @@ function preLaunch(img_rewrite) {
             var collectionID = response.collection;            
             if (img_rewrite === "true"){
                 //proxied image access
-                var baseURL = "http://silo.lib.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
+                var baseURL = "http://digital.library.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
             }
             else {
                 //WSU IP ranges image access
-                var baseURL = "http://silo.lib.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
+                var baseURL = "http://digital.library.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
             }
             
 
@@ -139,7 +139,7 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 
     br.getEmbedCode = function(frameWidth, frameHeight, viewParams) {
         return "Embed code not yet supported.";
-        // <iframe src="http://silo.lib.wayne.edu/eTextReader/eTextReader.php?ItemID={{APIParams.PID}}#page/1/mode/2up" width="575px" height="500px" frameborder="0" ></iframe>
+        // <iframe src="http://digital.library.wayne.edu/eTextReader/eTextReader.php?ItemID={{APIParams.PID}}#page/1/mode/2up" width="575px" height="500px" frameborder="0" ></iframe>
     }
 
     // Let's go!

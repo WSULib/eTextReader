@@ -4,6 +4,6 @@
 // $repo_baseURL = $_SERVER['SERVER_NAME'];
 
 //manuall assigned Fedora host
-$repo_baseURL = "silo.lib.wayne.edu";
+$repo_baseURL = "digital.library.wayne.edu";
 
 ?>
