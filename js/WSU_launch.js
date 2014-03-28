@@ -340,7 +340,7 @@ function postLaunch() {
 
         //create and update link 
         // $(".logo.tools.left").prepend('<a id="embedPopOut" target="_blank" href="'+br.baseURL+'/eTextReader/eTextReader.php?ItemID=wayne:'+br.PIDsafeID+'#page/1/mode/2up">Open in New Window</a>');
-        $("#cogIcon .the-icons").append('<li><a id="embedPopOut" target="_blank" href="'+br.baseURL+'/eTextReader/eTextReader.php?ItemID=wayne:'+br.PIDsafeID+'#page/1/mode/2up"><i class="icon-resize-full" title="Open in New Window" data-ot="Open in New Window"></i></a></li>');                
+        $("#cogIcon .the-icons").append('<li><a id="embedPopOut" target="_blank" href="'+br.baseURL+'eTextReader/eTextReader.php?ItemID=wayne:'+br.PIDsafeID+'#page/1/mode/2up"><i class="icon-resize-full" title="Open in New Window" data-ot="Open in New Window"></i></a></li>');                
 
 
         //remove toolbars
