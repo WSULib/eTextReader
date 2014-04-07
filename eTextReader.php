@@ -129,13 +129,10 @@ if ($auth_status == "deny"){
                             </div>
                         </div>
                         <div class="icon tools right second">
-                            <ul class="the-icons">                                
-                                <!--<li><i class="icon-hand-left" onclick='launchTextAnalysis(); return false;' data-ot="Text Analysis"></i></li>-->
-                                <!-- <li><i class="icon-hand-left" onclick='toggleTextAnalysis(); return false;' data-ot="Text Analysis"></i></li> -->
+                            <ul class="the-icons">                                                                
                                 <li><i class="toggleOCR icon-file-alt" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
-                                <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>
-                                <li><i class="icon-speaker toolbarTip" onclick='speakPageAloud();' data-ot="Speak Text Aloud"></i></li>                         
+                                <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>                                
                                 <li><i class="icon-screenshot" onclick='magLoupe();' data-ot="Maginfying Loupe"></i></li>
                                 <li><i class="icon-resize-full" onclick='goFullScreen();' data-ot="Full-Screen"></i></li>
                                 <li><i class="icon-info-sign" onclick='itemInfo();' data-ot="Information about this Text"></i></li>
