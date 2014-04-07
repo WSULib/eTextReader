@@ -132,8 +132,7 @@ if ($auth_status == "deny"){
                             <ul class="the-icons">                                                                
                                 <li><i class="toggleOCR icon-file-alt" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
-                                <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>                                
-                                <li><i class="icon-screenshot" onclick='magLoupe();' data-ot="Maginfying Loupe"></i></li>
+                                <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>                                                                
                                 <li><i class="icon-resize-full" onclick='goFullScreen();' data-ot="Full-Screen"></i></li>
                                 <li><i class="icon-info-sign" onclick='itemInfo();' data-ot="Information about this Text"></i></li>
                                 <li><i class="icon-question-sign" onclick='help_eTextReader();' data-ot="Help about the eTextReader"></i></li>                                        
