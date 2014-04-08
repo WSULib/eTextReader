@@ -21,6 +21,7 @@ if ($auth_status == "deny"){
     <script type="text/javascript" src="js/jquery.bt.min.js"></script>
     <!-- Main BookReader CSS -->    
     <link id="css_icons" rel="stylesheet" type="text/css" href="css/elusive-iconset/css/elusive-webfont.css"/>
+    <link rel="stylesheet" href="css/style.css">
     <!--[if lte IE 7]><script src="css/elusive-iconset/lte-ie7.js"></script><![endif]-->    
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/orig_stylesheet.css"/>
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_def_stylesheet.css"/>
@@ -75,7 +76,7 @@ if ($auth_status == "deny"){
 
                     <div class="icon tools left">                                                
                         <ul class="the-icons">                        
-                            <li><i id="text_nav_icon" class="icon-indent-left tooltip" onclick='textNav(); return false;' data-ot="Jump to Section"></i></li>
+                            <li><i id="text_nav_icon" class="ico-toc tooltip" onclick='textNav(); return false;' data-ot="Jump to Section"></i></li>
                             <!-- <li><i class="icon-list tooltip" onclick='textNav(); return false;' data-ot="Text Structure"></i></li>                             -->
                         </ul>            
                     </div>                   
@@ -113,10 +114,10 @@ if ($auth_status == "deny"){
                     
                     <div rel="tooltip" class="icon tools right second">                                                 
                         <ul id="mode_icons" class="the-icons">                        
-                            <li><i id="1up_icon" class="icon-file" onclick="launch1up(); return false;" data-ot="One Page Mode"></i></li>
-                            <li><i id="2up_icon" class="icon-book" onclick="launch2up(); return false;" data-ot="Two Page Mode"></i></li>
+                            <li><i id="1up_icon" class="ico-single-page" onclick="launch1up(); return false;" data-ot="One Page Mode"></i></li>
+                            <li><i id="2up_icon" class="ico-book" onclick="launch2up(); return false;" data-ot="Two Page Mode"></i></li>
                             <li><i id="thumbs_icon" class="icon-th" onclick="launchThumbs(); return false;" data-ot="Thumbnail Mode"></i></li>
-                            <li><i id="plain_text_icon" class="icon-align-left" onclick='plainText();' data-ot="Plain Text / HTML Mode"></i></li>
+                            <li><i id="plain_text_icon" class="ico-html" onclick='plainText();' data-ot="Plain Text / HTML Mode"></i></li>
                         </ul>                    
                     </div>             
 
@@ -130,7 +131,7 @@ if ($auth_status == "deny"){
                         </div>
                         <div class="icon tools right second">
                             <ul class="the-icons">                                                                
-                                <li><i class="toggleOCR icon-file-alt" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
+                                <li><i class="toggleOCR ico-text" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
                                 <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>                                                                
                                 <li><i class="icon-resize-full" onclick='goFullScreen();' data-ot="Full-Screen"></i></li>

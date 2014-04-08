@@ -98,7 +98,7 @@ ul.icons li .icon-large:before {
 }
 
 /* My modifications ------------------------------------------------------ */
-.no-touch ul.the-icons li:hover i{
+.no-touch ul.the-icons li:hover i {
   color: #08b;
   transform: scale(1.4,1.4);
   -ms-transform: scale(1.4,1.4);
