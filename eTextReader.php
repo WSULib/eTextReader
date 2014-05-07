@@ -46,7 +46,22 @@ if ($auth_status == "deny"){
     <!--magnifier / tjpzoom -->    
     <script type="text/javascript" src="js/jquery.loupe.js"></script>    
     <!-- Modernizr -->
-    <script type="text/javascript" src="js/modernizr.js"></script>    
+    <script type="text/javascript" src="js/modernizr.js"></script>  
+    <!--Piwik-->
+	<script type="text/javascript">
+		// Piwik	
+		var _paq = _paq || [];
+		_paq.push(["setCustomVariable", "1", "ebook_pid", "<?php echo $_GET['ItemID']; ?>", "visit"]);
+		_paq.push(["trackPageView"]);
+		_paq.push(["enableLinkTracking"]);
+		(function() {
+			var u=(("https:" == document.location.protocol) ? "https" : "http") + "://cgi.lib.wayne.edu/stats/piwik/";
+			_paq.push(["setTrackerUrl", u+"piwik.php"]);
+			_paq.push(["setSiteId", "28"]);
+			var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+			g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+		})();  
+	</script>  
 
 </head>
 

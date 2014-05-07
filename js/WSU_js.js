@@ -24,12 +24,6 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
         accordFTSResultsStatic();
     }
 
-    // Create hidden Full-Text Search static box 
-    // if (br.fts_displayed == false){
-    //     $fts_static = $('<div id="fts_box_text_static" class="shadow"></div>');
-    //     $('body').append($fts_static);
-    // }
-
     //clear previous results            
     $("#fts_box_text_static").html('<p id="fts_terms"></p>');    
     
@@ -329,7 +323,7 @@ function textNav(){
             }
         }
         function tocError(response){
-            console.log(response);
+            // console.log(response);
         }    
 
         $.ajax({          
@@ -1517,6 +1511,7 @@ function itemInfo(){
     }
     
     else{
+
         //write metadata to HTML block  
         var itemMeta = document.createElement('div');
         itemMeta.setAttribute('id','itemMeta');
@@ -1563,7 +1558,7 @@ function itemInfo(){
             }
             
         }
-        //console.log(bookAuthors);
+        
         //iterate through all authors
         for(var i = 0; i < bookAuthors.length; i++){
             $(itemMeta).append("<span class='info_span'><strong>Author:</strong> "+bookAuthors[i]+"</br>");
@@ -1576,6 +1571,7 @@ function itemInfo(){
         $(itemMeta).append("<strong>Physical Description:</strong> "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form)+"</span>";        
 
         //citation & persistent links
+
         if (typeof(br.bookMetaObj.identifier) == "object"){
             for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
                 if (br.bookMetaObj.identifier[i].startsWith('b')){
@@ -1587,14 +1583,14 @@ function itemInfo(){
                 }
                 else{
                     //citation link                
-                    var OCLCnum = br.bookMetaObj.identifier[i];
-                    // var OCLCnum = br.bookMetaObj.recordInfo.recordIdentifier.split('ocn')[1];
-                    var OCLCbase = "http://wild.worldcat.org/oclc/[OCLCNUM]?page=citation";
+                    var OCLCnum = br.bookMetaObj.identifier[i];                                        
+                    var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
                     var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
                     $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
                 }
             }
         }
+
         else{
             if (br.bookMetaObj.identifier.startsWith('b')){
                 var BIBnum = br.bookMetaObj.identifier;
@@ -1605,9 +1601,8 @@ function itemInfo(){
             }
             else{
                 //citation link                
-                var OCLCnum = br.bookMetaObj.identifier;
-                // var OCLCnum = br.bookMetaObj.recordInfo.recordIdentifier.split('ocn')[1];
-                var OCLCbase = "http://wild.worldcat.org/oclc/[OCLCNUM]?page=citation";
+                var OCLCnum = br.bookMetaObj.identifier;                
+                var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
                 var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
                 $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
             }
@@ -1888,7 +1883,7 @@ $(window).bind('resizeEnd', function() {
 
 });
 
-//listens for rootpage change - very helpful function...
+//listens for rootpage change
 $(window).bind('hashchange', function() {
     //draws highlights for new page    
     if (br.imageHighlights == true){        

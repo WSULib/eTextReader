@@ -16,6 +16,30 @@ function preLaunch(img_rewrite) {
 
         var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=STRUCT_META&datatype=xml';                       
 
+        //baseURL and solr_baseURL could be pulled or set in a config file, or DB
+        function pull_meta(response){   
+            //console.log(response)
+            var pheight = response.dimensions.pheight;
+            var pwidth = response.dimensions.pwidth;
+            var leafs = response.dimensions.leafs;                
+            var PIDsafeID = response.PIDsafe;
+            var item_ID = response.item_ID;
+            var collectionID = response.collection;            
+            
+            if (img_rewrite === "true"){
+                //proxied image access
+                var baseURL = "http://digital.library.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
+            }
+            else {
+                //WSU IP ranges image access
+                var baseURL = "http://digital.library.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
+            }            
+
+            var solr_baseURL = "http://localhost/solr4/bookreader/";                
+            //sets things in motion to launchBookReader()
+            launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
+        }
+
         //returns json
         $(document).ready(function(){
           $.ajax({
@@ -26,29 +50,7 @@ function preLaunch(img_rewrite) {
           });
         });
 
-        //baseURL and solr_baseURL could be pulled or set in a config file, or DB
-        function pull_meta(response){   
-            //console.log(response)
-            var pheight = response.dimensions.pheight;
-            var pwidth = response.dimensions.pwidth;
-            var leafs = response.dimensions.leafs;                
-            var PIDsafeID = response.PIDsafe;
-            var item_ID = response.item_ID;
-            var collectionID = response.collection;            
-            if (img_rewrite === "true"){
-                //proxied image access
-                var baseURL = "http://digital.library.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
-            }
-            else {
-                //WSU IP ranges image access
-                var baseURL = "http://digital.library.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
-            }
-            
-
-            var solr_baseURL = "http://localhost/solr4/bookreader/";                
-            //sets things in motion to launchBookReader()
-            launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
-        }
+        
     });
 }
 
@@ -184,40 +186,60 @@ function postLaunch() {
     //look for TOC datastream
     $(document).ready(function() {
 
-        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";    
-        // console.log(tocURL);
-
-        $.ajax({          
-          url: tocURL,      
-          dataType: 'json',            
-          success: tocSuccess          
-        });
-
+        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";            
         function tocSuccess(response){
             // console.log(response);                
             if (response === false){                                
                 $(".icon-indent-left").animate({'color':'rgb(158,158,158)'},0);
             }            
         }
+        $.ajax({          
+          url: tocURL,      
+          dataType: 'json',            
+          success: tocSuccess          
+        });        
     });
 
-    //retrieve book metadata and set to br.bookMetaObj, set title of browser page
-    $(document).ready(function() {
+    // NEW - retrieve book metadata from Solr and set to br.bookSolrObj, set title of browser page
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    $(document).ready(function() {                        
+                        
+            // Default Search Parameters (pre form submission)
+			var searchDefs = {};						      
+			searchDefs.wt = "json";
+			searchDefs.q = "id:wayne\\:"+br.PIDsafeID;
+			searchDefs.raw = "noescape";
+			
+			//pass solr parameters os stringify-ed JSON, accepted by Python API as dicitonary
+			solrParamsString = JSON.stringify(searchDefs);	
+			// Calls API functions	
+			var metaquery = "/WSUAPI?functions[]=solrSearch&solrParams="+solrParamsString;	
+			$.ajax({				
+				url: metaquery,
+				dataType: "json",						
+				success: pull_meta,
+				error: pull_meta_fail
+			});
+			function pull_meta(response){      				   
+                br.bookSolrObj = response.solrSearch.response.docs[0];
+                console.log("bookSolrObj:",br.bookSolrObj);
+
+                // set page title
+                $("#doc_title").html(br.bookSolrObj.mods_title_ms[0]);
+
+            }
+            function pull_meta_fail(){
+            	br.bookSolrObj == false;
+                console.log("There was an error retrieving book solr object.");
+            }
             
+        });
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // ORIGINAL - retrieve book metadata and set to br.bookMetaObj, set title of browser page
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    $(document).ready(function() {            
             var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=namespace2json';
-            // console.log(metaquery);            
-
-            //returns json
-            $(document).ready(function(){
-              $.ajax({
-                type: "GET",
-                url: metaquery,
-                dataType: "json",
-                success: pull_meta,
-                error: pull_meta_fail
-              });
-            });
-
             function pull_meta(response){                
                 //no MODS
                 if (response === false){
@@ -240,30 +262,21 @@ function postLaunch() {
                 }
 
             }
-
             function pull_meta_fail(){
                 br.bookMetaObj = null;
             }
+            //returns json
+            $(document).ready(function(){
+              $.ajax({
+                type: "GET",
+                url: metaquery,
+                dataType: "json",
+                success: pull_meta,
+                error: pull_meta_fail
+              });
+            });            
         });
-    
-    //Device Detection -----------------------------------------------    
-    
-    // // DIAGNOSTIC //////////////////////////////////////////////////////////////
-    // //retina / high resolution check
-    // var retina = window.devicePixelRatio > 2;
-    // if (retina) {
-    // alert('you on a retina!');
-    // }
-    // else {
-    //     alert('you is NOT on a retina.');
-    // }
-
-    // //resolution check
-    // alert("Width: "+$(window).width()+" / Height: "+$(window).height());      
-
-    // //your mobile device
-    // alert(isMobile.any());
-    // // DIAGNOSTIC //////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //mobile conditionals
     if (isMobile.any() != null || br.mobileRequest == "true"){

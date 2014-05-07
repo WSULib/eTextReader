@@ -591,8 +591,9 @@ input[type='password'], textarea
 /*item info lightbox*/
 #itemMeta{
     min-width:200px;
+    max-width:800px;
     height:400px;
-    text-align:center;
+    /*text-align:center;*/
 }
 
 #itemMeta_top{
