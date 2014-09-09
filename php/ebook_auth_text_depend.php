@@ -9,7 +9,7 @@ $PID = $_GET['ItemID'];
 //check security policy on etext object
 $baseURL = "http://localhost/fedora/risearch?";
 $queryOptions = "type=tuples&lang=itql&format=json&dt=on&stream=on&query=";
-$baseQuery = "select \$object from <#ri> where <info:fedora/$PID> <wsudor:hasSecurityPolicy> \$object;";
+$baseQuery = "select \$object from <#ri> where <info:fedora/$PID> <http://digital.library.wayne.edu/fedora/objects/wayne:WSUDOR-Fedora-Relations/datastreams/RELATIONS/content/hasSecurityPolicy> \$object;";
 
 $concatURL = $baseURL.$queryOptions.urlencode($baseQuery);
 $results = file_get_contents($concatURL);
