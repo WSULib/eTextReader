@@ -1571,6 +1571,7 @@ function itemInfo(){
         //citation & persistent links
         if (typeof(br.bookMetaObj.identifier) == "object"){
             for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
+                
                 if (br.bookMetaObj.identifier[i].startsWith('b')){
                     var BIBnum = br.bookMetaObj.identifier[i];
                     BIBnum = BIBnum.substring(0, BIBnum.length - 1);
@@ -1578,32 +1579,34 @@ function itemInfo(){
                     var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
                     $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
                 }
-                else{
+                
+                if (/^\d.*/.test(br.bookMetaObj.identifier[i])) {
                     //citation link                
                     var OCLCnum = br.bookMetaObj.identifier[i];                                        
                     var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
                     var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
                     $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
                 }
+
             }
         }
 
-        else{
-            if (br.bookMetaObj.identifier.startsWith('b')){
-                var BIBnum = br.bookMetaObj.identifier;
-                BIBnum = BIBnum.substring(0, BIBnum.length - 1);
-                var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
-                var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
-                $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
-            }
-            else{
-                //citation link                
-                var OCLCnum = br.bookMetaObj.identifier;                
-                var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
-                var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
-                $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
-            }
-        }
+        // else{
+        //     if (br.bookMetaObj.identifier.startsWith('b')){
+        //         var BIBnum = br.bookMetaObj.identifier;
+        //         BIBnum = BIBnum.substring(0, BIBnum.length - 1);
+        //         var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
+        //         var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
+        //         $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
+        //     }
+        //     else{
+        //         //citation link                
+        //         var OCLCnum = br.bookMetaObj.identifier;                
+        //         var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
+        //         var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
+        //         $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
+        //     }
+        // }
 
         //Notes
         if (br.bookMetaObj.note != undefined ){
