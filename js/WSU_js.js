@@ -1516,11 +1516,15 @@ function itemInfo(){
         var itemMeta = document.createElement('div');
         itemMeta.setAttribute('id','itemMeta');
 
+        // DC singleObject page
+        $(itemMeta).append("<h3 style='text-align:center;'><a href='http://digital.library.wayne.edu/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");        
+
         //cover image
         var coverURL = br.baseURL+'fedora/objects/'+br.PIDsafeID+':thumbs/datastreams/THUMB_1/content';
         $(itemMeta).append("<div id='itemMeta_top'><img src='"+coverURL+"'/></div>");    
 
         //METADATA
+
         //Book Title - usually [0] of titleInfo
         if (br.bookMetaObj.titleInfo.length != undefined){
             var mainTitle = br.bookMetaObj.titleInfo[0].title;
@@ -1604,10 +1608,7 @@ function itemInfo(){
         //Notes
         if (br.bookMetaObj.note != undefined ){
             $(itemMeta).append("<strong>Notes:</strong> "+br.bookMetaObj.note+"</br>");
-        }
-
-        // DC singleObject page
-        $(itemMeta).append("<h3><a href='http://digital.library.wayne.edu/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");
+        }       
             
         
     }
