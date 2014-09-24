@@ -1589,24 +1589,7 @@ function itemInfo(){
                 }
 
             }
-        }
-
-        // else{
-        //     if (br.bookMetaObj.identifier.startsWith('b')){
-        //         var BIBnum = br.bookMetaObj.identifier;
-        //         BIBnum = BIBnum.substring(0, BIBnum.length - 1);
-        //         var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
-        //         var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
-        //         $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
-        //     }
-        //     else{
-        //         //citation link                
-        //         var OCLCnum = br.bookMetaObj.identifier;                
-        //         var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
-        //         var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
-        //         $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
-        //     }
-        // }
+        }        
 
         //Notes
         if (br.bookMetaObj.note != undefined ){
