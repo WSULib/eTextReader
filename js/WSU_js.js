@@ -1563,15 +1563,8 @@ function itemInfo(){
         for(var i = 0; i < bookAuthors.length; i++){
             $(itemMeta).append("<span class='info_span'><strong>Author:</strong> "+bookAuthors[i]+"</br>");
         }
-
-        //publisher
-        $(itemMeta).append("<strong>Publication Info:</strong> "+br.bookMetaObj.originInfo.place[1].placeTerm+", "+br.bookMetaObj.originInfo.publisher+", "+br.bookMetaObj.originInfo.dateIssued+"</br>");
-
-        //properties
-        $(itemMeta).append("<strong>Physical Description:</strong> "+br.bookMetaObj.physicalDescription.extent+", "+br.bookMetaObj.physicalDescription.form)+"</span>";        
-
+        
         //citation & persistent links
-
         if (typeof(br.bookMetaObj.identifier) == "object"){
             for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
                 if (br.bookMetaObj.identifier[i].startsWith('b')){
@@ -1612,6 +1605,9 @@ function itemInfo(){
         if (br.bookMetaObj.note != undefined ){
             $(itemMeta).append("<strong>Notes:</strong> "+br.bookMetaObj.note+"</br>");
         }
+
+        // DC singleObject page
+        $(itemMeta).append("<h3><a href='http://digital.library.wayne.edu/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");
             
         
     }
