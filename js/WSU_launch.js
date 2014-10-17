@@ -35,7 +35,7 @@ function preLaunch(img_rewrite) {
                 var baseURL = "http://digital.library.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
             }            
 
-            var solr_baseURL = "http://localhost/solr4/bookreader/";                
+            var solr_baseURL = "http://silo.lib.wayne.edu/solr4/bookreader/";                
             //sets things in motion to launchBookReader()
             launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
         }
