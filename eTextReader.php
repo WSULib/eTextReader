@@ -150,6 +150,8 @@ if ($auth_status == "deny"){
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
                                 <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>                                                                
                                 <li><i class="icon-resize-full" onclick='goFullScreen();' data-ot="Full-Screen"></i></li>
+                                <li><i class="icon-speaker" onclick='speakPageAloud("autoflip");' data-ot="Text-to-Speech: Reads Aloud"></i></li>
+                                <!-- -->
                                 <li><i class="icon-info-sign" onclick='itemInfo();' data-ot="Information about this Text"></i></li>
                                 <li><i class="icon-question-sign" onclick='help_eTextReader();' data-ot="Help about the eTextReader"></i></li>                                        
                             </ul>                                                     

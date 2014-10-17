@@ -642,6 +642,12 @@ function fontNormalize(){
 
 // read pages aloud
 function speakPageAloud(source) {
+
+	// if page one, advance first...
+	var $current_layout = getPageInfo();
+	if ($current_layout.rootpage == 1){		
+		br.right();
+	}
      
     //if playing, then stop
     if ( $(".icon-speaker").hasClass('playing') ){
@@ -685,27 +691,25 @@ function speakPageAloud(source) {
               dataType: 'json',
               data:data,
               // jsonpCallback: 'callback',
-              success: function(result) {
-                // console.log(result);
+              success: function(result) {              	
+                // console.log(result);                
                 if ($current_layout.mode == "1up") { 
                     var Singletext = result.response.docs[0].OCR_text;
-                    var Speaktext = "Single Page - "+Singletext;
+                    var Speaktext = "Single page, "+$current_layout.rootpage+" - "+Singletext;
                     sayIt("page_text","null","null",Speaktext);
                 }
                 if ($current_layout.mode == "2up") {
                     var Ltext = result.response.docs[0].OCR_text;
                     var Rtext = result.response.docs[1].OCR_text;
-                    var Speaktext = "Left page - "+Ltext+"- Right page - "+Rtext;
+                    var Speaktext = "Left page, "+$current_layout.rootpage+" - "+Ltext+" - Right page, "+$current_layout.secondarypage+" - "+Rtext;
                     sayIt("page_text",Ltext,Rtext,Speaktext);        
                 }       
               }
             });
         }
     }
-
     //toggles color of icon and status
-    $(".icon-speaker").toggleClass("active_icon playing");  
-    
+    $(".icon-speaker").toggleClass("active_icon playing");
 }
 
 //speak words
@@ -731,8 +735,8 @@ function sayIt(type,Ltext,Rtext,Speaktext) {
             $('#audio_load_alert').fadeOut();
             br.right("speak_src"); //sends "speak_src" parameter to flipper, contidional runs "speakPageAloud"
             speakPageAloud('autoflip');
-            $("#jplayer_box").remove(); 
-
+            $("#jplayer_box").remove();
+            speakPageAloud('autoflip');
           }
         }
 
