@@ -49,8 +49,8 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     }
 
     //construct URL for Solr query
-    var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(solr_search_term) + "&ItemID=" + br.ItemID + "&row_start=" + row_start + "&datatype=json";
-    //console.log(squery);
+    var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(solr_search_term) + "&ItemID=" + br.ItemID.split(":")[1] + "&row_start=" + row_start + "&datatype=json";
+    console.log(squery);
 
     //solr query
     $.ajax({          
@@ -681,7 +681,7 @@ function speakPageAloud(source) {
         function speakText(){
             var $current_layout = getPageInfo();
             //solr query for text
-            var squery = 'http://silo.lib.wayne.edu/solr4/bookreader/select/?q=page_num:%5b'+$current_layout.rootpage+'%20TO%20'+$current_layout.secondarypage+'%5d&fq=ItemID:'+br.ItemID+'&wt=json';
+            var squery = 'http://silo.lib.wayne.edu/solr4/bookreader/select/?q=page_num:%5b'+$current_layout.rootpage+'%20TO%20'+$current_layout.secondarypage+'%5d&fq=ItemID:'+br.ItemID.split(":")[1]+'&wt=json';
             // console.log(squery);
             //1up or 2up mode, using PHP tunnel
             var data = new Object();
@@ -1228,8 +1228,10 @@ function renderImageHighlights(){
     if ($current_layout.mode == "2up") {
 
         //create URLs
-        var left_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';
-        var right_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.secondarypage.toString()+'&datatype=html';
+        var left_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.rootpage.toString()+'&datatype=html';
+        console.log("left page",left_xml_doc);
+        var right_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.secondarypage.toString()+'&datatype=html';
+        console.log("right page",right_xml_doc);
 
         drawBoxes($current_layout.mode, $current_layout.rootpage, left_xml_doc,br.search_term,'l');
         drawBoxes($current_layout.mode, $current_layout.secondarypage, right_xml_doc,br.search_term,'r');
@@ -1239,7 +1241,7 @@ function renderImageHighlights(){
     if ($current_layout.mode == "1up") {                    
 
         //create URLs
-        var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':altoXML&datastream=altoXML_'+$current_layout.rootpage.toString()+'&datatype=html';        
+        var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.rootpage.toString()+'&datatype=html';        
         drawBoxes($current_layout.mode, $current_layout.rootpage, single_current_xml_doc, br.search_term,'single'); //current page        
     }
 }

@@ -4,61 +4,48 @@ var ItemID = getURLParam('ItemID');
 var mobileRequest = getURLParam('m');        
 var PIDsafe = ItemID.replace(/_/g,"");
 
-//pull object structure
+//pull book structure
 function preLaunch(img_rewrite) {
-    $(document).ready(function() {        
 
-        //default to 2up mode if mode fragment is missing
-        var docURL = document.URL;
-        if (docURL.indexOf("#") === -1){
-            window.location.hash = '#page/1/mode/2up';
-        }
-
-        var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=STRUCT_META&datatype=xml';                       
-
-        //baseURL and solr_baseURL could be pulled or set in a config file, or DB
-        function pull_meta(response){   
-            //console.log(response)
-            var pheight = response.dimensions.pheight;
-            var pwidth = response.dimensions.pwidth;
-            var leafs = response.dimensions.leafs;                
-            var PIDsafeID = response.PIDsafe;
-            var item_ID = response.item_ID;
-            var collectionID = response.collection;            
-            
-            if (img_rewrite === "true"){
-                //proxied image access
-                var baseURL = "http://digital.library.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
-            }
-            else {
-                //WSU IP ranges image access
-                var baseURL = "http://digital.library.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
-            }            
-
-            var solr_baseURL = "http://silo.lib.wayne.edu/solr4/bookreader/";                
-            //sets things in motion to launchBookReader()
-            launchBookReader(PIDsafeID, leafs, pheight, pwidth, item_ID, collectionID, baseURL, solr_baseURL, mobileRequest);
-        }
-
-        //returns json
-        $(document).ready(function(){
-          $.ajax({
-            type: "GET",
-            url: metaquery,
-            dataType: "json",
-            success: pull_meta
-          });
-        });
-
-        
+    $(document).ready(function(){
+      $.ajax({
+        type: "GET",
+        url: "http://digital.library.wayne.edu/iiif_manifest-dev/"+ItemID,        
+        dataType: "json",
+        success: metasuccess        
+      });
     });
+
+    function metasuccess(response){
+        var manifest = response;        
+        var pheight = manifest.sequences[0].canvases[0].height; 
+        var pwidth = manifest.sequences[0].canvases[0].width;
+        var leafs = manifest.sequences[0].canvases.length;
+        var PIDsafeID = PIDsafe;        
+
+        //proxied image access
+        if (img_rewrite === "true"){
+            var baseURL = "http://digital.library.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
+        }
+        //WSU IP ranges image access
+        else {        
+            var baseURL = "http://digital.library.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
+        }
+        var solr_baseURL = "http://localhost/solr4/bookreader/";                
+        //sets things in motion to launchBookReader()
+        launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL, mobileRequest, manifest);
+    }
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
-function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionID, baseURL, solr_baseURL, mobileRequest){    
+function launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL, mobileRequest, manifest){
 
     // Create the BookReader object
     br = new BookReader();   
+
+    // set manifest
+    br.manifest = manifest;
     
     br.getPageWidth = function(index) {
         // return pageWidth;
@@ -70,22 +57,20 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
         return parseInt(pheight);
     }
 
-    // pulling from Fedora backend
+    // pulling from Loris Image Server
     br.getPageURI = function(index, reduce, rotate, mode) {
         // decision to bump internal IA index
         index = index + 1;            
 
         // add logic for rendering smaller images for thumbnail mode                
         var $current_layout = getPageInfo();
-        var mode = $current_layout.mode;                               
-
+        var mode = $current_layout.mode;
+        
         if (mode != 'thumb') {
-            var imageSizeLoc = ":images/"
-            var url = baseURL+'fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/IMAGE_"+index+'/content';
-            }
+            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_JP2/full/full/0/default.jpg';
+        }
         else {
-            var imageSizeLoc = ":thumbs/";
-            var url = baseURL+'fedora/objects/'+PIDsafeID+imageSizeLoc+"datastreams/THUMB_"+index+'/content';                        
+            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_THUMBNAIL/full/240,240/0/default.jpg';                        
         }
         
         return url;
@@ -149,9 +134,6 @@ function launchBookReader(PIDsafeID, leafs, pheight, pwidth, ItemID, collectionI
 
     //set some global variables
     br.ItemID = ItemID;
-    br.PIDsafeID = PIDsafeID;
-    br.collectionID = collectionID;
-    br.FedoraPID = collectionID + ":" + PIDsafeID;
     br.baseURL = baseURL;
     br.solr_baseURL = solr_baseURL;
     br.mobileRequest = mobileRequest;
@@ -183,10 +165,9 @@ function postLaunch() {
         $(".toggleOCR").hide();
     }
     
-    //look for TOC datastream
+    // look for TOC datastream
     $(document).ready(function() {
-
-        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";            
+        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe="+ItemID+"&datastream=TOC";            
         function tocSuccess(response){
             // console.log(response);                
             if (response === false){                                
@@ -200,83 +181,24 @@ function postLaunch() {
         });        
     });
 
-    // NEW - retrieve book metadata from Solr and set to br.bookSolrObj, set title of browser page
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    $(document).ready(function() {                        
-                        
-            // Default Search Parameters (pre form submission)
-			var searchDefs = {};						      
-			searchDefs.wt = "json";
-			searchDefs.q = "id:wayne\\:"+br.PIDsafeID;
-			searchDefs.raw = "noescape";
-			
-			//pass solr parameters os stringify-ed JSON, accepted by Python API as dicitonary
-			solrParamsString = JSON.stringify(searchDefs);	
-			// Calls API functions	
-			var metaquery = "/WSUAPI?functions[]=solrSearch&solrParams="+solrParamsString;	
-			$.ajax({				
-				url: metaquery,
-				dataType: "json",						
-				success: pull_meta,
-				error: pull_meta_fail
-			});
-			function pull_meta(response){      				   
-                br.bookSolrObj = response.solrSearch.response.docs[0];
-                console.log("bookSolrObj:",br.bookSolrObj);
+    // retrieve book metadata from Solr and set to br.bookSolrObj, set title of browser page
+    $(document).ready(function(){
+      $.ajax({
+        type: "GET",
+        url: "http://digital.library.wayne.edu/WSUAPI-dev?functions[]=solrGetFedDoc",
+        data: {
+            "PID":ItemID            
+        },
+        dataType: "json",
+        success: metasuccess        
+      });
+    });
 
-                // set page title
-                $("#doc_title").html(br.bookSolrObj.mods_title_ms[0]);
-
-            }
-            function pull_meta_fail(){
-            	br.bookSolrObj == false;
-                console.log("There was an error retrieving book solr object.");
-            }
-            
-        });
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // ORIGINAL - retrieve book metadata and set to br.bookMetaObj, set title of browser page
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    $(document).ready(function() {            
-            var metaquery = 'php/fedora_XML_request.php?PIDsafe='+PIDsafe+'&datastream=MODS&datatype=namespace2json';
-            function pull_meta(response){                
-                //no MODS
-                if (response === false){
-                    br.bookMetaObj = response;
-                    $(".icon-info-sign").animate({'color':'rgb(158,158,158)'},0);                                        
-                    return;
-                }
-                //MODS present
-                else {   
-                    br.bookMetaObj = response;
-                    //Book Title - usually [0] of titleInfo
-                    if (br.bookMetaObj.titleInfo.length != undefined){
-                        var mainTitle = br.bookMetaObj.titleInfo[0].title;
-                    }
-                    else {
-                        var mainTitle = br.bookMetaObj.titleInfo.title;
-                    }
-                    br.bookMetaObj.mainTitle = mainTitle; //pushes to global bookOjbect, might use later
-                    $("#doc_title").html(mainTitle);
-                }
-
-            }
-            function pull_meta_fail(){
-                br.bookMetaObj = null;
-            }
-            //returns json
-            $(document).ready(function(){
-              $.ajax({
-                type: "GET",
-                url: metaquery,
-                dataType: "json",
-                success: pull_meta,
-                error: pull_meta_fail
-              });
-            });            
-        });
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    function metasuccess(response){
+        br.bookSolrObj = response.solrGetFedDoc.response.docs[0];
+        // set page title
+        $("#doc_title").html(br.bookSolrObj.mods_title_ms[0]);            
+    }    
 
     //mobile conditionals
     if (isMobile.any() != null || br.mobileRequest == "true"){
@@ -352,12 +274,7 @@ function postLaunch() {
         $(".icon-resize-full").remove();
 
         //create and update link 
-        // $(".logo.tools.left").prepend('<a id="embedPopOut" target="_blank" href="'+br.baseURL+'/eTextReader/eTextReader.php?ItemID=wayne:'+br.PIDsafeID+'#page/1/mode/2up">Open in New Window</a>');
-        $("#cogIcon .the-icons").append('<li><a id="embedPopOut" target="_blank" href="'+br.baseURL+'eTextReader/eTextReader.php?ItemID=wayne:'+br.PIDsafeID+'#page/1/mode/2up"><i class="icon-resize-full" title="Open in New Window" data-ot="Open in New Window"></i></a></li>');                
-
-
-        //remove toolbars
-        // toolbarsMinimize();
+        $("#cogIcon .the-icons").append('<li><a id="embedPopOut" target="_blank" href="'+br.baseURL+'eTextReader/eTextReader.php?ItemID='+br.ItemID+'#page/1/mode/2up"><i class="icon-resize-full" title="Open in New Window" data-ot="Open in New Window"></i></a></li>');                
 
         //speed up animations of toolbars
         br.toolbarAnimate = 10;
