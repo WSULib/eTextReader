@@ -186,7 +186,7 @@ function postLaunch() {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "http://digital.library.wayne.edu/WSUAPI-dev?functions[]=solrGetFedDoc",
+        url: "http://digital.library.wayne.edu/WSUAPI?functions[]=solrGetFedDoc",
         data: {
             "PID":ItemID            
         },
