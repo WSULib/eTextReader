@@ -79,10 +79,8 @@ function BookReader() {
 
     //global variables needed
     this.ItemID = null; 
-    this.PIDsafeID = null;
     this.collectionID = null;
     this.lastReadingMode = '';
-    this.bookMetaObj = null;
     this.ftsWidth = null;
     this.toolbarAnimate = 400;
 

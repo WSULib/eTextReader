@@ -21,7 +21,6 @@ function preLaunch(img_rewrite) {
         var pheight = manifest.sequences[0].canvases[0].height; 
         var pwidth = manifest.sequences[0].canvases[0].width;
         var leafs = manifest.sequences[0].canvases.length;
-        var PIDsafeID = PIDsafe;        
 
         //proxied image access
         if (img_rewrite === "true"){
@@ -181,6 +180,8 @@ function postLaunch() {
         });        
     });
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // retrieve book metadata from Solr and set to br.bookSolrObj, set title of browser page
     $(document).ready(function(){
       $.ajax({
@@ -193,6 +194,8 @@ function postLaunch() {
         success: metasuccess        
       });
     });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     function metasuccess(response){
         br.bookSolrObj = response.solrGetFedDoc.response.docs[0];

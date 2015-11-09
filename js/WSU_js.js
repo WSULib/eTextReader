@@ -302,7 +302,7 @@ function textNav(){
         br.textNav = true;
 
         //look for TOC datastream    
-        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.PIDsafeID+"&datastream=TOC";
+        var tocURL = "php/fedora_XML_request.php?datatype=xml2json&PIDsafe=wayne:"+br.ItemID+"&datastream=TOC";
 
 	function tocSuccess(response){
             // console.log(response);        
@@ -430,8 +430,8 @@ function showOCR(adjust) {
             // var PIDsafe = br.ItemID.replace(/_/g,"");
 
             //page URL's
-            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':HTML&datastream=HTML_'+(rootpage).toString();
-            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':HTML&datastream=HTML_'+(secondarypage).toString();            
+            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_'+(rootpage).toString();
+            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_'+(secondarypage).toString();            
             
             $(document).ready(function(){
                 $.ajax({
@@ -513,7 +513,7 @@ function singlepageOCR() {
     // var PIDsafe = br.ItemID.replace(/_/g,"");
 
     //page URL
-    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':HTML&datastream=HTML_'+(rootpage).toString();
+    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_'+(rootpage).toString();
 
     //insert results
     $(document).ready(function(){
@@ -1026,7 +1026,7 @@ function plainText(){
         }
 
         // Load fullbook HTML
-        var html_concat = 'php/fedora_XML_request.php?PIDsafe='+br.PIDsafeID+':fullbook&datastream=HTML_FULL';
+        var html_concat = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_FULL';
         // console.log(html_concat);            
             
         $(document).ready(function(){
@@ -1507,7 +1507,7 @@ function hideLoading(){
 function itemInfo(){
 
     //conditional for no information
-    if (br.bookMetaObj == false){
+    if (br.bookSolrObj == false){
         var itemMeta = document.createElement('div');
         itemMeta.setAttribute('id','itemMeta');
         $(itemMeta).append("<h4>Metadata for this text is unavailable.</h4>");
@@ -1526,47 +1526,34 @@ function itemInfo(){
         $(itemMeta).append("<h3 style='text-align:center;'><a href='http://digital.library.wayne.edu/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");        
 
         //cover image
-        var coverURL = br.baseURL+'fedora/objects/'+br.PIDsafeID+':thumbs/datastreams/THUMB_1/content';
+        var coverURL = br.baseURL+'fedora/objects/'+br.ItemID+'/datastreams/THUMBNAIL/content';
         $(itemMeta).append("<div id='itemMeta_top'><img src='"+coverURL+"'/></div>");    
 
         //METADATA
 
         //Book Title - usually [0] of titleInfo
-        if (br.bookMetaObj.titleInfo.length != undefined){
-            var mainTitle = br.bookMetaObj.titleInfo[0].title;
+        if (br.bookSolrObj.dc_title.length != undefined){
+            var mainTitle = br.bookSolrObj.dc_title[0];
         }
         else {
-            var mainTitle = br.bookMetaObj.titleInfo.title;
+            var mainTitle = "Unknown Title";
         }
         $(itemMeta).append("<h2><strong>Title:</strong> "+mainTitle+"</h2>");
 
         //author
         var bookAuthors = [];        
         //multiple authors        
-        if (br.bookMetaObj.name.length != undefined ){
-            for(var i = 0; i < br.bookMetaObj.name.length; i++){                
+        if (br.bookSolrObj.mods_name_creator_ms.length != undefined ){
+            for(var i = 0; i < br.bookSolrObj.mods_name_creator_ms.length; i++){                
                 //if includes date in namePart
-                if (toType(br.bookMetaObj.name[i].namePart) === "array"){                    
-                    bookAuthors.push(br.bookMetaObj.name[i].namePart[0]);
+                if (toType(br.bookSolrObj.mods_name_creator_ms[i].namePart) === "array"){                    
+                    bookAuthors.push(br.bookSolrObj.mods_name_creator_ms[i][0]);
                 }
                 //just a name
                 else {                    
-                    bookAuthors.push(br.bookMetaObj.name[i].namePart);                    
+                    bookAuthors.push(br.bookSolrObj.mods_name_creator_ms[i]);                    
                 }
             }
-        }
-
-        //one author
-        else {
-            //if includes date in namePart
-            if (toType(br.bookMetaObj.name.namePart) === "array"){                
-                bookAuthors.push(br.bookMetaObj.name.namePart[0]);
-            }
-            //just a name
-            else {
-                bookAuthors.push(br.bookMetaObj.name.namePart);
-            }
-            
         }
         
         //iterate through all authors
@@ -1574,32 +1561,42 @@ function itemInfo(){
             $(itemMeta).append("<span class='info_span'><strong>Author:</strong> "+bookAuthors[i]+"</br>");
         }
         
-        //citation & persistent links
-        if (typeof(br.bookMetaObj.identifier) == "object"){
-            for(var i = 0; i < br.bookMetaObj.identifier.length; i++){
+        // //citation & persistent links
+        // if (typeof(br.bookSolrObj.identifier) == "object"){
+        //     for(var i = 0; i < br.bookSolrObj.identifier.length; i++){
                 
-                if (br.bookMetaObj.identifier[i].startsWith('b')){
-                    var BIBnum = br.bookMetaObj.identifier[i];
-                    BIBnum = BIBnum.substring(0, BIBnum.length - 1);
-                    var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
-                    var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
-                    $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
-                }
+        //         if (br.bookSolrObj.identifier[i].startsWith('b')){
+        //             var BIBnum = br.bookSolrObj.identifier[i];
+        //             BIBnum = BIBnum.substring(0, BIBnum.length - 1);
+        //             var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
+        //             var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
+        //             $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
+        //         }
                 
-                if (/^\d.*/.test(br.bookMetaObj.identifier[i])) {
-                    //citation link                
-                    var OCLCnum = br.bookMetaObj.identifier[i];                                        
-                    var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
-                    var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
-                    $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
-                }
+        //         if (/^\d.*/.test(br.bookSolrObj.identifier[i])) {
+        //             //citation link                
+        //             var OCLCnum = br.bookSolrObj.identifier[i];                                        
+        //             var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
+        //             var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
+        //             $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
+        //         }
 
-            }
-        }        
+        //     }
+        // }
+
+        //citation & persistent links
+            
+        if (br.bookSolrObj.mods_bibNo_ms.length != undefined ){            
+            $(itemMeta).append("<p><a href='http://elibrary.wayne.edu/record="+br.bookSolrObj.mods_bibNo_ms[0]+"' target='_blank'>Persistent Link</a></p>");        
+        }
+        
+        if (br.bookSolrObj.mods_identifier_oclc_ms.length != undefined ){            
+            $(itemMeta).append("<p><a href='http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum="+br.bookSolrObj.mods_identifier_oclc_ms[0]+"' target='_blank'>Cite This</a></p>");   
+        }
 
         //Notes
-        if (br.bookMetaObj.note != undefined ){
-            $(itemMeta).append("<strong>Notes:</strong> "+br.bookMetaObj.note+"</br>");
+        if (br.bookSolrObj.mods_note_ms != undefined ){
+            $(itemMeta).append("<strong>Notes:</strong> "+br.bookSolrObj.mods_note_ms[0]+"</br>");
         }       
             
         
