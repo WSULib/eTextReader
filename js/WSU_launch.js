@@ -10,7 +10,7 @@ function preLaunch(img_rewrite) {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "http://digital.library.wayne.edu/iiif_manifest-dev/"+ItemID,        
+        url: "http://digital.library.wayne.edu/iiif_manifest/"+ItemID,
         dataType: "json",
         success: metasuccess        
       });
