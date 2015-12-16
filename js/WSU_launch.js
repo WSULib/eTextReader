@@ -65,12 +65,21 @@ function launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL,
         var $current_layout = getPageInfo();
         var mode = $current_layout.mode;
         
+        // PROD
         if (mode != 'thumb') {
-            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_JP2/full/full/0/default.jpg';
+            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_JP2/full/,1700/0/default.jpg';
         }
         else {
-            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_THUMBNAIL/full/240,240/0/default.jpg';                        
+            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_THUMBNAIL/full/,240/0/default.jpg';                        
         }
+
+        // DEV 
+        // if (mode != 'thumb') {
+        //     var url = baseURL+'loris_dev/'+ItemID+"|IMAGE_"+index+'_JP2/full/,1700/0/default.jpg';
+        // }
+        // else {
+        //     var url = baseURL+'loris_dev/'+ItemID+"|IMAGE_"+index+'_THUMBNAIL/full/240,240/0/default.jpg';                        
+        // }
         
         return url;
     }
