@@ -27,6 +27,7 @@ if ($auth_status == "deny"){
     <link id="css_pointer" rel="stylesheet" type="text/css" href="css/WSU_def_stylesheet.css"/>
     <link id="css_layout" rel="stylesheet" type="text/css" href="css/WSU_layout.css"/>
     <!-- Load BR init and local functionality -->    
+    <script type="text/javascript" src="config/config.js"></script>  
     <script type="text/javascript" src="js/WSU_bookreader.js"></script>        
     <script type="text/javascript" src="js/WSU_js.js"></script>
     <script type="text/javascript" src="js/WSU_launch.js"></script>        

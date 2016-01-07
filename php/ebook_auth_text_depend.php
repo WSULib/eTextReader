@@ -1,6 +1,7 @@
 <?php
 //Utility to check if client IP matches requirements for a particular ebook
 INCLUDE "sensitive.php";
+require("config/config.php");
 
 //expecting ebook PID as GET parameter
 $clientIP = $_SERVER['REMOTE_ADDR']; 
@@ -9,7 +10,7 @@ $PID = $_GET['ItemID'];
 //check security policy on etext object
 $baseURL = "https://$FEDORA_USERNAME:$FEDORA_PASSWORD@silo.lib.wayne.edu/fedora/risearch?";
 $queryOptions = "type=tuples&lang=itql&format=json&dt=on&stream=on&query=";
-$baseQuery = "select \$object from <#ri> where <info:fedora/$PID> <http://digital.library.wayne.edu/fedora/objects/wayne:WSUDOR-Fedora-Relations/datastreams/RELATIONS/content/hasSecurityPolicy> \$object;";
+$baseQuery = "select \$object from <#ri> where <info:fedora/$PID> <http://$APP_HOST/fedora/objects/wayne:WSUDOR-Fedora-Relations/datastreams/RELATIONS/content/hasSecurityPolicy> \$object;";
 
 $concatURL = $baseURL.$queryOptions.urlencode($baseQuery);
 $results = file_get_contents($concatURL);

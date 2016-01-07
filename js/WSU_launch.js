@@ -10,7 +10,7 @@ function preLaunch(img_rewrite) {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "http://digital.library.wayne.edu/iiif_manifest/"+ItemID,
+        url: "http://"+config.APP_HOST+"/iiif_manifest/"+ItemID,
         dataType: "json",
         success: metasuccess        
       });
@@ -24,11 +24,11 @@ function preLaunch(img_rewrite) {
 
         //proxied image access
         if (img_rewrite === "true"){
-            var baseURL = "http://digital.library.wayne.edu.proxy.lib.wayne.edu/"; //proxy added to URL                
+            var baseURL = "http://"+config.APP_HOST+".proxy.lib.wayne.edu/"; //proxy added to URL                
         }
         //WSU IP ranges image access
         else {        
-            var baseURL = "http://digital.library.wayne.edu/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
+            var baseURL = "http://"+config.APP_HOST+"/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
         }
         var solr_baseURL = "http://localhost/solr4/bookreader/";                
         //sets things in motion to launchBookReader()
@@ -134,7 +134,6 @@ function launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL,
 
     br.getEmbedCode = function(frameWidth, frameHeight, viewParams) {
         return "Embed code not yet supported.";
-        // <iframe src="http://digital.library.wayne.edu/eTextReader/eTextReader.php?ItemID={{APIParams.PID}}#page/1/mode/2up" width="575px" height="500px" frameborder="0" ></iframe>
     }
 
     // Let's go!
@@ -195,7 +194,7 @@ function postLaunch() {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "http://digital.library.wayne.edu/WSUAPI?functions[]=solrGetFedDoc",
+        url: "http://"+config.APP_HOST+"/WSUAPI?functions[]=solrGetFedDoc",
         data: {
             "PID":ItemID            
         },

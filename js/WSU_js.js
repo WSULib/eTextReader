@@ -1,4 +1,3 @@
-
 //////////////////////////////////////////////////////////////////////////////////////
 //Other Functions
 
@@ -1523,7 +1522,7 @@ function itemInfo(){
         itemMeta.setAttribute('id','itemMeta');
 
         // DC singleObject page
-        $(itemMeta).append("<h3 style='text-align:center;'><a href='http://digital.library.wayne.edu/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");        
+        $(itemMeta).append("<h3 style='text-align:center;'><a href='http://"+config.APP_HOST+"/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");        
 
         //cover image
         var coverURL = br.baseURL+'fedora/objects/'+br.ItemID+'/datastreams/THUMBNAIL/content';

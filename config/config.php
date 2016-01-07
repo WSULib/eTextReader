@@ -1,5 +1,8 @@
 <?php
 
+// App Host
+$APP_HOST = "digital.library.wayne.edu";
+
 //get local URL
 // $repo_baseURL = $_SERVER['SERVER_NAME'];
 
