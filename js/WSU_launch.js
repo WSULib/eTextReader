@@ -252,19 +252,19 @@ function postLaunch() {
     }    
 
     // stats    
-    dataObject = {};
-    dataObject.PID = PIDsafe;
-    $(document).ready(function(){
-      $.ajax({
-        type: "POST",
-        url: "php/stats.php",
-        data: dataObject,
-        dataType: "html",
-        success: function(response){
-            // console.log(response);
-        }        
-      });
-    });
+    // dataObject = {};
+    // dataObject.PID = PIDsafe;
+    // $(document).ready(function(){
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "php/stats.php",
+    //     data: dataObject,
+    //     dataType: "html",
+    //     success: function(response){
+    //         // console.log(response);
+    //     }        
+    //   });
+    // });
 
     //resize container for small(ish) screens
     if ($(window).width() < 1160){        

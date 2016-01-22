@@ -49,7 +49,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
 
     //construct URL for Solr query
     var squery = "php/solr_XML_request.php?solr_baseURL=" + br.solr_baseURL + "&search_term=" + encodeURIComponent(solr_search_term) + "&ItemID=" + br.ItemID.split(":")[1] + "&row_start=" + row_start + "&datatype=json";
-    console.log(squery);
+    // console.log(squery);
 
     //solr query
     $.ajax({          
@@ -60,7 +60,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     });
 
     function FTSsearchSuccess(result) {      
-        // console.log(result);
+        console.log(result);
         //stop loading animation
         hideLoading();                
 
@@ -1228,9 +1228,9 @@ function renderImageHighlights(){
 
         //create URLs
         var left_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.rootpage.toString()+'&datatype=html';
-        console.log("left page",left_xml_doc);
+        // console.log("left page",left_xml_doc);
         var right_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.secondarypage.toString()+'&datatype=html';
-        console.log("right page",right_xml_doc);
+        // console.log("right page",right_xml_doc);
 
         drawBoxes($current_layout.mode, $current_layout.rootpage, left_xml_doc,br.search_term,'l');
         drawBoxes($current_layout.mode, $current_layout.secondarypage, right_xml_doc,br.search_term,'r');
