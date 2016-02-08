@@ -8,7 +8,7 @@ $clientIP = $_SERVER['REMOTE_ADDR'];
 $PID = $_GET['ItemID'];
 
 //check security policy on etext object
-$baseURL = "https://$FEDORA_USERNAME:$FEDORA_PASSWORD@silo.lib.wayne.edu/fedora/risearch?";
+$baseURL = "http://$FEDORA_USERNAME:$FEDORA_PASSWORD@$repo_baseURL/fedora/risearch?";
 $queryOptions = "type=tuples&lang=itql&format=json&dt=on&stream=on&query=";
 $baseQuery = "select \$object from <#ri> where <info:fedora/$PID> <http://digital.library.wayne.edu/fedora/objects/wayne:WSUDOR-Fedora-Relations/datastreams/RELATIONS/content/hasSecurityPolicy> \$object;";
 
