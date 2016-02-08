@@ -680,7 +680,7 @@ function speakPageAloud(source) {
         function speakText(){
             var $current_layout = getPageInfo();
             //solr query for text
-            var squery = 'http://silo.lib.wayne.edu/solr4/bookreader/select/?q=page_num:%5b'+$current_layout.rootpage+'%20TO%20'+$current_layout.secondarypage+'%5d&fq=ItemID:'+br.ItemID.split(":")[1]+'&wt=json';
+            var squery = 'http://'+config.APP_HOST+'/solr4/bookreader/select/?q=page_num:%5b'+$current_layout.rootpage+'%20TO%20'+$current_layout.secondarypage+'%5d&fq=ItemID:'+br.ItemID.split(":")[1]+'&wt=json';
             // console.log(squery);
             //1up or 2up mode, using PHP tunnel
             var data = new Object();
