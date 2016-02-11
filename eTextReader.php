@@ -48,8 +48,10 @@ if ($auth_status == "deny"){
     <script type="text/javascript" src="js/jquery.loupe.js"></script>    
     <!-- Modernizr -->
     <script type="text/javascript" src="js/modernizr.js"></script>  
+    <!-- Jcrop -->
+    <script type="text/javascript" src="inc/jcrop/js/jquery.Jcrop.min.js"></script>  
     <!--Piwik-->
-	<script type="text/javascript">
+	<script type="text/javascript">    
 		// Piwik	
 		var _paq = _paq || [];
 		_paq.push(["setCustomVariable", "1", "ebook_pid", "<?php echo $_GET['ItemID']; ?>", "visit"]);
@@ -117,8 +119,6 @@ if ($auth_status == "deny"){
                     </div>                    
                 </div> <!--closes first row-->
                 <div id="second_row" class="collapseRow">
-                    
-                    
 
                     <div class="icon tools left" id="second_row_leftmost">
                         <ul class="the-icons">       
@@ -147,6 +147,8 @@ if ($auth_status == "deny"){
                         </div>
                         <div class="icon tools right second">
                             <ul class="the-icons">                                                                
+                                <li style="display:none;" id="ImageCropResults"><a target="_blank" href="#">Go!</a> <input size="80" type="text"></input></li>                                
+                                <li><i class="icon-screenshot" onclick='toggleImageCrop(); return false;' data-ot="Toggle ImageCrop tool"></i></li>
                                 <li><i class="toggleOCR ico-text" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
                                 <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>                                                                

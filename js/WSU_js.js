@@ -1232,8 +1232,8 @@ function renderImageHighlights(){
         var right_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.secondarypage.toString()+'&datatype=html';
         // console.log("right page",right_xml_doc);
 
-        drawBoxes($current_layout.mode, $current_layout.rootpage, left_xml_doc,br.search_term,'l');
-        drawBoxes($current_layout.mode, $current_layout.secondarypage, right_xml_doc,br.search_term,'r');
+        drawBoxes($current_layout.mode, $current_layout.rootpage, left_xml_doc, br.search_term, 'l');
+        drawBoxes($current_layout.mode, $current_layout.secondarypage, right_xml_doc, br.search_term, 'r');
     }
 
     // 1up
@@ -1307,9 +1307,10 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
                 }
 
                 else { //single word
-                    if (content_string_stripped == search_term_stripped) {
-                        temp_orig_boxes.push($(this));             
-                    }
+                    // if (content_string_stripped == search_term_stripped) {
+                    //     temp_orig_boxes.push($(this));             
+                    // }
+                    temp_orig_boxes.push($(this));
                 }                
             }); //closes each loop                            
                             
@@ -1357,7 +1358,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
                 // console.log("highlight box",h_info);
 
                 //draw boxes where "i" is the current match number
-                $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'></div>"); //number with match indices...
+                $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'>"+search_term+"</div>"); //number with match indices...
                 $('#'+leaf_side+'_match_'+i).css({
                     'height': h_info['height'],
                     'width': h_info['width'],
@@ -1701,6 +1702,86 @@ function toggleTextAnalysis(){
 
 function launchTextAnalysis(){
     window.location = "../textAnalysis/index.php?PID="+PIDsafe;
+}
+
+
+// tool for using jcrop to get region from image
+function toggleImageCrop(){
+
+    // toggle selected
+    $("i.icon-screenshot").toggleClass('active_icon');
+    $("#ImageCropResults").toggle();
+
+    // toggle boolean
+    if ( br.hasOwnProperty('ImageCropBool') ){
+        // console.log('toggling');
+        br.ImageCropBool = !br.ImageCropBool;
+    }
+    else {
+        br.ImageCropBool = true;
+    }
+
+    if (br.ImageCropBool == true) {
+        // init Jcrop
+        $('#'+(br.currentIndex()+1)).Jcrop({
+            // onChange: showCoords,
+            onSelect: showCoords
+        },function(){
+            br.jcrop_api = this;
+            br.jcrop_api.img = $('#'+(br.currentIndex()+1));
+        });
+    }
+    else {
+        // console.log('disabling Jcrop');
+        br.jcrop_api.destroy();
+        $("#ImageCropResults input").val('');
+        $("#ImageCropResults a").attr('href',"#");
+    }
+
+
+   
+
+
+    function showCoords(c) {
+        /* This will need to take into account the size of the image as it is resized */ 
+
+        // console.log("coords for current image",c.x,c.y,c.x2,c.y2);   
+
+        // get image size
+        var loris_json_url = "http://digital.library.wayne.edu/loris/fedora:"+br.ItemID+"|IMAGE_"+(br.currentIndex()+1)+"_JP2/info.json";
+        // console.log("loris json:",loris_json_url);
+
+        $.ajax({          
+          url: loris_json_url,
+          dataType: 'json',
+          success: lorisSuccess
+        });
+
+        function lorisSuccess(loris_json){
+            // console.log("original image dimensions", loris_json.width, loris_json.height);
+
+            // calc coords for full-size   
+            width_ratio = br.jcrop_api.img.width() / loris_json.width
+            height_ratio = br.jcrop_api.img.height() / loris_json.height  
+            var newc = {
+                'x': parseInt(c.x / br.jcrop_api.img.width() * loris_json.width),
+                'y': parseInt(c.y / br.jcrop_api.img.height() * loris_json.height),
+                'x2': parseInt(c.x2 / br.jcrop_api.img.width() * loris_json.width),
+                'y2': parseInt(c.y2 / br.jcrop_api.img.height() * loris_json.height),            
+            }
+            newc.w = newc.x2 - newc.x;
+            newc.h = newc.y2 - newc.y;        
+            // console.log(newc);
+
+            // finally, return loris url
+            var loris_image_url = "http://digital.library.wayne.edu/loris/fedora:"+br.ItemID+"|IMAGE_"+(br.currentIndex()+1)+"_JP2/"+newc.x+","+newc.y+","+newc.w+","+newc.h+"/full/0/default.jpg";
+            // console.log(loris_image_url);
+            $("#ImageCropResults input").val(loris_image_url);
+            $("#ImageCropResults a").attr('href',loris_image_url);
+        }
+
+    };
+
 }
 
 
