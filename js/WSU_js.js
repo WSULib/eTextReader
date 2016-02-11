@@ -1710,7 +1710,7 @@ function toggleImageCrop(){
 
     // toggle selected
     $("i.icon-screenshot").toggleClass('active_icon');
-    $("#ImageCropResults").toggle();
+    // $("#ImageCropResults").toggle();
 
     // toggle boolean
     if ( br.hasOwnProperty('ImageCropBool') ){
@@ -1734,8 +1734,9 @@ function toggleImageCrop(){
     else {
         // console.log('disabling Jcrop');
         br.jcrop_api.destroy();
-        $("#ImageCropResults input").val('');
+        // $("#ImageCropResults input").val('');
         $("#ImageCropResults a").attr('href',"#");
+	$("#ImageCropResults").fadeOut();
     }
 
 
@@ -1758,6 +1759,7 @@ function toggleImageCrop(){
         });
 
         function lorisSuccess(loris_json){
+	    $("#ImageCropResults").fadeOut();
             // console.log("original image dimensions", loris_json.width, loris_json.height);
 
             // calc coords for full-size   
@@ -1776,8 +1778,9 @@ function toggleImageCrop(){
             // finally, return loris url
             var loris_image_url = "http://digital.library.wayne.edu/loris/fedora:"+br.ItemID+"|IMAGE_"+(br.currentIndex()+1)+"_JP2/"+newc.x+","+newc.y+","+newc.w+","+newc.h+"/full/0/default.jpg";
             // console.log(loris_image_url);
-            $("#ImageCropResults input").val(loris_image_url);
+            //$("#ImageCropResults input").val(loris_image_url);
             $("#ImageCropResults a").attr('href',loris_image_url);
+	    $("#ImageCropResults").fadeIn();
         }
 
     };

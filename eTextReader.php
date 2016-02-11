@@ -147,7 +147,7 @@ if ($auth_status == "deny"){
                         </div>
                         <div class="icon tools right second">
                             <ul class="the-icons">                                                                
-                                <li style="display:none;" id="ImageCropResults"><a target="_blank" href="#">Go!</a> <input size="80" type="text"></input></li>                                
+                                <li style="display:none;" id="ImageCropResults"><a target="_blank" href="#"><strong>ImageCrop link</strong></a></li>                                
                                 <li><i class="icon-screenshot" onclick='toggleImageCrop(); return false;' data-ot="Toggle ImageCrop tool"></i></li>
                                 <li><i class="toggleOCR ico-text" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
