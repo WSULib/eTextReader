@@ -1748,7 +1748,7 @@ function toggleImageCrop(){
         // console.log("coords for current image",c.x,c.y,c.x2,c.y2);   
 
         // get image size
-        var loris_json_url = "http://digital.library.wayne.edu/loris/fedora:"+br.ItemID+"|IMAGE_"+(br.currentIndex()+1)+"_JP2/info.json";
+        var loris_json_url = "http://"+config.APP_HOST+"/loris/fedora:"+br.ItemID+"|IMAGE_"+(br.currentIndex()+1)+"_JP2/info.json";
         // console.log("loris json:",loris_json_url);
 
         $.ajax({          
@@ -1775,7 +1775,7 @@ function toggleImageCrop(){
             // console.log(newc);
 
             // finally, return loris url
-            var loris_image_url = "http://digital.library.wayne.edu/loris/fedora:"+br.ItemID+"|IMAGE_"+(br.currentIndex()+1)+"_JP2/"+newc.x+","+newc.y+","+newc.w+","+newc.h+"/full/0/default.jpg";
+            var loris_image_url = "http://"+config.APP_HOST+"/loris/fedora:"+br.ItemID+"|IMAGE_"+(br.currentIndex()+1)+"_JP2/"+newc.x+","+newc.y+","+newc.w+","+newc.h+"/full/0/default.jpg";
             // console.log(loris_image_url);
             //$("#ImageCropResults input").val(loris_image_url);
             $("#ImageCropResults a").attr('href',loris_image_url);
