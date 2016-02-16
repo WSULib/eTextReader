@@ -1307,10 +1307,9 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
                 }
 
                 else { //single word
-                    // if (content_string_stripped == search_term_stripped) {
-                    //     temp_orig_boxes.push($(this));             
-                    // }
-                    temp_orig_boxes.push($(this));
+                    if (content_string_stripped == search_term_stripped) {
+                        temp_orig_boxes.push($(this));             
+                    }                    
                 }                
             }); //closes each loop                            
                             
@@ -1358,7 +1357,7 @@ function drawBoxes(page_mode, image_index, xml_doc, search_term, leaf_side, matc
                 // console.log("highlight box",h_info);
 
                 //draw boxes where "i" is the current match number
-                $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'>"+search_term+"</div>"); //number with match indices...
+                $("#BRtwopageview").append("<div id='"+leaf_side+"_match_"+i+"' style='display:none;' class='image_highlight'></div>"); //number with match indices...
                 $('#'+leaf_side+'_match_'+i).css({
                     'height': h_info['height'],
                     'width': h_info['width'],
