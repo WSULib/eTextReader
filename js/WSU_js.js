@@ -776,6 +776,10 @@ function launch1up (){
     $("#mode_icons>li>i").removeClass("active_icon");
     $("#1up_icon").toggleClass('active_icon');
 
+    // show/hide imageCrop tool
+    $(".image_crop_tool").fadeIn();
+    $("#ImageCropResults").fadeOut();
+
     //turns off OCR
     if (br.OCRstatus == true) {
         toggleOCR();        
@@ -801,6 +805,10 @@ function launch2up (){
     $("#mode_icons>li>i").removeClass("active_icon");
     $("#2up_icon").toggleClass('active_icon');
 
+    // show/hide imageCrop tool
+    $(".image_crop_tool").fadeOut();
+    $("#ImageCropResults").fadeOut();
+
     //turns off OCR
     if (br.OCRstatus == true) {
         toggleOCR();
@@ -825,6 +833,10 @@ function launchThumbs (){
     //highlight icon
     $("#mode_icons>li>i").removeClass("active_icon");
     $("#thumbs_icon").addClass('active_icon');
+
+    // show/hide imageCrop tool
+    $(".image_crop_tool").fadeOut();
+    $("#ImageCropResults").fadeOut();
 
     //turns off OCR
     if (br.OCRstatus == true) {

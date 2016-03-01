@@ -94,7 +94,7 @@ if ($auth_status == "deny"){
 
                     <div class="icon tools left">                                                
                         <ul class="the-icons">                        
-                            <li><i id="text_nav_icon" class="ico-toc tooltip" onclick='textNav(); return false;' data-ot="Jump to Section"></i></li>
+                            <!-- <li><i id="text_nav_icon" class="ico-toc tooltip" onclick='textNav(); return false;' data-ot="Jump to Section"></i></li> -->
                             <!-- <li><i class="icon-list tooltip" onclick='textNav(); return false;' data-ot="Text Structure"></i></li>                             -->
                         </ul>            
                     </div>                   
@@ -146,16 +146,17 @@ if ($auth_status == "deny"){
                             </div>
                         </div>
                         <div class="icon tools right second">
-                            <ul class="the-icons">                                                                
-                                <li style="display:none;" id="ImageCropResults"><a target="_blank" href="#"><strong>ImageCrop link</strong></a></li>                                
-                                <li><i class="icon-screenshot" onclick='toggleImageCrop(); return false;' data-ot="Toggle ImageCrop tool"></i></li>
+                            <ul class="the-icons">     
+
+                                <li style="display:none;" id="ImageCropResults"><a target="_blank" href="#"><span style="text-decoration:underline; font-weight:bold; font-size:1.5em;">ImageCrop Link</span></a></li>                                
+                                <li><i class="icon-screenshot image_crop_tool" onclick='toggleImageCrop(); return false;' data-ot="Toggle ImageCrop tool"></i></li>
+
                                 <li><i class="toggleOCR ico-text" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
                                 <li><i style="display:none;" class="OCR_tools icon-minus" onclick='fontResize("decrease"); return false;' data-ot="Decrease Text Size"></i></li>                                                                
                                 <li><i class="icon-resize-full" onclick='goFullScreen();' data-ot="Full-Screen"></i></li>
-                                <li><i class="icon-speaker" onclick='speakPageAloud("autoflip");' data-ot="Text-to-Speech: Reads Aloud"></i></li>
-                                <!-- -->
-                                <li><i class="icon-info-sign" onclick='itemInfo();' data-ot="Information about this Text"></i></li>
+                                <!-- <li><i class="icon-speaker" onclick='speakPageAloud("autoflip");' data-ot="Text-to-Speech: Reads Aloud"></i></li> -->                                
+                                <!-- <li><i class="icon-info-sign" onclick='itemInfo();' data-ot="Information about this Text"></i></li> -->
                                 <li><i class="icon-question-sign" onclick='help_eTextReader();' data-ot="Help about the eTextReader"></i></li>                                        
                             </ul>                                                     
                         </div>
