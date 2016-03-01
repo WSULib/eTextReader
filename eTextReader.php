@@ -149,7 +149,7 @@ if ($auth_status == "deny"){
                             <ul class="the-icons">     
 
                                 <li style="display:none;" id="ImageCropResults"><a target="_blank" href="#"><span style="text-decoration:underline; font-weight:bold; font-size:1.5em;">ImageCrop Link</span></a></li>                                
-                                <li><i class="icon-screenshot image_crop_tool" onclick='toggleImageCrop(); return false;' data-ot="Toggle ImageCrop tool"></i></li>
+                                <li><i style="display:none;" class="icon-screenshot image_crop_tool" onclick='toggleImageCrop(); return false;' data-ot="Toggle ImageCrop tool"></i></li>
 
                                 <li><i class="toggleOCR ico-text" onclick='toggleOCR(); return false;' data-ot="OCR Text Overlay"></i></li>                
                                 <li><i style="display:none;" class="OCR_tools icon-plus" onclick='fontResize("increase"); return false;' data-ot="Increase Text Size"></i></li>
