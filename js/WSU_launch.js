@@ -67,10 +67,10 @@ function launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL,
         
         // PROD
         if (mode != 'thumb') {
-            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_JP2/full/,1700/0/default.jpg';
+            var url = baseURL+'loris/fedora:'+ItemID+"_Page_"+index+"|JP2/full/,1700/0/default.jpg";
         }
         else {
-            var url = baseURL+'loris/fedora:'+ItemID+"|IMAGE_"+index+'_THUMBNAIL/full/,240/0/default.jpg';                        
+            var url = baseURL+'loris/fedora:'+ItemID+"_Page_"+index+"|THUMBNAIL/full/,240/0/default.jpg";                        
         }
 
         // DEV 
