@@ -428,9 +428,9 @@ function showOCR(adjust) {
             // // convert ItemID to PIDsafe
             // var PIDsafe = br.ItemID.replace(/_/g,"");
 
-            //page URL's
-            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_'+(rootpage).toString();
-            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_'+(secondarypage).toString();            
+            //page URL's            
+            var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'_Page_'+(rootpage).toString()+'&datastream=HTML';
+            var rightOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'_Page_'+(secondarypage).toString()+'&datastream=HTML';               
             
             $(document).ready(function(){
                 $.ajax({
@@ -512,7 +512,7 @@ function singlepageOCR() {
     // var PIDsafe = br.ItemID.replace(/_/g,"");
 
     //page URL
-    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_'+(rootpage).toString();
+    var leftOCR_URL = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'_Page_'+(rootpage).toString()+'&datastream=HTML';
 
     //insert results
     $(document).ready(function(){
@@ -1037,7 +1037,7 @@ function plainText(){
         }
 
         // Load fullbook HTML
-        var html_concat = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_FULL';
+        var html_concat = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=HTML_FULL';;
         // console.log(html_concat);            
             
         $(document).ready(function(){
@@ -1239,10 +1239,8 @@ function renderImageHighlights(){
     if ($current_layout.mode == "2up") {
 
         //create URLs
-        var left_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.rootpage.toString()+'&datatype=html';
-        // console.log("left page",left_xml_doc);
-        var right_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.secondarypage.toString()+'&datatype=html';
-        // console.log("right page",right_xml_doc);
+        var left_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'_Page_'+$current_layout.rootpage.toString()+'&datastream=ALTOXML&datatype=html';
+        var right_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'_Page_'+$current_layout.secondarypage.toString()+'&datastream=ALTOXML&datatype=html';
 
         drawBoxes($current_layout.mode, $current_layout.rootpage, left_xml_doc, br.search_term, 'l');
         drawBoxes($current_layout.mode, $current_layout.secondarypage, right_xml_doc, br.search_term, 'r');
@@ -1252,7 +1250,7 @@ function renderImageHighlights(){
     if ($current_layout.mode == "1up") {                    
 
         //create URLs
-        var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'&datastream=ALTOXML_'+$current_layout.rootpage.toString()+'&datatype=html';        
+        var single_current_xml_doc = 'php/fedora_XML_request.php?PIDsafe='+br.ItemID+'_Page_'+$current_layout.rootpage.toString()+'&datastream=ALTOXML&datatype=html';        
         drawBoxes($current_layout.mode, $current_layout.rootpage, single_current_xml_doc, br.search_term,'single'); //current page        
     }
 }
