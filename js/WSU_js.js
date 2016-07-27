@@ -680,7 +680,7 @@ function speakPageAloud(source) {
         function speakText(){
             var $current_layout = getPageInfo();
             //solr query for text
-            var squery = 'http://'+config.APP_HOST+'/solr4/bookreader/select/?q=page_num:%5b'+$current_layout.rootpage+'%20TO%20'+$current_layout.secondarypage+'%5d&fq=ItemID:'+br.ItemID.split(":")[1]+'&wt=json';
+            var squery = 'https://'+config.APP_HOST+'/solr4/bookreader/select/?q=page_num:%5b'+$current_layout.rootpage+'%20TO%20'+$current_layout.secondarypage+'%5d&fq=ItemID:'+br.ItemID.split(":")[1]+'&wt=json';
             // console.log(squery);
             //1up or 2up mode, using PHP tunnel
             var data = new Object();
@@ -716,7 +716,7 @@ function sayIt(type,Ltext,Rtext,Speaktext) {
   var playerDivId = "jplayer_box";
 
   var getTextToSpeechURL = function(text) {
-    return "http://tts-api.com/tts.mp3?q=" + encodeURIComponent(text);
+    return "https://tts-api.com/tts.mp3?q=" + encodeURIComponent(text);
   };
 
   var say = function(Ltext, Rtext, Speaktext) {
@@ -1532,7 +1532,7 @@ function itemInfo(){
         itemMeta.setAttribute('id','itemMeta');
 
         // DC singleObject page
-        $(itemMeta).append("<h3 style='text-align:center;'><a href='http://"+config.APP_HOST+"/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");        
+        $(itemMeta).append("<h3 style='text-align:center;'><a href='https://"+config.APP_HOST+"/digitalcollections/item?id="+PIDsafe+"'>Digital Collections Item Record</a></h3>");        
 
         //cover image
         var coverURL = br.baseURL+'fedora/objects/'+br.ItemID+'/datastreams/THUMBNAIL/content';
@@ -1577,7 +1577,7 @@ function itemInfo(){
         //         if (br.bookSolrObj.identifier[i].startsWith('b')){
         //             var BIBnum = br.bookSolrObj.identifier[i];
         //             BIBnum = BIBnum.substring(0, BIBnum.length - 1);
-        //             var BIBbase = "http://elibrary.wayne.edu/record=[BIBNUM]"
+        //             var BIBbase = "https://elibrary.wayne.edu/record=[BIBNUM]"
         //             var BIBurl = BIBbase.replace('[BIBNUM]',BIBnum);
         //             $(itemMeta).append("<p><a href='"+BIBurl+"' target='_blank'>Persistent Link</a></p>");        
         //         }
@@ -1585,7 +1585,7 @@ function itemInfo(){
         //         if (/^\d.*/.test(br.bookSolrObj.identifier[i])) {
         //             //citation link                
         //             var OCLCnum = br.bookSolrObj.identifier[i];                                        
-        //             var OCLCbase = "http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
+        //             var OCLCbase = "https://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum=[OCLCNUM]";
         //             var OCLCurl = OCLCbase.replace('[OCLCNUM]',OCLCnum);
         //             $(itemMeta).append("<p><a href='"+OCLCurl+"' target='_blank'>Cite This</a></p>");   
         //         }
@@ -1596,11 +1596,11 @@ function itemInfo(){
         //citation & persistent links
             
         if (br.bookSolrObj.mods_bibNo_ms.length != undefined ){            
-            $(itemMeta).append("<p><a href='http://elibrary.wayne.edu/record="+br.bookSolrObj.mods_bibNo_ms[0]+"' target='_blank'>Persistent Link</a></p>");        
+            $(itemMeta).append("<p><a href='https://elibrary.wayne.edu/record="+br.bookSolrObj.mods_bibNo_ms[0]+"' target='_blank'>Persistent Link</a></p>");        
         }
         
         if (br.bookSolrObj.mods_identifier_oclc_ms.length != undefined ){            
-            $(itemMeta).append("<p><a href='http://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum="+br.bookSolrObj.mods_identifier_oclc_ms[0]+"' target='_blank'>Cite This</a></p>");   
+            $(itemMeta).append("<p><a href='https://www.lib.wayne.edu/inc/OCLC_citation.php?oclcnum="+br.bookSolrObj.mods_identifier_oclc_ms[0]+"' target='_blank'>Cite This</a></p>");   
         }
 
         //Notes
@@ -1758,7 +1758,7 @@ function toggleImageCrop(){
         // console.log("coords for current image",c.x,c.y,c.x2,c.y2);   
 
         // get image size
-        var loris_json_url = "http://"+config.APP_HOST+"/loris/fedora:"+br.ItemID+"_Page_"+(br.currentIndex()+1)+"|JP2/info.json";
+        var loris_json_url = "https://"+config.APP_HOST+"/loris/fedora:"+br.ItemID+"_Page_"+(br.currentIndex()+1)+"|JP2/info.json";
         // console.log("loris json:",loris_json_url);
 
         $.ajax({          
@@ -1785,7 +1785,7 @@ function toggleImageCrop(){
             // console.log(newc);
 
             // finally, return loris url
-            var loris_image_url = "http://"+config.APP_HOST+"/loris/fedora:"+br.ItemID+"_Page_"+(br.currentIndex()+1)+"|JP2/"+newc.x+","+newc.y+","+newc.w+","+newc.h+"/full/0/default.jpg";
+            var loris_image_url = "https://"+config.APP_HOST+"/loris/fedora:"+br.ItemID+"_Page_"+(br.currentIndex()+1)+"|JP2/"+newc.x+","+newc.y+","+newc.w+","+newc.h+"/full/0/default.jpg";
             // console.log(loris_image_url);
             //$("#ImageCropResults input").val(loris_image_url);
             $("#ImageCropResults a").attr('href',loris_image_url);

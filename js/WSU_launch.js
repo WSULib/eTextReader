@@ -10,7 +10,7 @@ function preLaunch(img_rewrite) {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "http://"+config.APP_HOST+"/iiif_manifest/"+ItemID,
+        url: "https://"+config.APP_HOST+"/iiif_manifest/"+ItemID,
         dataType: "json",
         success: metasuccess        
       });
@@ -24,13 +24,13 @@ function preLaunch(img_rewrite) {
 
         //proxied image access
         if (img_rewrite === "true"){
-            var baseURL = "http://"+config.APP_HOST+".proxy.lib.wayne.edu/"; //proxy added to URL                
+            var baseURL = "https://"+config.APP_HOST+".proxy.lib.wayne.edu/"; //proxy added to URL                
         }
         //WSU IP ranges image access
         else {        
-            var baseURL = "http://"+config.APP_HOST+"/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
+            var baseURL = "https://"+config.APP_HOST+"/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
         }
-        var solr_baseURL = "http://localhost/solr4/bookreader/";                
+        var solr_baseURL = "https://localhost/solr4/bookreader/";                
         //sets things in motion to launchBookReader()
         launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL, mobileRequest, manifest);
     }
@@ -194,7 +194,7 @@ function postLaunch() {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "http://"+config.APP_HOST+"/WSUAPI?functions[]=solrGetFedDoc",
+        url: "https://"+config.APP_HOST+"/WSUAPI?functions[]=solrGetFedDoc",
         data: {
             "PID":ItemID            
         },
