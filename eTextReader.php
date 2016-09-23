@@ -1,10 +1,10 @@
 <?php
 //checks authentication status
-include "php/ebook_auth_text_depend.php";
+// include "php/ebook_auth_text_depend.php";
 
-if ($auth_status == "deny"){    
-    header( "Location: http://proxy.lib.wayne.edu/login?url=".curPageURL()."#page/1/mode/2up");    
-}
+// if ($auth_status == "deny"){    
+//     header( "Location: http://proxy.lib.wayne.edu/login?url=".curPageURL()."#page/1/mode/2up");    
+// }
 
 ?>
 
