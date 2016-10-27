@@ -64,6 +64,18 @@ function launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL,
         // add logic for rendering smaller images for thumbnail mode                
         var $current_layout = getPageInfo();
         var mode = $current_layout.mode;
+
+        // toggle image crop if 1-up mode
+        if (mode == '1up') {
+            launch1up();
+        }
+        if (mode == '2up') {
+            launch2up();
+        }
+        if (mode == 'thumb') {
+            launchThumbs();
+        }
+
         
         // PROD
         if (mode != 'thumb') {
@@ -72,14 +84,6 @@ function launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL,
         else {
             var url = baseURL+'loris/fedora:'+ItemID+"_Page_"+index+"|THUMBNAIL/full/,240/0/default.jpg";                        
         }
-
-        // DEV 
-        // if (mode != 'thumb') {
-        //     var url = baseURL+'loris_dev/'+ItemID+"|IMAGE_"+index+'_JP2/full/,1700/0/default.jpg';
-        // }
-        // else {
-        //     var url = baseURL+'loris_dev/'+ItemID+"|IMAGE_"+index+'_THUMBNAIL/full/240,240/0/default.jpg';                        
-        // }
         
         return url;
     }

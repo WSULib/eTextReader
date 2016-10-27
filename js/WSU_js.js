@@ -1681,39 +1681,6 @@ function mobileNavPanelDestroy(type){
     }
 }
 
-function toggleTextAnalysis(){
-
-    // already present, remove
-    if ($("#text_analysis").hasClass('active')){
-        revealToggle();
-        $("#text_analysis").remove();
-    }    
-    
-    // create
-    else{
-        // 2) draw analysis box
-        //insert HTML and resize        
-        $('#BookReader').append("<div id='text_analysis' ></div>");        
-        $('#text_analysis').hide();            
-        // $('#text_analysis').height(($(window).height() - $("#WSUtoolbar").height()) );        
-        $('#text_analysis').css('margin-top',$("#WSUtoolbar").height());
-
-        // 3) populate
-        $("#text_analysis").load("inc/views/text_analysis.htm", function(){revealToggle();});    
-    }   
-
-
-    function revealToggle(){        
-        $("#text_analysis").toggle();
-        $("#text_analysis").toggleClass("active");
-    }
-}
-
-function launchTextAnalysis(){
-    window.location = "../textAnalysis/index.php?PID="+PIDsafe;
-}
-
-
 // tool for using jcrop to get region from image
 function toggleImageCrop(){
 
@@ -1746,7 +1713,7 @@ function toggleImageCrop(){
         // $("#ImageCropResults input").val('');
         $("#ImageCropResults a").attr('href',"#");
 	$("#ImageCropResults").fadeOut();
-    }
+}
 
 
    
