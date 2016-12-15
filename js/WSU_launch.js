@@ -198,7 +198,7 @@ function postLaunch() {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "https://"+config.APP_HOST+"/WSUAPI?functions[]=solrGetFedDoc",
+        url: "https://"+config.APP_HOST+"/"+config.API_PREFIX+"?functions[]=solrGetFedDoc",
         data: {
             "PID":ItemID            
         },
