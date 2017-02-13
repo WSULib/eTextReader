@@ -10,7 +10,7 @@ function preLaunch(img_rewrite) {
     $(document).ready(function(){
       $.ajax({
         type: "GET",
-        url: "https://"+config.APP_HOST+"/iiif_manifest/"+ItemID,
+        url: "https://"+config.APP_HOST+"/api/item/"+ItemID+"/iiif",
         dataType: "json",
         success: metasuccess        
       });

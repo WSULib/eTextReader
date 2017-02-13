@@ -6,7 +6,7 @@ include "../config/config.php";
 $PIDsafe = $_GET['PIDsafe'];
 $datastream_request = $_GET['datastream'];
 $data_type = $_GET['datatype'];
-$request_URL = "http://$repo_baseURL/item/$PIDsafe/bitStream/$datastream_request";
+$request_URL = "http://$repo_baseURL/item/$PIDsafe/file/$datastream_request";
 
 // XML
 if ($data_type == 'xml'){
