@@ -7,7 +7,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     showLoading();
 
     // var search_term = form.fts.value;
-    var search_term = $('#fts_input').val();
+    var search_term = encodeURI($('#fts_input').val());
     var solr_search_term = search_term.replace(/['’‘]/g,"*");
 
     //blank search conditional
