@@ -30,7 +30,7 @@ function preLaunch(img_rewrite) {
         else {        
             var baseURL = "https://"+config.APP_HOST+"/"; //This cannot be localhost, as it codes the src for <img> tags on the client side.
         }
-        var solr_baseURL = "https://localhost/solr4/bookreader/";                
+        var solr_baseURL = "http://localhost/solr4/bookreader/";                
         //sets things in motion to launchBookReader()
         launchBookReader(leafs, pheight, pwidth, ItemID, baseURL, solr_baseURL, mobileRequest, manifest);
     }
