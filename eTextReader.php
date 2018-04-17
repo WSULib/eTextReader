@@ -54,7 +54,7 @@
 	<script type="text/javascript">    
 		// Piwik	
 		var _paq = _paq || [];
-		_paq.push(["setCustomVariable", "1", "ebook_pid", "<?php echo $_GET['ItemID']; ?>", "visit"]);
+		_paq.push(["setCustomVariable", "1", "ebook_pid", "<?php echo filter_input(INPUT_GET, 'ItemID', FILTER_SANITIZE_STRING); ?>", "visit"]);
 		_paq.push(["trackPageView"]);
 		_paq.push(["enableLinkTracking"]);
 		(function() {
