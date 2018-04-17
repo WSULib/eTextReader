@@ -60,7 +60,7 @@ function getFTSResultsStatic (row_start, fts_box_mode) {
     });
 
     function FTSsearchSuccess(result) {      
-        console.log(result);
+        // console.log(result);
         //stop loading animation
         hideLoading();                
 
@@ -1705,6 +1705,7 @@ function toggleImageCrop(){
         },function(){
             br.jcrop_api = this;
             br.jcrop_api.img = $('#'+(br.currentIndex()+1));
+            console.log("bar");
         });
     }
     else {
@@ -1756,10 +1757,27 @@ function toggleImageCrop(){
             // console.log(loris_image_url);
             //$("#ImageCropResults input").val(loris_image_url);
             $("#ImageCropResults a").attr('href',loris_image_url);
+            sendCoords(loris_image_url);
 	    $("#ImageCropResults").fadeIn();
         }
 
     };
+
+    function sendCoords(url) {
+        $.ajax({
+            type: "POST",
+            url: 'php/image_capture.php',
+            data: { ImageURL : url },
+            success: function(data)
+            {
+                // console.log(data);
+            },
+            error: function(xhr)
+            {
+                console.log("either URL is invalid or image capture is not set up correctly.");
+            }
+        });
+    }
 
 }
 
